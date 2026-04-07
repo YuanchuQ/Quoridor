@@ -1,0 +1,20 @@
+{
+    "name": "Quoridor.EditModeTests",
+    "rootNamespace": "Quoridor.Tests.EditMode",
+    "references": [
+        "Quoridor.Core"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ]
+}
