@@ -35,6 +35,16 @@ namespace Quoridor.Pawn
         public PlayerId ActivePlayer => activePlayer;
 
         /// <summary>
+        /// Current position of player one's pawn.
+        /// </summary>
+        public BoardPosition PlayerOnePosition => playerOnePawn != null ? playerOnePawn.Position : GetStartPosition(PlayerId.PlayerOne);
+
+        /// <summary>
+        /// Current position of player two's pawn.
+        /// </summary>
+        public BoardPosition PlayerTwoPosition => playerTwoPawn != null ? playerTwoPawn.Position : GetStartPosition(PlayerId.PlayerTwo);
+
+        /// <summary>
         /// Reinitializes the pawn controller with current inspector references.
         /// </summary>
         public void ResetMatch()

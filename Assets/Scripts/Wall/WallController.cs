@@ -1,0 +1,285 @@
+using System;
+using Quoridor.Board;
+using Quoridor.Config;
+using Quoridor.Core;
+using Quoridor.Input;
+using Quoridor.Pawn;
+using UnityEngine;
+
+namespace Quoridor.Wall
+{
+    /// <summary>
+    /// Handles wall preview, validation, placement, and remaining wall counts.
+    /// </summary>
+    [DisallowMultipleComponent]
+    public sealed class WallController : MonoBehaviour
+    {
+        [SerializeField] private GameConfig config;
+        [SerializeField] private BoardView boardView;
+        [SerializeField] private InputRouter inputRouter;
+        [SerializeField] private PawnController pawnController;
+        [SerializeField] private WallView previewWall;
+        [SerializeField] private WallView placedWallPrefab;
+        [SerializeField] private Transform placedWallsRoot;
+        [SerializeField] private Material validPreviewMaterial;
+        [SerializeField] private Material invalidPreviewMaterial;
+        [SerializeField] private Material placedMaterial;
+
+        private WallState wallState;
+        private WallPlacement currentPreview;
+        private bool hasPreview;
+
+        /// <summary>
+        /// Raised after a wall is placed successfully.
+        /// </summary>
+        public event Action<WallPlacedEvent> WallPlaced;
+
+        /// <summary>
+        /// Walls remaining for player one.
+        /// </summary>
+        public int PlayerOneWallsRemaining => wallState != null
+            ? wallState.GetRemainingWalls(PlayerId.PlayerOne)
+            : GetInitialWallCount();
+
+        /// <summary>
+        /// Walls remaining for player two.
+        /// </summary>
+        public int PlayerTwoWallsRemaining => wallState != null
+            ? wallState.GetRemainingWalls(PlayerId.PlayerTwo)
+            : GetInitialWallCount();
+
+        /// <summary>
+        /// Reinitializes wall state for a fresh local match.
+        /// </summary>
+        public void ResetMatch()
+        {
+            int boardSize = config != null ? config.BoardSize : QuoridorRules.BoardSize;
+            int initialWallCount = config != null ? config.InitialWallCount : QuoridorRules.InitialWallCount;
+
+            wallState = new WallState(boardSize, initialWallCount);
+            ClearPlacedWallViews();
+
+            if (pawnController != null)
+            {
+                pawnController.SetBoardGraph(wallState.Graph);
+            }
+
+            HidePreview();
+        }
+
+        /// <summary>
+        /// Attempts to place a wall at the supplied anchor and active orientation.
+        /// </summary>
+        public bool TryPlaceWall(BoardPosition anchor)
+        {
+            WallPlacement candidate = new WallPlacement(anchor, GetCurrentOrientation());
+            PlayerId playerId = GetActivePlayer();
+            WallValidationResult result = TryPlaceWall(playerId, candidate);
+            if (!result.IsValid)
+            {
+                ShowPreview(candidate, false);
+                return false;
+            }
+
+            CreatePlacedWall(candidate);
+
+            if (pawnController != null)
+            {
+                pawnController.SetBoardGraph(wallState.Graph);
+                pawnController.SetActivePlayer(GetNextPlayer(playerId));
+            }
+
+            if (inputRouter != null)
+            {
+                inputRouter.SetInputMode(InputMode.PawnMove);
+            }
+
+            HidePreview();
+            WallPlaced?.Invoke(new WallPlacedEvent(playerId, candidate, wallState.GetRemainingWalls(playerId)));
+            return true;
+        }
+
+        private void Awake()
+        {
+            ResetMatch();
+        }
+
+        private void OnEnable()
+        {
+            if (inputRouter == null)
+            {
+                return;
+            }
+
+            inputRouter.BoardCellInput += HandleBoardCellInput;
+            inputRouter.WallOrientationChanged += HandleWallOrientationChanged;
+            inputRouter.InputModeChanged += HandleInputModeChanged;
+        }
+
+        private void OnDisable()
+        {
+            if (inputRouter == null)
+            {
+                return;
+            }
+
+            inputRouter.BoardCellInput -= HandleBoardCellInput;
+            inputRouter.WallOrientationChanged -= HandleWallOrientationChanged;
+            inputRouter.InputModeChanged -= HandleInputModeChanged;
+        }
+
+        private void HandleBoardCellInput(BoardCellInputEvent inputEvent)
+        {
+            if (inputEvent.Mode != InputMode.WallPlacement)
+            {
+                return;
+            }
+
+            if (inputEvent.Phase == BoardCellInputPhase.HoverExited)
+            {
+                HidePreview();
+                return;
+            }
+
+            WallPlacement candidate = new WallPlacement(inputEvent.Position, GetCurrentOrientation());
+            WallValidationResult result = Validate(candidate);
+            ShowPreview(candidate, result.IsValid);
+
+            if (inputEvent.Phase == BoardCellInputPhase.Selected)
+            {
+                TryPlaceWall(inputEvent.Position);
+            }
+        }
+
+        private void HandleWallOrientationChanged(WallOrientation orientation)
+        {
+            if (!hasPreview || inputRouter == null || inputRouter.ActiveMode != InputMode.WallPlacement)
+            {
+                return;
+            }
+
+            WallPlacement candidate = new WallPlacement(currentPreview.Anchor, orientation);
+            WallValidationResult result = Validate(candidate);
+            ShowPreview(candidate, result.IsValid);
+        }
+
+        private void HandleInputModeChanged(InputMode mode)
+        {
+            if (mode != InputMode.WallPlacement)
+            {
+                HidePreview();
+            }
+        }
+
+        private WallValidationResult Validate(WallPlacement candidate)
+        {
+            EnsureGraph();
+            return wallState.CanPlaceWall(
+                GetActivePlayer(),
+                candidate,
+                GetPlayerPosition(PlayerId.PlayerOne),
+                GetPlayerPosition(PlayerId.PlayerTwo));
+        }
+
+        private WallValidationResult TryPlaceWall(PlayerId playerId, WallPlacement candidate)
+        {
+            EnsureGraph();
+            return wallState.TryPlaceWall(
+                playerId,
+                candidate,
+                GetPlayerPosition(PlayerId.PlayerOne),
+                GetPlayerPosition(PlayerId.PlayerTwo));
+        }
+
+        private void ShowPreview(WallPlacement placement, bool isValid)
+        {
+            if (previewWall == null)
+            {
+                return;
+            }
+
+            hasPreview = true;
+            currentPreview = placement;
+            previewWall.SetVisible(true);
+            previewWall.Configure(placement, boardView, config, isValid ? validPreviewMaterial : invalidPreviewMaterial);
+            previewWall.SetPreviewValidity(isValid);
+        }
+
+        private void HidePreview()
+        {
+            hasPreview = false;
+
+            if (previewWall != null)
+            {
+                previewWall.SetVisible(false);
+            }
+        }
+
+        private void CreatePlacedWall(WallPlacement placement)
+        {
+            if (placedWallPrefab == null)
+            {
+                return;
+            }
+
+            Transform parent = placedWallsRoot != null ? placedWallsRoot : transform;
+            WallView wallView = Instantiate(placedWallPrefab, parent);
+            wallView.name = $"{placement.Orientation}Wall_{placement.Anchor.X}_{placement.Anchor.Y}";
+            wallView.Configure(placement, boardView, config, placedMaterial);
+            wallView.SetPlaced();
+            wallView.SetVisible(true);
+        }
+
+        private void ClearPlacedWallViews()
+        {
+            if (placedWallsRoot == null)
+            {
+                return;
+            }
+
+            for (int index = placedWallsRoot.childCount - 1; index >= 0; index--)
+            {
+                Destroy(placedWallsRoot.GetChild(index).gameObject);
+            }
+        }
+
+        private void EnsureGraph()
+        {
+            if (wallState == null)
+            {
+                int boardSize = config != null ? config.BoardSize : QuoridorRules.BoardSize;
+                wallState = new WallState(boardSize, GetInitialWallCount());
+            }
+        }
+
+        private int GetInitialWallCount()
+        {
+            return config != null ? config.InitialWallCount : QuoridorRules.InitialWallCount;
+        }
+
+        private PlayerId GetActivePlayer()
+        {
+            return pawnController != null ? pawnController.ActivePlayer : PlayerId.PlayerOne;
+        }
+
+        private WallOrientation GetCurrentOrientation()
+        {
+            return inputRouter != null ? inputRouter.CurrentWallOrientation : WallOrientation.Horizontal;
+        }
+
+        private BoardPosition GetPlayerPosition(PlayerId playerId)
+        {
+            if (pawnController == null)
+            {
+                return playerId == PlayerId.PlayerOne ? QuoridorRules.PlayerOneStart : QuoridorRules.PlayerTwoStart;
+            }
+
+            return playerId == PlayerId.PlayerOne ? pawnController.PlayerOnePosition : pawnController.PlayerTwoPosition;
+        }
+
+        private static PlayerId GetNextPlayer(PlayerId playerId)
+        {
+            return playerId == PlayerId.PlayerOne ? PlayerId.PlayerTwo : PlayerId.PlayerOne;
+        }
+    }
+}
