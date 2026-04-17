@@ -200,6 +200,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
+--- !u!1 &119037482
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 119037483}
+  m_Layer: 0
+  m_Name: PlacedWalls
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &119037483
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 119037482}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1953054533}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &135078860
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1735,6 +1766,7 @@ GameObject:
   - component: {fileID: 574020595}
   - component: {fileID: 574020596}
   - component: {fileID: 574020597}
+  - component: {fileID: 574020598}
   m_Layer: 0
   m_Name: Systems
   m_TagString: Untagged
@@ -1772,6 +1804,7 @@ MonoBehaviour:
   boardView: {fileID: 458832242}
   activeMode: 0
   currentWallOrientation: 0
+  toggleInputModeKey: 9
   toggleWallOrientationKey: 293
 --- !u!114 &574020597
 MonoBehaviour:
@@ -1790,6 +1823,28 @@ MonoBehaviour:
   inputRouter: {fileID: 574020596}
   playerOnePawn: {fileID: 1996273076}
   playerTwoPawn: {fileID: 1133516381}
+--- !u!114 &574020598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 574020594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ad3ae3d88e0040d4a829a9de24054c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Wall.WallController
+  config: {fileID: 11400000, guid: 3f0b0c44165a049c9b8434d15e6762bc, type: 2}
+  boardView: {fileID: 458832242}
+  inputRouter: {fileID: 574020596}
+  pawnController: {fileID: 574020597}
+  previewWall: {fileID: 617173618}
+  placedWallPrefab: {fileID: 5853652732904677950, guid: 491f523254fa14b009c5193c19d0dc51, type: 3}
+  placedWallsRoot: {fileID: 119037483}
+  validPreviewMaterial: {fileID: 2100000, guid: ad2bda3a29f1647419b9aa0c045f806d, type: 2}
+  invalidPreviewMaterial: {fileID: 2100000, guid: 3e2563af6f6b8479f8064c18782bf5f2, type: 2}
+  placedMaterial: {fileID: 2100000, guid: b8686dc8d49514cc4b4c7268f5cfd469, type: 2}
 --- !u!1001 &582402401
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1871,6 +1926,95 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
+--- !u!1001 &617173616
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1953054533}
+    m_Modifications:
+    - target: {fileID: 151821067547498355, guid: 491f523254fa14b009c5193c19d0dc51, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: ad2bda3a29f1647419b9aa0c045f806d, type: 2}
+    - target: {fileID: 3372605187581968793, guid: 491f523254fa14b009c5193c19d0dc51, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3372605187581968793, guid: 491f523254fa14b009c5193c19d0dc51, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.14
+      objectReference: {fileID: 0}
+    - target: {fileID: 3372605187581968793, guid: 491f523254fa14b009c5193c19d0dc51, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3372605187581968793, guid: 491f523254fa14b009c5193c19d0dc51, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3372605187581968793, guid: 491f523254fa14b009c5193c19d0dc51, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3372605187581968793, guid: 491f523254fa14b009c5193c19d0dc51, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3372605187581968793, guid: 491f523254fa14b009c5193c19d0dc51, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3372605187581968793, guid: 491f523254fa14b009c5193c19d0dc51, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3372605187581968793, guid: 491f523254fa14b009c5193c19d0dc51, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3372605187581968793, guid: 491f523254fa14b009c5193c19d0dc51, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3372605187581968793, guid: 491f523254fa14b009c5193c19d0dc51, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3372605187581968793, guid: 491f523254fa14b009c5193c19d0dc51, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4302231507796174860, guid: 491f523254fa14b009c5193c19d0dc51, type: 3}
+      propertyPath: m_Name
+      value: WallPreview
+      objectReference: {fileID: 0}
+    - target: {fileID: 4302231507796174860, guid: 491f523254fa14b009c5193c19d0dc51, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 491f523254fa14b009c5193c19d0dc51, type: 3}
+--- !u!4 &617173617 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3372605187581968793, guid: 491f523254fa14b009c5193c19d0dc51, type: 3}
+  m_PrefabInstance: {fileID: 617173616}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &617173618 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5853652732904677950, guid: 491f523254fa14b009c5193c19d0dc51, type: 3}
+  m_PrefabInstance: {fileID: 617173616}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfdb5df34456a4d5d93b55ccb56078b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Wall.WallView
 --- !u!1001 &674461044
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5080,6 +5224,7 @@ Transform:
   - {fileID: 1640768393}
   - {fileID: 392897822}
   - {fileID: 1052885022}
+  - {fileID: 1953054533}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1536342337
@@ -6628,6 +6773,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
+--- !u!1 &1953054532
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1953054533}
+  m_Layer: 0
+  m_Name: Walls
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1953054533
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1953054532}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 119037483}
+  - {fileID: 617173617}
+  m_Father: {fileID: 1533822815}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1969350304
 PrefabInstance:
   m_ObjectHideFlags: 0
