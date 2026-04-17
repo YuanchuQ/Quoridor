@@ -15,6 +15,7 @@ namespace Quoridor.Input
         [SerializeField] private BoardView boardView;
         [SerializeField] private InputMode activeMode = InputMode.PawnMove;
         [SerializeField] private WallOrientation currentWallOrientation = WallOrientation.Horizontal;
+        [SerializeField] private KeyCode toggleInputModeKey = KeyCode.Tab;
         [SerializeField] private KeyCode toggleWallOrientationKey = KeyCode.R;
 
         private readonly HashSet<CellView> subscribedCells = new();
@@ -38,6 +39,11 @@ namespace Quoridor.Input
         /// Raised when a board cell is selected.
         /// </summary>
         public event Action<CellView> CellSelected;
+
+        /// <summary>
+        /// Raised whenever the active input mode changes.
+        /// </summary>
+        public event Action<InputMode> InputModeChanged;
 
         /// <summary>
         /// Raised when wall orientation is toggled by input.
@@ -101,7 +107,21 @@ namespace Quoridor.Input
         /// </summary>
         public void SetInputMode(InputMode mode)
         {
+            if (activeMode == mode)
+            {
+                return;
+            }
+
             activeMode = mode;
+            InputModeChanged?.Invoke(activeMode);
+        }
+
+        /// <summary>
+        /// Toggles the active input mode between pawn movement and wall placement.
+        /// </summary>
+        public void ToggleInputMode()
+        {
+            SetInputMode(activeMode == InputMode.PawnMove ? InputMode.WallPlacement : InputMode.PawnMove);
         }
 
         /// <summary>
@@ -145,6 +165,11 @@ namespace Quoridor.Input
 
         private void Update()
         {
+            if (UnityEngine.Input.GetKeyDown(toggleInputModeKey))
+            {
+                ToggleInputMode();
+            }
+
             if (UnityEngine.Input.GetKeyDown(toggleWallOrientationKey))
             {
                 ToggleWallOrientation();
