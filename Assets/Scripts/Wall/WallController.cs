@@ -28,6 +28,7 @@ namespace Quoridor.Wall
         private WallState wallState;
         private WallPlacement currentPreview;
         private bool hasPreview;
+        private bool inputEnabled = true;
 
         /// <summary>
         /// Raised after a wall is placed successfully.
@@ -47,6 +48,11 @@ namespace Quoridor.Wall
         public int PlayerTwoWallsRemaining => wallState != null
             ? wallState.GetRemainingWalls(PlayerId.PlayerTwo)
             : GetInitialWallCount();
+
+        /// <summary>
+        /// True when wall placement input is accepted.
+        /// </summary>
+        public bool InputEnabled => inputEnabled;
 
         /// <summary>
         /// Reinitializes wall state for a fresh local match.
@@ -72,6 +78,11 @@ namespace Quoridor.Wall
         /// </summary>
         public bool TryPlaceWall(BoardPosition anchor)
         {
+            if (!inputEnabled)
+            {
+                return false;
+            }
+
             WallPlacement candidate = new WallPlacement(anchor, GetCurrentOrientation());
             PlayerId playerId = GetActivePlayer();
             WallValidationResult result = TryPlaceWall(playerId, candidate);
@@ -86,7 +97,6 @@ namespace Quoridor.Wall
             if (pawnController != null)
             {
                 pawnController.SetBoardGraph(wallState.Graph);
-                pawnController.SetActivePlayer(GetNextPlayer(playerId));
             }
 
             if (inputRouter != null)
@@ -97,6 +107,19 @@ namespace Quoridor.Wall
             HidePreview();
             WallPlaced?.Invoke(new WallPlacedEvent(playerId, candidate, wallState.GetRemainingWalls(playerId)));
             return true;
+        }
+
+        /// <summary>
+        /// Enables or disables wall placement input.
+        /// </summary>
+        public void SetInputEnabled(bool isEnabled)
+        {
+            inputEnabled = isEnabled;
+
+            if (!inputEnabled)
+            {
+                HidePreview();
+            }
         }
 
         private void Awake()
@@ -130,6 +153,11 @@ namespace Quoridor.Wall
 
         private void HandleBoardCellInput(BoardCellInputEvent inputEvent)
         {
+            if (!inputEnabled)
+            {
+                return;
+            }
+
             if (inputEvent.Mode != InputMode.WallPlacement)
             {
                 return;
