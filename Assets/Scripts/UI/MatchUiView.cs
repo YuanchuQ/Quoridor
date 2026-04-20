@@ -1,3 +1,4 @@
+using System;
 using Quoridor.Core;
 using Quoridor.Input;
 using UnityEngine;
@@ -16,6 +17,12 @@ namespace Quoridor.UI
         [SerializeField] private Text orientationText;
         [SerializeField] private GameObject gameOverPanel;
         [SerializeField] private Text winnerText;
+        [SerializeField] private Button restartButton;
+
+        /// <summary>
+        /// Raised when the player requests a fresh local match.
+        /// </summary>
+        public event Action RestartRequested;
 
         /// <summary>
         /// Refreshes the match HUD with current match data.
@@ -64,6 +71,27 @@ namespace Quoridor.UI
         private static string FormatPlayer(PlayerId playerId)
         {
             return playerId == PlayerId.PlayerOne ? "Player 1" : "Player 2";
+        }
+
+        private void Awake()
+        {
+            if (restartButton != null)
+            {
+                restartButton.onClick.AddListener(HandleRestartClicked);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (restartButton != null)
+            {
+                restartButton.onClick.RemoveListener(HandleRestartClicked);
+            }
+        }
+
+        private void HandleRestartClicked()
+        {
+            RestartRequested?.Invoke();
         }
     }
 }

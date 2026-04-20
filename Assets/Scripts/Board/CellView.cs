@@ -18,6 +18,9 @@ namespace Quoridor.Board
         [SerializeField] private Material hoverMaterial;
         [SerializeField] private Material moveHintMaterial;
 
+        private CellHighlightState highlightState = CellHighlightState.None;
+        private bool isPointerOver;
+
         /// <summary>
         /// Raised when the pointer enters this cell.
         /// </summary>
@@ -66,6 +69,7 @@ namespace Quoridor.Board
         /// </summary>
         public void SetDefault()
         {
+            highlightState = CellHighlightState.None;
             ApplyMaterial(defaultMaterial);
         }
 
@@ -74,7 +78,8 @@ namespace Quoridor.Board
         /// </summary>
         public void SetHover()
         {
-            ApplyMaterial(hoverMaterial);
+            isPointerOver = true;
+            ApplyCurrentMaterial();
         }
 
         /// <summary>
@@ -82,7 +87,8 @@ namespace Quoridor.Board
         /// </summary>
         public void SetMoveHint()
         {
-            ApplyMaterial(moveHintMaterial);
+            highlightState = CellHighlightState.MoveHint;
+            ApplyCurrentMaterial();
         }
 
         private void Reset()
@@ -97,13 +103,15 @@ namespace Quoridor.Board
 
         private void OnMouseEnter()
         {
-            SetHover();
+            isPointerOver = true;
+            ApplyCurrentMaterial();
             HoverEntered?.Invoke(this);
         }
 
         private void OnMouseExit()
         {
-            SetDefault();
+            isPointerOver = false;
+            ApplyCurrentMaterial();
             HoverExited?.Invoke(this);
         }
 
@@ -128,6 +136,23 @@ namespace Quoridor.Board
             {
                 spriteRenderer.sharedMaterial = material;
             }
+        }
+
+        private void ApplyCurrentMaterial()
+        {
+            if (isPointerOver)
+            {
+                ApplyMaterial(hoverMaterial);
+                return;
+            }
+
+            ApplyMaterial(highlightState == CellHighlightState.MoveHint ? moveHintMaterial : defaultMaterial);
+        }
+
+        private enum CellHighlightState
+        {
+            None = 0,
+            MoveHint = 1
         }
     }
 }

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using Quoridor.Board;
 using Quoridor.Core;
 using UnityEngine;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
 namespace Quoridor.Input
 {
@@ -165,15 +168,38 @@ namespace Quoridor.Input
 
         private void Update()
         {
-            if (UnityEngine.Input.GetKeyDown(toggleInputModeKey))
+            if (WasKeyPressed(toggleInputModeKey))
             {
                 ToggleInputMode();
             }
 
-            if (UnityEngine.Input.GetKeyDown(toggleWallOrientationKey))
+            if (WasKeyPressed(toggleWallOrientationKey))
             {
                 ToggleWallOrientation();
             }
+        }
+
+        private static bool WasKeyPressed(KeyCode keyCode)
+        {
+#if ENABLE_INPUT_SYSTEM
+            Keyboard keyboard = Keyboard.current;
+            if (keyboard != null)
+            {
+                switch (keyCode)
+                {
+                    case KeyCode.R:
+                        return keyboard.rKey.wasPressedThisFrame;
+                    case KeyCode.Tab:
+                        return keyboard.tabKey.wasPressedThisFrame;
+                }
+            }
+#endif
+
+#if ENABLE_LEGACY_INPUT_MANAGER
+            return UnityEngine.Input.GetKeyDown(keyCode);
+#else
+            return false;
+#endif
         }
 
         private void SubscribeToCells()

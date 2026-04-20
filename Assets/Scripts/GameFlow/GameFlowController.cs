@@ -83,6 +83,11 @@ namespace Quoridor.GameFlow
 
         private void OnEnable()
         {
+            if (matchUiView != null)
+            {
+                matchUiView.RestartRequested += StartNewMatch;
+            }
+
             if (pawnController != null)
             {
                 pawnController.PawnMoved += HandlePawnMoved;
@@ -102,6 +107,11 @@ namespace Quoridor.GameFlow
 
         private void OnDisable()
         {
+            if (matchUiView != null)
+            {
+                matchUiView.RestartRequested -= StartNewMatch;
+            }
+
             if (pawnController != null)
             {
                 pawnController.PawnMoved -= HandlePawnMoved;
