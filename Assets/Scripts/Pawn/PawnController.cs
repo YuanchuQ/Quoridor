@@ -23,6 +23,7 @@ namespace Quoridor.Pawn
         private readonly List<BoardPosition> legalMoves = new();
         private BoardGraph boardGraph;
         private PlayerId activePlayer = PlayerId.PlayerOne;
+        private bool inputEnabled = true;
 
         /// <summary>
         /// Raised after a pawn successfully moves.
@@ -43,6 +44,11 @@ namespace Quoridor.Pawn
         /// Current position of player two's pawn.
         /// </summary>
         public BoardPosition PlayerTwoPosition => playerTwoPawn != null ? playerTwoPawn.Position : GetStartPosition(PlayerId.PlayerTwo);
+
+        /// <summary>
+        /// True when pawn movement input is accepted.
+        /// </summary>
+        public bool InputEnabled => inputEnabled;
 
         /// <summary>
         /// Reinitializes the pawn controller with current inspector references.
@@ -73,6 +79,11 @@ namespace Quoridor.Pawn
         /// </summary>
         public bool TryMoveActivePawn(BoardPosition destination)
         {
+            if (!inputEnabled)
+            {
+                return false;
+            }
+
             PawnView activePawn = GetPawn(activePlayer);
             PawnView opponentPawn = GetOpponentPawn(activePlayer);
 
@@ -90,7 +101,6 @@ namespace Quoridor.Pawn
             BoardPosition from = activePawn.Position;
             activePawn.MoveTo(destination);
             PawnMoved?.Invoke(new PawnMoveEvent(activePlayer, from, destination));
-            activePlayer = activePlayer == PlayerId.PlayerOne ? PlayerId.PlayerTwo : PlayerId.PlayerOne;
             RefreshMoveHints();
             return true;
         }
@@ -111,6 +121,23 @@ namespace Quoridor.Pawn
         {
             activePlayer = playerId;
             RefreshMoveHints();
+        }
+
+        /// <summary>
+        /// Enables or disables pawn movement input.
+        /// </summary>
+        public void SetInputEnabled(bool isEnabled)
+        {
+            inputEnabled = isEnabled;
+
+            if (!inputEnabled && boardView != null)
+            {
+                boardView.ClearHighlights();
+            }
+            else
+            {
+                RefreshMoveHints();
+            }
         }
 
         private void Awake()
@@ -136,6 +163,11 @@ namespace Quoridor.Pawn
 
         private void HandleBoardCellInput(BoardCellInputEvent inputEvent)
         {
+            if (!inputEnabled)
+            {
+                return;
+            }
+
             if (inputEvent.Mode != InputMode.PawnMove || inputEvent.Phase != BoardCellInputPhase.Selected)
             {
                 return;
