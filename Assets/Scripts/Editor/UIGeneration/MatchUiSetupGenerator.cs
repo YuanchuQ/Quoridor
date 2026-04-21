@@ -63,7 +63,7 @@ namespace Quoridor.Editor.UIGeneration
             Text modeText = CreateText(hud.transform, "ModeText", new Vector2(24f, -60f), new Vector2(260f, 28f), 18, TextAnchor.MiddleLeft);
             Text orientationText = CreateText(hud.transform, "OrientationText", new Vector2(24f, -92f), new Vector2(260f, 28f), 18, TextAnchor.MiddleLeft);
             Text wallText = CreateText(hud.transform, "WallText", new Vector2(-24f, -24f), new Vector2(390f, 30f), 18, TextAnchor.MiddleRight);
-            GameObject panel = CreateGameOverPanel(hud.transform, out Text winnerText);
+            GameObject panel = CreateGameOverPanel(hud.transform, out Text winnerText, out Button restartButton);
 
             var serializedView = new SerializedObject(hud.GetComponent<MatchUiView>());
             serializedView.FindProperty("turnText").objectReferenceValue = turnText;
@@ -72,6 +72,7 @@ namespace Quoridor.Editor.UIGeneration
             serializedView.FindProperty("orientationText").objectReferenceValue = orientationText;
             serializedView.FindProperty("gameOverPanel").objectReferenceValue = panel;
             serializedView.FindProperty("winnerText").objectReferenceValue = winnerText;
+            serializedView.FindProperty("restartButton").objectReferenceValue = restartButton;
             serializedView.ApplyModifiedPropertiesWithoutUndo();
 
             PrefabUtility.SaveAsPrefabAsset(hud, MatchHudPrefabPath);
@@ -109,7 +110,7 @@ namespace Quoridor.Editor.UIGeneration
             return text;
         }
 
-        private static GameObject CreateGameOverPanel(Transform parent, out Text winnerText)
+        private static GameObject CreateGameOverPanel(Transform parent, out Text winnerText, out Button restartButton)
         {
             GameObject panel = new GameObject("GameOverPanel", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
             panel.transform.SetParent(parent, false);
@@ -118,7 +119,7 @@ namespace Quoridor.Editor.UIGeneration
             panelRect.anchorMax = new Vector2(0.5f, 0.5f);
             panelRect.pivot = new Vector2(0.5f, 0.5f);
             panelRect.anchoredPosition = Vector2.zero;
-            panelRect.sizeDelta = new Vector2(360f, 128f);
+            panelRect.sizeDelta = new Vector2(360f, 156f);
 
             Image image = panel.GetComponent<Image>();
             image.color = new Color(0.05f, 0.06f, 0.08f, 0.86f);
@@ -128,10 +129,44 @@ namespace Quoridor.Editor.UIGeneration
             winnerRect.anchorMin = new Vector2(0.5f, 0.5f);
             winnerRect.anchorMax = new Vector2(0.5f, 0.5f);
             winnerRect.pivot = new Vector2(0.5f, 0.5f);
-            winnerRect.anchoredPosition = Vector2.zero;
+            winnerRect.anchoredPosition = new Vector2(0f, 24f);
             winnerText.color = Color.white;
+
+            restartButton = CreateRestartButton(panel.transform);
             panel.SetActive(false);
             return panel;
+        }
+
+        private static Button CreateRestartButton(Transform parent)
+        {
+            GameObject buttonObject = new GameObject("RestartButton", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
+            buttonObject.transform.SetParent(parent, false);
+            RectTransform rectTransform = buttonObject.GetComponent<RectTransform>();
+            rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+            rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+            rectTransform.pivot = new Vector2(0.5f, 0.5f);
+            rectTransform.anchoredPosition = new Vector2(0f, -44f);
+            rectTransform.sizeDelta = new Vector2(140f, 34f);
+
+            Image image = buttonObject.GetComponent<Image>();
+            image.color = new Color(0.18f, 0.42f, 0.78f, 1f);
+
+            Button button = buttonObject.GetComponent<Button>();
+            ColorBlock colors = button.colors;
+            colors.highlightedColor = new Color(0.24f, 0.52f, 0.92f, 1f);
+            colors.pressedColor = new Color(0.12f, 0.28f, 0.56f, 1f);
+            button.colors = colors;
+
+            Text label = CreateText(buttonObject.transform, "Label", Vector2.zero, new Vector2(128f, 28f), 18, TextAnchor.MiddleCenter);
+            RectTransform labelRect = label.GetComponent<RectTransform>();
+            labelRect.anchorMin = Vector2.zero;
+            labelRect.anchorMax = Vector2.one;
+            labelRect.pivot = new Vector2(0.5f, 0.5f);
+            labelRect.anchoredPosition = Vector2.zero;
+            labelRect.sizeDelta = Vector2.zero;
+            label.text = "Restart";
+            label.color = Color.white;
+            return button;
         }
 
         private static Font GetDefaultFont()
