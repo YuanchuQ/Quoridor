@@ -83,9 +83,22 @@ namespace Quoridor.Wall
                 transform.position.z);
 
             transform.localRotation = Quaternion.identity;
-            transform.localScale = placement.Orientation == WallOrientation.Horizontal
-                ? new Vector3(spacing * 2f, thickness, 1f)
-                : new Vector3(thickness, spacing * 2f, 1f);
+
+            CacheRenderer();
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.drawMode = SpriteDrawMode.Simple;
+                Vector2 targetSize = placement.Orientation == WallOrientation.Horizontal
+                    ? new Vector2(spacing * 2f, thickness)
+                    : new Vector2(thickness, spacing * 2f);
+                transform.localScale = CalculateScale(targetSize);
+            }
+            else
+            {
+                transform.localScale = placement.Orientation == WallOrientation.Horizontal
+                    ? new Vector3(spacing * 2f, thickness, 1f)
+                    : new Vector3(thickness, spacing * 2f, 1f);
+            }
         }
 
         private void ApplyMaterial(Material material)
@@ -98,6 +111,7 @@ namespace Quoridor.Wall
             }
 
             spriteRenderer.sortingOrder = sortingOrder;
+            spriteRenderer.color = Color.white;
             if (material != null)
             {
                 spriteRenderer.sharedMaterial = material;
@@ -110,6 +124,19 @@ namespace Quoridor.Wall
             {
                 spriteRenderer = GetComponent<SpriteRenderer>();
             }
+        }
+
+        private Vector3 CalculateScale(Vector2 targetSize)
+        {
+            if (spriteRenderer == null || spriteRenderer.sprite == null)
+            {
+                return new Vector3(targetSize.x, targetSize.y, 1f);
+            }
+
+            Vector2 spriteSize = spriteRenderer.sprite.bounds.size;
+            float width = spriteSize.x > Mathf.Epsilon ? targetSize.x / spriteSize.x : targetSize.x;
+            float height = spriteSize.y > Mathf.Epsilon ? targetSize.y / spriteSize.y : targetSize.y;
+            return new Vector3(width, height, 1f);
         }
     }
 }
