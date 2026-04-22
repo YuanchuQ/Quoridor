@@ -1918,6 +1918,7 @@ MonoBehaviour:
   boardView: {fileID: 458832242}
   activeMode: 0
   currentWallOrientation: 0
+  inputCamera: {fileID: 0}
   toggleInputModeKey: 9
   toggleWallOrientationKey: 293
 --- !u!114 &574020597
