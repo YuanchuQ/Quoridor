@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Quoridor.Board;
 using Quoridor.Core;
 using UnityEngine;
@@ -18,10 +17,11 @@ namespace Quoridor.Input
         [SerializeField] private BoardView boardView;
         [SerializeField] private InputMode activeMode = InputMode.PawnMove;
         [SerializeField] private WallOrientation currentWallOrientation = WallOrientation.Horizontal;
+        [SerializeField] private Camera inputCamera;
         [SerializeField] private KeyCode toggleInputModeKey = KeyCode.Tab;
         [SerializeField] private KeyCode toggleWallOrientationKey = KeyCode.R;
 
-        private readonly HashSet<CellView> subscribedCells = new();
+        private CellView hoveredCell;
 
         /// <summary>
         /// Raised when board cell input is routed through the active input mode.
@@ -83,13 +83,8 @@ namespace Quoridor.Input
                 return;
             }
 
-            UnsubscribeFromCells();
+            ClearHoveredCell();
             boardView = nextBoardView;
-
-            if (isActiveAndEnabled)
-            {
-                SubscribeToCells();
-            }
         }
 
         /// <summary>
@@ -97,12 +92,7 @@ namespace Quoridor.Input
         /// </summary>
         public void RefreshBoardSubscriptions()
         {
-            UnsubscribeFromCells();
-
-            if (isActiveAndEnabled)
-            {
-                SubscribeToCells();
-            }
+            ClearHoveredCell();
         }
 
         /// <summary>
@@ -156,18 +146,15 @@ namespace Quoridor.Input
             WallOrientationChanged?.Invoke(currentWallOrientation);
         }
 
-        private void OnEnable()
-        {
-            SubscribeToCells();
-        }
-
         private void OnDisable()
         {
-            UnsubscribeFromCells();
+            ClearHoveredCell();
         }
 
         private void Update()
         {
+            RoutePointerInput();
+
             if (WasKeyPressed(toggleInputModeKey))
             {
                 ToggleInputMode();
@@ -177,6 +164,53 @@ namespace Quoridor.Input
             {
                 ToggleWallOrientation();
             }
+        }
+
+        private void RoutePointerInput()
+        {
+            CellView currentCell = GetCellUnderPointer();
+            if (currentCell != hoveredCell)
+            {
+                if (hoveredCell != null)
+                {
+                    hoveredCell.SetPointerHover(false);
+                    CellHoverExited?.Invoke(hoveredCell);
+                    PublishBoardCellInput(hoveredCell, BoardCellInputPhase.HoverExited);
+                }
+
+                hoveredCell = currentCell;
+
+                if (hoveredCell != null)
+                {
+                    hoveredCell.SetPointerHover(true);
+                    CellHoverEntered?.Invoke(hoveredCell);
+                    PublishBoardCellInput(hoveredCell, BoardCellInputPhase.HoverEntered);
+                }
+            }
+
+            if (hoveredCell != null && WasPrimaryPointerPressed())
+            {
+                CellSelected?.Invoke(hoveredCell);
+                PublishBoardCellInput(hoveredCell, BoardCellInputPhase.Selected);
+            }
+        }
+
+        private CellView GetCellUnderPointer()
+        {
+            if (!TryGetPointerScreenPosition(out Vector2 screenPosition))
+            {
+                return null;
+            }
+
+            Camera cameraToUse = inputCamera != null ? inputCamera : Camera.main;
+            if (cameraToUse == null)
+            {
+                return null;
+            }
+
+            Vector3 worldPosition = cameraToUse.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, -cameraToUse.transform.position.z));
+            Collider2D collider = Physics2D.OverlapPoint(worldPosition);
+            return collider != null ? collider.GetComponent<CellView>() : null;
         }
 
         private static bool WasKeyPressed(KeyCode keyCode)
@@ -202,59 +236,13 @@ namespace Quoridor.Input
 #endif
         }
 
-        private void SubscribeToCells()
+        private void ClearHoveredCell()
         {
-            if (boardView == null)
+            if (hoveredCell != null)
             {
-                return;
+                hoveredCell.SetPointerHover(false);
+                hoveredCell = null;
             }
-
-            foreach (CellView cell in boardView.Cells)
-            {
-                if (cell == null || !subscribedCells.Add(cell))
-                {
-                    continue;
-                }
-
-                cell.HoverEntered += HandleCellHoverEntered;
-                cell.HoverExited += HandleCellHoverExited;
-                cell.Selected += HandleCellSelected;
-            }
-        }
-
-        private void UnsubscribeFromCells()
-        {
-            foreach (CellView cell in subscribedCells)
-            {
-                if (cell == null)
-                {
-                    continue;
-                }
-
-                cell.HoverEntered -= HandleCellHoverEntered;
-                cell.HoverExited -= HandleCellHoverExited;
-                cell.Selected -= HandleCellSelected;
-            }
-
-            subscribedCells.Clear();
-        }
-
-        private void HandleCellHoverEntered(CellView cell)
-        {
-            CellHoverEntered?.Invoke(cell);
-            PublishBoardCellInput(cell, BoardCellInputPhase.HoverEntered);
-        }
-
-        private void HandleCellHoverExited(CellView cell)
-        {
-            CellHoverExited?.Invoke(cell);
-            PublishBoardCellInput(cell, BoardCellInputPhase.HoverExited);
-        }
-
-        private void HandleCellSelected(CellView cell)
-        {
-            CellSelected?.Invoke(cell);
-            PublishBoardCellInput(cell, BoardCellInputPhase.Selected);
         }
 
         private void PublishBoardCellInput(CellView cell, BoardCellInputPhase phase)
@@ -266,6 +254,43 @@ namespace Quoridor.Input
 
             var inputEvent = new BoardCellInputEvent(cell.Position, phase, activeMode, cell);
             BoardCellInput?.Invoke(inputEvent);
+        }
+
+        private static bool TryGetPointerScreenPosition(out Vector2 screenPosition)
+        {
+#if ENABLE_INPUT_SYSTEM
+            Mouse mouse = Mouse.current;
+            if (mouse != null)
+            {
+                screenPosition = mouse.position.ReadValue();
+                return true;
+            }
+#endif
+
+#if ENABLE_LEGACY_INPUT_MANAGER
+            screenPosition = UnityEngine.Input.mousePosition;
+            return true;
+#else
+            screenPosition = default;
+            return false;
+#endif
+        }
+
+        private static bool WasPrimaryPointerPressed()
+        {
+#if ENABLE_INPUT_SYSTEM
+            Mouse mouse = Mouse.current;
+            if (mouse != null)
+            {
+                return mouse.leftButton.wasPressedThisFrame;
+            }
+#endif
+
+#if ENABLE_LEGACY_INPUT_MANAGER
+            return UnityEngine.Input.GetMouseButtonDown(0);
+#else
+            return false;
+#endif
         }
     }
 }
