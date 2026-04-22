@@ -62,12 +62,14 @@ namespace Quoridor.Editor.UIGeneration
             Text turnText = CreateText(hud.transform, "TurnText", new Vector2(24f, -22f), new Vector2(360f, 34f), 24, TextAnchor.MiddleLeft);
             Text modeText = CreateText(hud.transform, "ModeText", new Vector2(24f, -60f), new Vector2(260f, 28f), 18, TextAnchor.MiddleLeft);
             Text orientationText = CreateText(hud.transform, "OrientationText", new Vector2(24f, -92f), new Vector2(260f, 28f), 18, TextAnchor.MiddleLeft);
+            Text hintText = CreateText(hud.transform, "HintText", new Vector2(24f, -126f), new Vector2(620f, 28f), 16, TextAnchor.MiddleLeft);
             Text wallText = CreateText(hud.transform, "WallText", new Vector2(-24f, -24f), new Vector2(390f, 30f), 18, TextAnchor.MiddleRight);
             GameObject panel = CreateGameOverPanel(hud.transform, out Text winnerText, out Button restartButton);
 
             var serializedView = new SerializedObject(hud.GetComponent<MatchUiView>());
             serializedView.FindProperty("turnText").objectReferenceValue = turnText;
             serializedView.FindProperty("modeText").objectReferenceValue = modeText;
+            serializedView.FindProperty("hintText").objectReferenceValue = hintText;
             serializedView.FindProperty("wallText").objectReferenceValue = wallText;
             serializedView.FindProperty("orientationText").objectReferenceValue = orientationText;
             serializedView.FindProperty("gameOverPanel").objectReferenceValue = panel;
@@ -172,7 +174,7 @@ namespace Quoridor.Editor.UIGeneration
         private static Font GetDefaultFont()
         {
             Font font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            return font != null ? font : Resources.GetBuiltinResource<Font>("Arial.ttf");
+            return font != null ? font : Font.CreateDynamicFontFromOSFont("Arial", 16);
         }
 
         private static void WireScene(GameObject prefab)
