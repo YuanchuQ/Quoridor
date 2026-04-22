@@ -13,6 +13,7 @@ namespace Quoridor.UI
     {
         [SerializeField] private Text turnText;
         [SerializeField] private Text modeText;
+        [SerializeField] private Text hintText;
         [SerializeField] private Text wallText;
         [SerializeField] private Text orientationText;
         [SerializeField] private GameObject gameOverPanel;
@@ -44,6 +45,13 @@ namespace Quoridor.UI
             if (modeText != null)
             {
                 modeText.text = inputMode == InputMode.PawnMove ? "Mode: Move" : "Mode: Wall";
+            }
+
+            if (hintText != null)
+            {
+                hintText.text = inputMode == InputMode.PawnMove
+                    ? "Click a highlighted cell to move   |   Tab: Place wall"
+                    : "Hover a cell to preview   |   Click: Place wall   |   R: Rotate   |   Tab: Move";
             }
 
             if (wallText != null)

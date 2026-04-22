@@ -70,6 +70,7 @@ namespace Quoridor.Board
         public void SetDefault()
         {
             highlightState = CellHighlightState.None;
+            isPointerOver = false;
             ApplyMaterial(defaultMaterial);
         }
 
@@ -78,8 +79,7 @@ namespace Quoridor.Board
         /// </summary>
         public void SetHover()
         {
-            isPointerOver = true;
-            ApplyCurrentMaterial();
+            SetPointerHover(true);
         }
 
         /// <summary>
@@ -88,6 +88,15 @@ namespace Quoridor.Board
         public void SetMoveHint()
         {
             highlightState = CellHighlightState.MoveHint;
+            ApplyCurrentMaterial();
+        }
+
+        /// <summary>
+        /// Updates pointer hover state without changing the persistent highlight state.
+        /// </summary>
+        public void SetPointerHover(bool isHovered)
+        {
+            isPointerOver = isHovered;
             ApplyCurrentMaterial();
         }
 
@@ -103,15 +112,13 @@ namespace Quoridor.Board
 
         private void OnMouseEnter()
         {
-            isPointerOver = true;
-            ApplyCurrentMaterial();
+            SetPointerHover(true);
             HoverEntered?.Invoke(this);
         }
 
         private void OnMouseExit()
         {
-            isPointerOver = false;
-            ApplyCurrentMaterial();
+            SetPointerHover(false);
             HoverExited?.Invoke(this);
         }
 
