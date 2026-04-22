@@ -1920,7 +1920,7 @@ MonoBehaviour:
   currentWallOrientation: 0
   inputCamera: {fileID: 0}
   toggleInputModeKey: 9
-  toggleWallOrientationKey: 293
+  toggleWallOrientationKey: 114
 --- !u!114 &574020597
 MonoBehaviour:
   m_ObjectHideFlags: 0
