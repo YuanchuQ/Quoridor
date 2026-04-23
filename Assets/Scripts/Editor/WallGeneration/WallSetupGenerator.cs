@@ -1,10 +1,10 @@
-using System.IO;
 using Quoridor.Board;
 using Quoridor.Config;
 using Quoridor.Core;
 using Quoridor.Input;
 using Quoridor.Pawn;
 using Quoridor.Wall;
+using Quoridor.EditorTools;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -17,8 +17,6 @@ namespace Quoridor.Editor.WallGeneration
     public static class WallSetupGenerator
     {
         private const string WallPrefabPath = "Assets/Prefabs/Wall/Wall.prefab";
-        private const string WallSpritePath = "Assets/Art/WallBar.png";
-        private const int WallTextureSize = 16;
         private const int WallSortingOrder = 15;
 
         /// <summary>
@@ -52,38 +50,7 @@ namespace Quoridor.Editor.WallGeneration
 
         private static Sprite EnsureWallSprite()
         {
-            Texture2D texture = CreateWallTexture();
-            File.WriteAllBytes(WallSpritePath, texture.EncodeToPNG());
-            Object.DestroyImmediate(texture);
-
-            AssetDatabase.ImportAsset(WallSpritePath, ImportAssetOptions.ForceUpdate);
-            var importer = (TextureImporter)AssetImporter.GetAtPath(WallSpritePath);
-            importer.textureType = TextureImporterType.Sprite;
-            importer.spriteImportMode = SpriteImportMode.Single;
-            importer.spritePixelsPerUnit = WallTextureSize;
-            importer.mipmapEnabled = false;
-            importer.alphaIsTransparency = true;
-            importer.SaveAndReimport();
-            return AssetDatabase.LoadAssetAtPath<Sprite>(WallSpritePath);
-        }
-
-        private static Texture2D CreateWallTexture()
-        {
-            var texture = new Texture2D(WallTextureSize, WallTextureSize, TextureFormat.RGBA32, false);
-            Color clear = new Color(0f, 0f, 0f, 0f);
-            Color fill = Color.white;
-
-            for (int y = 0; y < WallTextureSize; y++)
-            {
-                for (int x = 0; x < WallTextureSize; x++)
-                {
-                    bool inside = x > 1 && x < WallTextureSize - 2 && y > 1 && y < WallTextureSize - 2;
-                    texture.SetPixel(x, y, inside ? fill : clear);
-                }
-            }
-
-            texture.Apply();
-            return texture;
+            return QuoridorArtAssetUtility.EnsureWallSprite();
         }
 
         private static GameObject EnsureWallPrefab(Sprite wallSprite)
