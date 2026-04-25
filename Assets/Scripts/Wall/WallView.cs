@@ -82,19 +82,22 @@ namespace Quoridor.Wall
                 anchorPosition.y + spacing * 0.5f,
                 transform.position.z);
 
-            transform.localRotation = Quaternion.identity;
-
             CacheRenderer();
             if (spriteRenderer != null)
             {
                 spriteRenderer.drawMode = SpriteDrawMode.Simple;
+                bool isVertical = placement.Orientation == WallOrientation.Vertical;
                 Vector2 targetSize = placement.Orientation == WallOrientation.Horizontal
                     ? new Vector2(spacing * 2f, thickness)
                     : new Vector2(thickness, spacing * 2f);
-                transform.localScale = CalculateScale(targetSize);
+                transform.localRotation = !isVertical
+                    ? Quaternion.identity
+                    : Quaternion.Euler(0f, 0f, 90f);
+                transform.localScale = CalculateScale(targetSize, isVertical);
             }
             else
             {
+                transform.localRotation = Quaternion.identity;
                 transform.localScale = placement.Orientation == WallOrientation.Horizontal
                     ? new Vector3(spacing * 2f, thickness, 1f)
                     : new Vector3(thickness, spacing * 2f, 1f);
@@ -126,7 +129,7 @@ namespace Quoridor.Wall
             }
         }
 
-        private Vector3 CalculateScale(Vector2 targetSize)
+        private Vector3 CalculateScale(Vector2 targetSize, bool isVertical)
         {
             if (spriteRenderer == null || spriteRenderer.sprite == null)
             {
@@ -134,9 +137,18 @@ namespace Quoridor.Wall
             }
 
             Vector2 spriteSize = spriteRenderer.sprite.bounds.size;
-            float width = spriteSize.x > Mathf.Epsilon ? targetSize.x / spriteSize.x : targetSize.x;
-            float height = spriteSize.y > Mathf.Epsilon ? targetSize.y / spriteSize.y : targetSize.y;
+            float width = isVertical
+                ? CalculateScaleAxis(targetSize.y, spriteSize.x)
+                : CalculateScaleAxis(targetSize.x, spriteSize.x);
+            float height = isVertical
+                ? CalculateScaleAxis(targetSize.x, spriteSize.y)
+                : CalculateScaleAxis(targetSize.y, spriteSize.y);
             return new Vector3(width, height, 1f);
+        }
+
+        private static float CalculateScaleAxis(float targetSize, float spriteSize)
+        {
+            return spriteSize > Mathf.Epsilon ? targetSize / spriteSize : targetSize;
         }
     }
 }
