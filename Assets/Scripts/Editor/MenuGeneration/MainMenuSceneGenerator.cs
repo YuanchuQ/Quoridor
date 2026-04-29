@@ -88,7 +88,7 @@ namespace Quoridor.Editor.MenuGeneration
             scaler.referenceResolution = new Vector2(1280f, 720f);
             scaler.matchWidthOrHeight = 0.5f;
 
-            GameObject root = CreatePanel(canvasObject.transform, RootName, Vector2.zero, Vector2.zero, Vector2.one, Color.clear);
+            GameObject root = CreateStretchPanel(canvasObject.transform, RootName, Color.clear);
             MainMenuController controller = root.AddComponent<MainMenuController>();
 
             CreateBackground(root.transform);
@@ -134,7 +134,7 @@ namespace Quoridor.Editor.MenuGeneration
 
         private static void CreateBackground(Transform parent)
         {
-            GameObject background = CreatePanel(parent, "Background", Vector2.zero, Vector2.zero, Vector2.one, BackgroundColor);
+            GameObject background = CreateStretchPanel(parent, "Background", BackgroundColor);
             background.transform.SetAsFirstSibling();
         }
 
@@ -328,6 +328,15 @@ namespace Quoridor.Editor.MenuGeneration
             rectTransform.offsetMin = Vector2.zero;
             rectTransform.offsetMax = Vector2.zero;
             panel.GetComponent<Image>().color = color;
+            return panel;
+        }
+
+        private static GameObject CreateStretchPanel(Transform parent, string name, Color color)
+        {
+            GameObject panel = CreatePanel(parent, name, Vector2.zero, Vector2.one, new Vector2(0.5f, 0.5f), color);
+            RectTransform rectTransform = panel.GetComponent<RectTransform>();
+            rectTransform.offsetMin = Vector2.zero;
+            rectTransform.offsetMax = Vector2.zero;
             return panel;
         }
 
