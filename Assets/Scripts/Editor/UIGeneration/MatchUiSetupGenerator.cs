@@ -17,7 +17,10 @@ namespace Quoridor.Editor.UIGeneration
     public static class MatchUiSetupGenerator
     {
         private const string MatchHudPrefabPath = "Assets/Prefabs/UI/MatchHUD.prefab";
+        private const string PlayerInfoTexturePath = "Assets/Art/UI/Information.png";
         private const int HudSortingOrder = 50;
+        private static readonly Color PlayerOneTextColor = new Color(0.68f, 0.24f, 0.32f, 1f);
+        private static readonly Color PlayerTwoTextColor = new Color(0.2f, 0.34f, 0.68f, 1f);
 
         /// <summary>
         /// Creates or updates the match HUD prefab, scene instance, and game flow wiring.
@@ -59,11 +62,39 @@ namespace Quoridor.Editor.UIGeneration
             scaler.referenceResolution = new Vector2(1280f, 720f);
             scaler.matchWidthOrHeight = 0.5f;
 
-            Text turnText = CreateText(hud.transform, "TurnText", new Vector2(24f, -22f), new Vector2(360f, 34f), 24, TextAnchor.MiddleLeft);
-            Text modeText = CreateText(hud.transform, "ModeText", new Vector2(24f, -60f), new Vector2(260f, 28f), 18, TextAnchor.MiddleLeft);
-            Text orientationText = CreateText(hud.transform, "OrientationText", new Vector2(24f, -92f), new Vector2(260f, 28f), 18, TextAnchor.MiddleLeft);
-            Text hintText = CreateText(hud.transform, "HintText", new Vector2(24f, -126f), new Vector2(620f, 28f), 16, TextAnchor.MiddleLeft);
-            Text wallText = CreateText(hud.transform, "WallText", new Vector2(-24f, -24f), new Vector2(390f, 30f), 18, TextAnchor.MiddleRight);
+            CreatePlayerInfoPanel(
+                hud.transform,
+                "PlayerOneInfoPanel",
+                true,
+                PlayerOneTextColor,
+                out Text playerOneNameText,
+                out Text playerOnePawnCountText,
+                out Text playerOneWallCountText,
+                out Text playerOneStatusText);
+
+            CreatePlayerInfoPanel(
+                hud.transform,
+                "PlayerTwoInfoPanel",
+                false,
+                PlayerTwoTextColor,
+                out Text playerTwoNameText,
+                out Text playerTwoPawnCountText,
+                out Text playerTwoWallCountText,
+                out Text playerTwoStatusText);
+
+            Text turnText = CreateText(hud.transform, "TurnText", new Vector2(0f, -18f), new Vector2(420f, 34f), 22, TextAnchor.MiddleCenter);
+            SetAnchored(turnText.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), turnText.rectTransform.anchoredPosition, turnText.rectTransform.sizeDelta);
+
+            Text modeText = CreateText(hud.transform, "ModeText", new Vector2(-224f, 34f), new Vector2(190f, 26f), 16, TextAnchor.MiddleLeft);
+            Text orientationText = CreateText(hud.transform, "OrientationText", new Vector2(224f, 34f), new Vector2(190f, 26f), 16, TextAnchor.MiddleRight);
+            Text hintText = CreateText(hud.transform, "HintText", new Vector2(0f, 22f), new Vector2(620f, 42f), 16, TextAnchor.MiddleCenter);
+            Text wallText = CreateText(hud.transform, "WallText", new Vector2(0f, 58f), new Vector2(390f, 24f), 16, TextAnchor.MiddleCenter);
+
+            SetBottomAnchored(modeText.rectTransform);
+            SetBottomAnchored(orientationText.rectTransform);
+            SetBottomAnchored(hintText.rectTransform);
+            SetBottomAnchored(wallText.rectTransform);
+
             GameObject panel = CreateGameOverPanel(hud.transform, out Text winnerText, out Button restartButton);
 
             var serializedView = new SerializedObject(hud.GetComponent<MatchUiView>());
@@ -72,6 +103,14 @@ namespace Quoridor.Editor.UIGeneration
             serializedView.FindProperty("hintText").objectReferenceValue = hintText;
             serializedView.FindProperty("wallText").objectReferenceValue = wallText;
             serializedView.FindProperty("orientationText").objectReferenceValue = orientationText;
+            serializedView.FindProperty("playerOneNameText").objectReferenceValue = playerOneNameText;
+            serializedView.FindProperty("playerOnePawnCountText").objectReferenceValue = playerOnePawnCountText;
+            serializedView.FindProperty("playerOneWallCountText").objectReferenceValue = playerOneWallCountText;
+            serializedView.FindProperty("playerOneStatusText").objectReferenceValue = playerOneStatusText;
+            serializedView.FindProperty("playerTwoNameText").objectReferenceValue = playerTwoNameText;
+            serializedView.FindProperty("playerTwoPawnCountText").objectReferenceValue = playerTwoPawnCountText;
+            serializedView.FindProperty("playerTwoWallCountText").objectReferenceValue = playerTwoWallCountText;
+            serializedView.FindProperty("playerTwoStatusText").objectReferenceValue = playerTwoStatusText;
             serializedView.FindProperty("gameOverPanel").objectReferenceValue = panel;
             serializedView.FindProperty("winnerText").objectReferenceValue = winnerText;
             serializedView.FindProperty("restartButton").objectReferenceValue = restartButton;
@@ -80,6 +119,78 @@ namespace Quoridor.Editor.UIGeneration
             PrefabUtility.SaveAsPrefabAsset(hud, MatchHudPrefabPath);
             Object.DestroyImmediate(hud);
             return AssetDatabase.LoadAssetAtPath<GameObject>(MatchHudPrefabPath);
+        }
+
+        private static void CreatePlayerInfoPanel(
+            Transform parent,
+            string name,
+            bool isLeftSide,
+            Color textColor,
+            out Text nameText,
+            out Text pawnCountText,
+            out Text wallCountText,
+            out Text statusText)
+        {
+            GameObject panel = new GameObject(name, typeof(RectTransform));
+            panel.transform.SetParent(parent, false);
+
+            RectTransform panelRect = panel.GetComponent<RectTransform>();
+            Vector2 horizontalAnchor = isLeftSide ? Vector2.zero : Vector2.one;
+            panelRect.anchorMin = new Vector2(horizontalAnchor.x, 0.5f);
+            panelRect.anchorMax = new Vector2(horizontalAnchor.x, 0.5f);
+            panelRect.pivot = new Vector2(horizontalAnchor.x, 0.5f);
+            panelRect.anchoredPosition = new Vector2(isLeftSide ? 12f : -12f, -18f);
+            panelRect.sizeDelta = new Vector2(238f, 424f);
+
+            RawImage frameImage = CreatePanelFrame(panel.transform, isLeftSide);
+            RectTransform frameRect = frameImage.rectTransform;
+            frameRect.anchorMin = Vector2.zero;
+            frameRect.anchorMax = Vector2.one;
+            frameRect.pivot = new Vector2(0.5f, 0.5f);
+            frameRect.anchoredPosition = Vector2.zero;
+            frameRect.sizeDelta = Vector2.zero;
+
+            nameText = CreatePanelText(panel.transform, "NameText", new Vector2(0f, 54f), new Vector2(150f, 34f), 24, FontStyle.Bold, TextAnchor.MiddleCenter, Color.white);
+            Text nameSubText = CreatePanelText(panel.transform, "NameSubText", new Vector2(0f, 28f), new Vector2(140f, 22f), 12, FontStyle.Bold, TextAnchor.MiddleCenter, Color.white);
+            nameSubText.text = isLeftSide ? "YUI" : "KARU";
+
+            Text pawnLabel = CreatePanelText(panel.transform, "PawnLabel", new Vector2(0f, -34f), new Vector2(120f, 24f), 18, FontStyle.Bold, TextAnchor.MiddleCenter, textColor);
+            pawnLabel.text = "棋子";
+            pawnCountText = CreatePanelText(panel.transform, "PawnCountText", new Vector2(26f, -78f), new Vector2(90f, 34f), 22, FontStyle.Bold, TextAnchor.MiddleLeft, textColor);
+
+            Text wallLabel = CreatePanelText(panel.transform, "WallLabel", new Vector2(0f, -132f), new Vector2(120f, 24f), 18, FontStyle.Bold, TextAnchor.MiddleCenter, textColor);
+            wallLabel.text = "墙壁";
+            wallCountText = CreatePanelText(panel.transform, "WallCountText", new Vector2(26f, -176f), new Vector2(90f, 34f), 22, FontStyle.Bold, TextAnchor.MiddleLeft, textColor);
+
+            statusText = CreatePanelText(panel.transform, "StatusText", new Vector2(0f, -246f), new Vector2(150f, 34f), 20, FontStyle.Bold, TextAnchor.MiddleCenter, textColor);
+        }
+
+        private static RawImage CreatePanelFrame(Transform parent, bool isLeftSide)
+        {
+            GameObject frameObject = new GameObject("Frame", typeof(RectTransform), typeof(CanvasRenderer), typeof(RawImage));
+            frameObject.transform.SetParent(parent, false);
+            RawImage image = frameObject.GetComponent<RawImage>();
+            image.texture = AssetDatabase.LoadAssetAtPath<Texture2D>(PlayerInfoTexturePath);
+            image.uvRect = isLeftSide ? new Rect(0f, 0f, 0.5f, 1f) : new Rect(0.5f, 0f, 0.5f, 1f);
+            image.raycastTarget = false;
+            return image;
+        }
+
+        private static Text CreatePanelText(
+            Transform parent,
+            string name,
+            Vector2 anchoredPosition,
+            Vector2 size,
+            int fontSize,
+            FontStyle fontStyle,
+            TextAnchor alignment,
+            Color color)
+        {
+            Text text = CreateText(parent, name, anchoredPosition, size, fontSize, alignment);
+            text.fontStyle = fontStyle;
+            text.color = color;
+            text.horizontalOverflow = HorizontalWrapMode.Wrap;
+            return text;
         }
 
         private static Text CreateText(
@@ -110,6 +221,22 @@ namespace Quoridor.Editor.UIGeneration
             text.verticalOverflow = VerticalWrapMode.Truncate;
             text.raycastTarget = false;
             return text;
+        }
+
+        private static void SetBottomAnchored(RectTransform rectTransform)
+        {
+            rectTransform.anchorMin = new Vector2(0.5f, 0f);
+            rectTransform.anchorMax = new Vector2(0.5f, 0f);
+            rectTransform.pivot = new Vector2(0.5f, 0f);
+        }
+
+        private static void SetAnchored(RectTransform rectTransform, Vector2 anchorMin, Vector2 anchorMax, Vector2 pivot, Vector2 position, Vector2 size)
+        {
+            rectTransform.anchorMin = anchorMin;
+            rectTransform.anchorMax = anchorMax;
+            rectTransform.pivot = pivot;
+            rectTransform.anchoredPosition = position;
+            rectTransform.sizeDelta = size;
         }
 
         private static GameObject CreateGameOverPanel(Transform parent, out Text winnerText, out Button restartButton)
