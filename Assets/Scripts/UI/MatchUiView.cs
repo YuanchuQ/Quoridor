@@ -16,9 +16,21 @@ namespace Quoridor.UI
         [SerializeField] private Text hintText;
         [SerializeField] private Text wallText;
         [SerializeField] private Text orientationText;
+        [SerializeField] private Text playerOneNameText;
+        [SerializeField] private Text playerOnePawnCountText;
+        [SerializeField] private Text playerOneWallCountText;
+        [SerializeField] private Text playerOneStatusText;
+        [SerializeField] private Text playerTwoNameText;
+        [SerializeField] private Text playerTwoPawnCountText;
+        [SerializeField] private Text playerTwoWallCountText;
+        [SerializeField] private Text playerTwoStatusText;
         [SerializeField] private GameObject gameOverPanel;
         [SerializeField] private Text winnerText;
         [SerializeField] private Button restartButton;
+
+        private const string PlayerOneName = "优衣";
+        private const string PlayerTwoName = "凯露";
+        private const int PawnCount = 1;
 
         /// <summary>
         /// Raised when the player requests a fresh local match.
@@ -64,6 +76,32 @@ namespace Quoridor.UI
                 orientationText.text = $"Wall: {wallOrientation}";
             }
 
+            RefreshPlayerPanel(
+                playerOneNameText,
+                playerOnePawnCountText,
+                playerOneWallCountText,
+                playerOneStatusText,
+                PlayerOneName,
+                PawnCount,
+                playerOneWalls,
+                state,
+                activePlayer,
+                PlayerId.PlayerOne,
+                winner);
+
+            RefreshPlayerPanel(
+                playerTwoNameText,
+                playerTwoPawnCountText,
+                playerTwoWallCountText,
+                playerTwoStatusText,
+                PlayerTwoName,
+                PawnCount,
+                playerTwoWalls,
+                state,
+                activePlayer,
+                PlayerId.PlayerTwo,
+                winner);
+
             bool isGameOver = state == GameState.GameOver;
             if (gameOverPanel != null)
             {
@@ -79,6 +117,50 @@ namespace Quoridor.UI
         private static string FormatPlayer(PlayerId playerId)
         {
             return playerId == PlayerId.PlayerOne ? "Player 1" : "Player 2";
+        }
+
+        private static void RefreshPlayerPanel(
+            Text nameText,
+            Text pawnCountText,
+            Text wallCountText,
+            Text statusText,
+            string playerName,
+            int pawnCount,
+            int wallCount,
+            GameState state,
+            PlayerId activePlayer,
+            PlayerId panelPlayer,
+            PlayerId winner)
+        {
+            if (nameText != null)
+            {
+                nameText.text = playerName;
+            }
+
+            if (pawnCountText != null)
+            {
+                pawnCountText.text = $"× {pawnCount}";
+            }
+
+            if (wallCountText != null)
+            {
+                wallCountText.text = $"× {wallCount}";
+            }
+
+            if (statusText != null)
+            {
+                statusText.text = FormatPanelStatus(state, activePlayer, panelPlayer, winner);
+            }
+        }
+
+        private static string FormatPanelStatus(GameState state, PlayerId activePlayer, PlayerId panelPlayer, PlayerId winner)
+        {
+            if (state == GameState.GameOver)
+            {
+                return winner == panelPlayer ? "胜利" : "败北";
+            }
+
+            return activePlayer == panelPlayer ? "你的回合" : "等待中";
         }
 
         private void Awake()
