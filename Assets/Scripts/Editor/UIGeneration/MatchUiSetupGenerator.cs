@@ -150,19 +150,19 @@ namespace Quoridor.Editor.UIGeneration
             frameRect.anchoredPosition = Vector2.zero;
             frameRect.sizeDelta = Vector2.zero;
 
-            nameText = CreatePanelText(panel.transform, "NameText", new Vector2(0f, 54f), new Vector2(150f, 34f), 24, FontStyle.Bold, TextAnchor.MiddleCenter, Color.white);
-            Text nameSubText = CreatePanelText(panel.transform, "NameSubText", new Vector2(0f, 28f), new Vector2(140f, 22f), 12, FontStyle.Bold, TextAnchor.MiddleCenter, Color.white);
+            nameText = CreatePanelText(panel.transform, "NameText", new Vector2(46.7f, -170.4f), new Vector2(150f, 34f), 24, FontStyle.Bold, TextAnchor.MiddleCenter, Color.white);
+            Text nameSubText = CreatePanelText(panel.transform, "NameSubText", new Vector2(51.7f, -176.4f), new Vector2(140f, 22f), 12, FontStyle.Bold, TextAnchor.MiddleCenter, Color.white);
             nameSubText.text = isLeftSide ? "YUI" : "KARU";
 
-            Text pawnLabel = CreatePanelText(panel.transform, "PawnLabel", new Vector2(0f, -34f), new Vector2(120f, 24f), 18, FontStyle.Bold, TextAnchor.MiddleCenter, textColor);
+            Text pawnLabel = CreatePanelText(panel.transform, "PawnLabel", new Vector2(30f, -235.9f), new Vector2(120f, 24f), 18, FontStyle.Bold, TextAnchor.MiddleCenter, textColor);
             pawnLabel.text = "棋子";
-            pawnCountText = CreatePanelText(panel.transform, "PawnCountText", new Vector2(26f, -78f), new Vector2(90f, 34f), 22, FontStyle.Bold, TextAnchor.MiddleLeft, textColor);
+            pawnCountText = CreatePanelText(panel.transform, "PawnCountText", new Vector2(106.7f, -230.9f), new Vector2(90f, 34f), 22, FontStyle.Bold, TextAnchor.MiddleLeft, textColor);
 
-            Text wallLabel = CreatePanelText(panel.transform, "WallLabel", new Vector2(0f, -132f), new Vector2(120f, 24f), 18, FontStyle.Bold, TextAnchor.MiddleCenter, textColor);
+            Text wallLabel = CreatePanelText(panel.transform, "WallLabel", new Vector2(30f, -259.90002f), new Vector2(120f, 24f), 18, FontStyle.Bold, TextAnchor.MiddleCenter, textColor);
             wallLabel.text = "墙壁";
-            wallCountText = CreatePanelText(panel.transform, "WallCountText", new Vector2(26f, -176f), new Vector2(90f, 34f), 22, FontStyle.Bold, TextAnchor.MiddleLeft, textColor);
+            wallCountText = CreatePanelText(panel.transform, "WallCountText", new Vector2(106.7f, -254.90002f), new Vector2(90f, 34f), 22, FontStyle.Bold, TextAnchor.MiddleLeft, textColor);
 
-            statusText = CreatePanelText(panel.transform, "StatusText", new Vector2(0f, -246f), new Vector2(150f, 34f), 20, FontStyle.Bold, TextAnchor.MiddleCenter, textColor);
+            statusText = CreatePanelText(panel.transform, "StatusText", new Vector2(46.7f, -320.8f), new Vector2(150f, 34f), 20, FontStyle.Bold, TextAnchor.MiddleCenter, textColor);
         }
 
         private static RawImage CreatePanelFrame(Transform parent, bool isLeftSide)
