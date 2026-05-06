@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23e96d546af704cd4977c8f5a1d2206b, type: 3}
+  m_Name: CharacterVisualCatalog
+  m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Config.CharacterVisualCatalog
+  characters:
+  - characterId: yui
+    displayName: "\u4F18\u8863"
+    latinName: YUI
+    portraitSprite: {fileID: 846943051, guid: d8104a75c3b7b4ac0bf910b3a733057a, type: 3}
+    pawnSprite: {fileID: 846943051, guid: d8104a75c3b7b4ac0bf910b3a733057a, type: 3}
+    pawnScale: 0.13
+    pawnOffset: {x: 0, y: 0.12}
+  - characterId: pecorine
+    displayName: "\u4F69\u53EF\u8389\u59C6"
+    latinName: PECORINE
+    portraitSprite: {fileID: 1930214956, guid: 6080846b4081e4ef0837b8a5d5223f23, type: 3}
+    pawnSprite: {fileID: 1930214956, guid: 6080846b4081e4ef0837b8a5d5223f23, type: 3}
+    pawnScale: 0.13
+    pawnOffset: {x: 0, y: 0.1}
+  - characterId: karyl
+    displayName: "\u51EF\u9732"
+    latinName: KARYL
+    portraitSprite: {fileID: 198139043, guid: 3680e05598cfb4dbb9e832705ad1cff8, type: 3}
+    pawnSprite: {fileID: 198139043, guid: 3680e05598cfb4dbb9e832705ad1cff8, type: 3}
+    pawnScale: 0.13
+    pawnOffset: {x: 0, y: 0.1}
+  - characterId: kokkoro
+    displayName: "\u53EF\u53EF\u841D"
+    latinName: KOKKORO
+    portraitSprite: {fileID: 581352625, guid: d46dfb2d0be764ff5ac20d2677a242db, type: 3}
+    pawnSprite: {fileID: 581352625, guid: d46dfb2d0be764ff5ac20d2677a242db, type: 3}
+    pawnScale: 0.13
+    pawnOffset: {x: 0, y: 0.1}
+  defaultPlayerOneCharacterId: yui
+  defaultPlayerTwoCharacterId: karyl
