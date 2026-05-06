@@ -20,6 +20,7 @@ namespace Quoridor.GameFlow
         [SerializeField] private PawnController pawnController;
         [SerializeField] private WallController wallController;
         [SerializeField] private MatchUiView matchUiView;
+        [SerializeField] private CharacterVisualCatalog characterCatalog;
 
         private GameState state = GameState.PlayerOneTurn;
         private PlayerId activePlayer = PlayerId.PlayerOne;
@@ -73,6 +74,7 @@ namespace Quoridor.GameFlow
             }
 
             StateChanged?.Invoke(state);
+            RefreshPlayerCharacters();
             RefreshUi();
         }
 
@@ -219,6 +221,25 @@ namespace Quoridor.GameFlow
                 wallController != null ? wallController.PlayerOneWallsRemaining : QuoridorRules.InitialWallCount,
                 wallController != null ? wallController.PlayerTwoWallsRemaining : QuoridorRules.InitialWallCount,
                 winner);
+        }
+
+        private void RefreshPlayerCharacters()
+        {
+            if (matchUiView == null || characterCatalog == null)
+            {
+                return;
+            }
+
+            matchUiView.SetPlayerCharacters(
+                ResolveCharacter(PlayerId.PlayerOne),
+                ResolveCharacter(PlayerId.PlayerTwo));
+        }
+
+        private CharacterVisualDefinition ResolveCharacter(PlayerId playerId)
+        {
+            string selectedId = LocalPlayerSelection.GetCharacterId(playerId);
+            CharacterVisualDefinition selected = characterCatalog.GetById(selectedId);
+            return selected ?? characterCatalog.GetDefault(playerId);
         }
     }
 }

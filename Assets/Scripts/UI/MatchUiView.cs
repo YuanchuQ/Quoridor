@@ -1,4 +1,5 @@
 using System;
+using Quoridor.Config;
 using Quoridor.Core;
 using Quoridor.Input;
 using UnityEngine;
@@ -17,10 +18,14 @@ namespace Quoridor.UI
         [SerializeField] private Text wallText;
         [SerializeField] private Text orientationText;
         [SerializeField] private Text playerOneNameText;
+        [SerializeField] private Text playerOneSubNameText;
+        [SerializeField] private Image playerOnePortraitImage;
         [SerializeField] private Text playerOnePawnCountText;
         [SerializeField] private Text playerOneWallCountText;
         [SerializeField] private Text playerOneStatusText;
         [SerializeField] private Text playerTwoNameText;
+        [SerializeField] private Text playerTwoSubNameText;
+        [SerializeField] private Image playerTwoPortraitImage;
         [SerializeField] private Text playerTwoPawnCountText;
         [SerializeField] private Text playerTwoWallCountText;
         [SerializeField] private Text playerTwoStatusText;
@@ -30,7 +35,12 @@ namespace Quoridor.UI
 
         private const string PlayerOneName = "优衣";
         private const string PlayerTwoName = "凯露";
+        private const string PlayerOneLatinName = "YUI";
+        private const string PlayerTwoLatinName = "KARU";
         private const int PawnCount = 1;
+
+        private CharacterVisualDefinition playerOneCharacter;
+        private CharacterVisualDefinition playerTwoCharacter;
 
         /// <summary>
         /// Raised when the player requests a fresh local match.
@@ -78,10 +88,14 @@ namespace Quoridor.UI
 
             RefreshPlayerPanel(
                 playerOneNameText,
+                playerOneSubNameText,
+                playerOnePortraitImage,
                 playerOnePawnCountText,
                 playerOneWallCountText,
                 playerOneStatusText,
+                playerOneCharacter,
                 PlayerOneName,
+                PlayerOneLatinName,
                 PawnCount,
                 playerOneWalls,
                 state,
@@ -91,10 +105,14 @@ namespace Quoridor.UI
 
             RefreshPlayerPanel(
                 playerTwoNameText,
+                playerTwoSubNameText,
+                playerTwoPortraitImage,
                 playerTwoPawnCountText,
                 playerTwoWallCountText,
                 playerTwoStatusText,
+                playerTwoCharacter,
                 PlayerTwoName,
+                PlayerTwoLatinName,
                 PawnCount,
                 playerTwoWalls,
                 state,
@@ -114,6 +132,31 @@ namespace Quoridor.UI
             }
         }
 
+        /// <summary>
+        /// Applies character portraits and display names to both player HUD panels.
+        /// </summary>
+        public void SetPlayerCharacters(CharacterVisualDefinition playerOneCharacter, CharacterVisualDefinition playerTwoCharacter)
+        {
+            this.playerOneCharacter = playerOneCharacter;
+            this.playerTwoCharacter = playerTwoCharacter;
+
+            RefreshPlayerIdentity(
+                playerOneNameText,
+                playerOneSubNameText,
+                playerOnePortraitImage,
+                playerOneCharacter,
+                PlayerOneName,
+                PlayerOneLatinName);
+
+            RefreshPlayerIdentity(
+                playerTwoNameText,
+                playerTwoSubNameText,
+                playerTwoPortraitImage,
+                playerTwoCharacter,
+                PlayerTwoName,
+                PlayerTwoLatinName);
+        }
+
         private static string FormatPlayer(PlayerId playerId)
         {
             return playerId == PlayerId.PlayerOne ? "Player 1" : "Player 2";
@@ -121,10 +164,14 @@ namespace Quoridor.UI
 
         private static void RefreshPlayerPanel(
             Text nameText,
+            Text subNameText,
+            Image portraitImage,
             Text pawnCountText,
             Text wallCountText,
             Text statusText,
+            CharacterVisualDefinition character,
             string playerName,
+            string latinName,
             int pawnCount,
             int wallCount,
             GameState state,
@@ -134,7 +181,19 @@ namespace Quoridor.UI
         {
             if (nameText != null)
             {
-                nameText.text = playerName;
+                nameText.text = character != null ? character.DisplayName : playerName;
+            }
+
+            if (subNameText != null)
+            {
+                subNameText.text = character != null ? character.LatinName : latinName;
+            }
+
+            if (portraitImage != null && character != null && character.PortraitSprite != null)
+            {
+                portraitImage.sprite = character.PortraitSprite;
+                portraitImage.enabled = true;
+                portraitImage.preserveAspect = true;
             }
 
             if (pawnCountText != null)
@@ -150,6 +209,32 @@ namespace Quoridor.UI
             if (statusText != null)
             {
                 statusText.text = FormatPanelStatus(state, activePlayer, panelPlayer, winner);
+            }
+        }
+
+        private static void RefreshPlayerIdentity(
+            Text nameText,
+            Text subNameText,
+            Image portraitImage,
+            CharacterVisualDefinition character,
+            string fallbackName,
+            string fallbackLatinName)
+        {
+            if (nameText != null)
+            {
+                nameText.text = character != null ? character.DisplayName : fallbackName;
+            }
+
+            if (subNameText != null)
+            {
+                subNameText.text = character != null ? character.LatinName : fallbackLatinName;
+            }
+
+            if (portraitImage != null)
+            {
+                portraitImage.sprite = character != null ? character.PortraitSprite : null;
+                portraitImage.enabled = portraitImage.sprite != null;
+                portraitImage.preserveAspect = true;
             }
         }
 

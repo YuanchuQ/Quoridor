@@ -11,7 +11,13 @@ namespace Quoridor.Menu
     {
         [SerializeField] private MainMenuController menuController;
         [SerializeField] private Button button;
+        [SerializeField] private string characterId;
         [SerializeField] private string characterName;
+
+        /// <summary>
+        /// Stable id passed to the menu controller when this character is selected.
+        /// </summary>
+        public string CharacterId => characterId;
 
         private void Awake()
         {
@@ -33,7 +39,7 @@ namespace Quoridor.Menu
         {
             if (menuController != null)
             {
-                menuController.SelectCharacter(characterName);
+                menuController.SelectCharacter(characterId, characterName);
             }
         }
     }

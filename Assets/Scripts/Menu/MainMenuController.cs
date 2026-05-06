@@ -1,4 +1,6 @@
 using System;
+using Quoridor.Config;
+using Quoridor.Core;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -21,6 +23,7 @@ namespace Quoridor.Menu
         [SerializeField] private Text roomListText;
         [SerializeField] private Text roomTitleText;
         [SerializeField] private Text selectedCharacterText;
+        [SerializeField] private CharacterVisualCatalog characterCatalog;
         [SerializeField] private Button singlePlayerButton;
         [SerializeField] private Button twoPlayerButton;
         [SerializeField] private Button settingsButton;
@@ -48,14 +51,26 @@ namespace Quoridor.Menu
         };
 
         private string selectedCharacterName = string.Empty;
+        private string selectedCharacterId = string.Empty;
 
         /// <summary>
         /// Selects a character by display name from a character card button.
         /// </summary>
-        public void SelectCharacter(string characterName)
+        public void SelectCharacter(string characterId, string characterName)
         {
+            selectedCharacterId = string.IsNullOrWhiteSpace(characterId)
+                ? ResolveCharacterId(characterName)
+                : characterId;
             selectedCharacterName = string.IsNullOrWhiteSpace(characterName) ? "Unknown" : characterName;
             RefreshSelectedCharacter();
+        }
+
+        /// <summary>
+        /// Selects a character by display name from legacy character card buttons.
+        /// </summary>
+        public void SelectCharacter(string characterName)
+        {
+            SelectCharacter(ResolveCharacterId(characterName), characterName);
         }
 
         private void Awake()
@@ -183,6 +198,7 @@ namespace Quoridor.Menu
 
         private void LoadLocalGame()
         {
+            ApplyLocalCharacterSelection();
             SceneManager.LoadScene(localGameSceneName);
         }
 
@@ -226,6 +242,60 @@ namespace Quoridor.Menu
             {
                 selectedCharacterText.text = $"Selected: {selectedCharacterName}";
             }
+        }
+
+        private void ApplyLocalCharacterSelection()
+        {
+            string playerOneId = string.IsNullOrWhiteSpace(selectedCharacterId)
+                ? GetDefaultCharacterId(PlayerId.PlayerOne)
+                : selectedCharacterId;
+            string playerTwoId = GetDefaultCharacterId(PlayerId.PlayerTwo);
+
+            if (!string.IsNullOrWhiteSpace(playerOneId) && playerOneId == playerTwoId)
+            {
+                playerTwoId = GetFallbackOpponentId(playerOneId);
+            }
+
+            LocalPlayerSelection.SetCharacter(PlayerId.PlayerOne, playerOneId);
+            LocalPlayerSelection.SetCharacter(PlayerId.PlayerTwo, playerTwoId);
+        }
+
+        private string ResolveCharacterId(string characterName)
+        {
+            CharacterVisualDefinition character = characterCatalog != null
+                ? characterCatalog.GetByDisplayName(characterName)
+                : null;
+            return character != null ? character.CharacterId : string.Empty;
+        }
+
+        private string GetDefaultCharacterId(PlayerId playerId)
+        {
+            if (characterCatalog == null)
+            {
+                return string.Empty;
+            }
+
+            return playerId == PlayerId.PlayerOne
+                ? characterCatalog.DefaultPlayerOneCharacterId
+                : characterCatalog.DefaultPlayerTwoCharacterId;
+        }
+
+        private string GetFallbackOpponentId(string unavailableCharacterId)
+        {
+            if (characterCatalog == null)
+            {
+                return string.Empty;
+            }
+
+            foreach (CharacterVisualDefinition character in characterCatalog.Characters)
+            {
+                if (character != null && character.CharacterId != unavailableCharacterId)
+                {
+                    return character.CharacterId;
+                }
+            }
+
+            return unavailableCharacterId;
         }
 
         private void ApplyReadableFont()
