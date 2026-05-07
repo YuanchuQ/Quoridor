@@ -19,6 +19,7 @@ namespace Quoridor.Pawn
         [SerializeField] private InputRouter inputRouter;
         [SerializeField] private PawnView playerOnePawn;
         [SerializeField] private PawnView playerTwoPawn;
+        [SerializeField] private CharacterVisualCatalog characterCatalog;
 
         private readonly List<BoardPosition> legalMoves = new();
         private BoardGraph boardGraph;
@@ -64,11 +65,13 @@ namespace Quoridor.Pawn
             if (playerOnePawn != null)
             {
                 playerOnePawn.Configure(PlayerId.PlayerOne, boardView, GetStartPosition(PlayerId.PlayerOne), moveDuration);
+                ApplyCharacterVisual(playerOnePawn, PlayerId.PlayerOne);
             }
 
             if (playerTwoPawn != null)
             {
                 playerTwoPawn.Configure(PlayerId.PlayerTwo, boardView, GetStartPosition(PlayerId.PlayerTwo), moveDuration);
+                ApplyCharacterVisual(playerTwoPawn, PlayerId.PlayerTwo);
             }
 
             RefreshMoveHints();
@@ -238,6 +241,27 @@ namespace Quoridor.Pawn
 
             Vector2Int start = playerId == PlayerId.PlayerOne ? config.PlayerOneStart : config.PlayerTwoStart;
             return new BoardPosition(start.x, start.y);
+        }
+
+        private void ApplyCharacterVisual(PawnView pawnView, PlayerId playerId)
+        {
+            CharacterVisualDefinition character = ResolveCharacter(playerId);
+            if (character != null)
+            {
+                pawnView.SetCharacterVisual(character.PawnSprite, character.PawnScale, character.PawnOffset);
+            }
+        }
+
+        private CharacterVisualDefinition ResolveCharacter(PlayerId playerId)
+        {
+            if (characterCatalog == null)
+            {
+                return null;
+            }
+
+            string selectedId = LocalPlayerSelection.GetCharacterId(playerId);
+            CharacterVisualDefinition selected = characterCatalog.GetById(selectedId);
+            return selected ?? characterCatalog.GetDefault(playerId);
         }
     }
 }

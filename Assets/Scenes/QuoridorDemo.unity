@@ -230,7 +230,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: adea636ed01d340c1907cde59ecb3ffd, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.UI.MatchUiView
 --- !u!1001 &15043112
 PrefabInstance:
@@ -311,7 +311,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1 &119037482
 GameObject:
@@ -423,7 +423,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &139011203
 PrefabInstance:
@@ -504,7 +504,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &264529453
 PrefabInstance:
@@ -585,7 +585,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &266038075
 PrefabInstance:
@@ -662,7 +662,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &267754633
 PrefabInstance:
@@ -743,7 +743,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &315005895
 PrefabInstance:
@@ -824,7 +824,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &341389924
 PrefabInstance:
@@ -905,7 +905,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &355070742
 PrefabInstance:
@@ -986,7 +986,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &379108528
 PrefabInstance:
@@ -1067,7 +1067,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1 &392897821
 GameObject:
@@ -1179,7 +1179,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &400030925
 PrefabInstance:
@@ -1256,7 +1256,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &412834686
 PrefabInstance:
@@ -1333,7 +1333,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &432332863
 PrefabInstance:
@@ -1414,7 +1414,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1 &458832240
 GameObject:
@@ -1459,7 +1459,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e68e2775be0a542abae607870db7bf43, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.BoardView
   config: {fileID: 11400000, guid: 3f0b0c44165a049c9b8434d15e6762bc, type: 2}
   cells:
@@ -1623,7 +1623,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &536020644
 PrefabInstance:
@@ -1704,7 +1704,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &548695539
 PrefabInstance:
@@ -1785,7 +1785,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &571357079
 PrefabInstance:
@@ -1866,7 +1866,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1 &574020594
 GameObject:
@@ -1913,7 +1913,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d123effff244413fabddd3b0220156d, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Input.InputRouter
   boardView: {fileID: 458832242}
   activeMode: 0
@@ -1931,13 +1931,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cb487b1fc49e44b3f99f2aef4f17ab33, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Pawn.PawnController
   config: {fileID: 11400000, guid: 3f0b0c44165a049c9b8434d15e6762bc, type: 2}
   boardView: {fileID: 458832242}
   inputRouter: {fileID: 574020596}
   playerOnePawn: {fileID: 1996273076}
   playerTwoPawn: {fileID: 1133516381}
+  characterCatalog: {fileID: 11400000, guid: 2b75e541504c24c069bdafa3fbc6c50c, type: 2}
 --- !u!114 &574020598
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1948,7 +1949,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ad3ae3d88e0040d4a829a9de24054c2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Wall.WallController
   config: {fileID: 11400000, guid: 3f0b0c44165a049c9b8434d15e6762bc, type: 2}
   boardView: {fileID: 458832242}
@@ -1970,13 +1971,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 98500729ba7604ebea10728b02eebfc3, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.GameFlow.GameFlowController
   config: {fileID: 11400000, guid: 3f0b0c44165a049c9b8434d15e6762bc, type: 2}
   inputRouter: {fileID: 574020596}
   pawnController: {fileID: 574020597}
   wallController: {fileID: 574020598}
   matchUiView: {fileID: 12034157}
+  characterCatalog: {fileID: 11400000, guid: 2b75e541504c24c069bdafa3fbc6c50c, type: 2}
 --- !u!1001 &582402401
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2056,7 +2058,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &617173616
 PrefabInstance:
@@ -2068,7 +2070,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 151821067547498355, guid: 491f523254fa14b009c5193c19d0dc51, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
-      value: 
+      value:
       objectReference: {fileID: 2100000, guid: ad2bda3a29f1647419b9aa0c045f806d, type: 2}
     - target: {fileID: 3372605187581968793, guid: 491f523254fa14b009c5193c19d0dc51, type: 3}
       propertyPath: m_LocalScale.x
@@ -2145,7 +2147,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dfdb5df34456a4d5d93b55ccb56078b6, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Wall.WallView
 --- !u!1001 &674461044
 PrefabInstance:
@@ -2226,7 +2228,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &701426354
 PrefabInstance:
@@ -2307,7 +2309,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &742197479
 PrefabInstance:
@@ -2388,7 +2390,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &752590908
 PrefabInstance:
@@ -2469,7 +2471,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1 &756368746
 GameObject:
@@ -2662,7 +2664,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &772742921
 PrefabInstance:
@@ -2743,7 +2745,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &773967751
 PrefabInstance:
@@ -2820,7 +2822,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &871071291
 PrefabInstance:
@@ -2901,7 +2903,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &871457526
 PrefabInstance:
@@ -2982,7 +2984,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &893267114
 PrefabInstance:
@@ -3063,7 +3065,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &899485103
 PrefabInstance:
@@ -3144,7 +3146,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &912729892
 PrefabInstance:
@@ -3225,7 +3227,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &920401413
 PrefabInstance:
@@ -3302,7 +3304,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &958394762
 PrefabInstance:
@@ -3383,7 +3385,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &975119723
 PrefabInstance:
@@ -3464,7 +3466,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &986175663
 PrefabInstance:
@@ -3545,7 +3547,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &988771028
 PrefabInstance:
@@ -3626,7 +3628,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1016726746
 PrefabInstance:
@@ -3707,7 +3709,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1019791036
 PrefabInstance:
@@ -3788,7 +3790,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1 &1050112488
 GameObject:
@@ -3990,7 +3992,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1133516379
 PrefabInstance:
@@ -4006,19 +4008,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1316425958975953574, guid: 31590908581c94c6ab7ca37194feae01, type: 3}
       propertyPath: boardView
-      value: 
+      value:
       objectReference: {fileID: 458832242}
+    - target: {fileID: 1316425958975953574, guid: 31590908581c94c6ab7ca37194feae01, type: 3}
+      propertyPath: visualOffset.y
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 1665501757589136479, guid: 31590908581c94c6ab7ca37194feae01, type: 3}
       propertyPath: m_Name
       value: PlayerTwoPawn
       objectReference: {fileID: 0}
     - target: {fileID: 3278090163501857328, guid: 31590908581c94c6ab7ca37194feae01, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -4
       objectReference: {fileID: 0}
     - target: {fileID: 3278090163501857328, guid: 31590908581c94c6ab7ca37194feae01, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4
+      value: -3.9
       objectReference: {fileID: 0}
     - target: {fileID: 3278090163501857328, guid: 31590908581c94c6ab7ca37194feae01, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4053,9 +4059,13 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5057723993739829481, guid: 31590908581c94c6ab7ca37194feae01, type: 3}
+      propertyPath: m_Sprite
+      value:
+      objectReference: {fileID: 198139043, guid: 3680e05598cfb4dbb9e832705ad1cff8, type: 3}
+    - target: {fileID: 5057723993739829481, guid: 31590908581c94c6ab7ca37194feae01, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 629ea5e4ef1f946ee88b3c84605317d1, type: 2}
+      value:
+      objectReference: {fileID: 2100000, guid: c7b706bb7d2c4481c8e086e5e4f6f3e9, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4075,7 +4085,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 016970e03a684450ea193d443c03c8ed, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Pawn.PawnView
 --- !u!1001 &1138900667
 PrefabInstance:
@@ -4156,7 +4166,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1246937308
 PrefabInstance:
@@ -4233,7 +4243,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1 &1260796216
 GameObject:
@@ -4263,7 +4273,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -4437,7 +4447,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1356387231
 PrefabInstance:
@@ -4518,7 +4528,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1407141823
 PrefabInstance:
@@ -4599,7 +4609,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1411012022
 PrefabInstance:
@@ -4680,7 +4690,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1429896555
 PrefabInstance:
@@ -4761,7 +4771,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1437825265
 PrefabInstance:
@@ -4842,7 +4852,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1459143496
 PrefabInstance:
@@ -4923,7 +4933,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1459335048
 PrefabInstance:
@@ -5000,7 +5010,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1486383156
 PrefabInstance:
@@ -5081,7 +5091,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1519352466
 PrefabInstance:
@@ -5158,7 +5168,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1523110800
 PrefabInstance:
@@ -5239,7 +5249,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1524870457
 PrefabInstance:
@@ -5320,7 +5330,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1 &1533822814
 GameObject:
@@ -5439,7 +5449,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1541891078
 PrefabInstance:
@@ -5520,7 +5530,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1550708424
 PrefabInstance:
@@ -5601,7 +5611,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1565928745
 PrefabInstance:
@@ -5682,7 +5692,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1604620468
 PrefabInstance:
@@ -5763,7 +5773,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1 &1640768392
 GameObject:
@@ -5871,7 +5881,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1696661532
 PrefabInstance:
@@ -5952,7 +5962,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1703279055
 PrefabInstance:
@@ -6033,7 +6043,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1704167879
 PrefabInstance:
@@ -6110,7 +6120,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1728970958
 PrefabInstance:
@@ -6183,7 +6193,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1761640782
 PrefabInstance:
@@ -6264,7 +6274,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1788976903
 PrefabInstance:
@@ -6345,7 +6355,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1868293431
 PrefabInstance:
@@ -6426,7 +6436,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1868306997
 PrefabInstance:
@@ -6507,7 +6517,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1898634932
 PrefabInstance:
@@ -6584,7 +6594,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1901275934
 PrefabInstance:
@@ -6665,7 +6675,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1913449145
 PrefabInstance:
@@ -6746,7 +6756,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1914094746
 PrefabInstance:
@@ -6823,7 +6833,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1949275016
 PrefabInstance:
@@ -6904,7 +6914,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1 &1953054532
 GameObject:
@@ -7018,7 +7028,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1988671207
 PrefabInstance:
@@ -7099,7 +7109,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &1996273074
 PrefabInstance:
@@ -7111,7 +7121,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1316425958975953574, guid: 31590908581c94c6ab7ca37194feae01, type: 3}
       propertyPath: boardView
-      value: 
+      value:
       objectReference: {fileID: 458832242}
     - target: {fileID: 1665501757589136479, guid: 31590908581c94c6ab7ca37194feae01, type: 3}
       propertyPath: m_Name
@@ -7119,11 +7129,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3278090163501857328, guid: 31590908581c94c6ab7ca37194feae01, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -4
       objectReference: {fileID: 0}
     - target: {fileID: 3278090163501857328, guid: 31590908581c94c6ab7ca37194feae01, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4
+      value: -3.88
       objectReference: {fileID: 0}
     - target: {fileID: 3278090163501857328, guid: 31590908581c94c6ab7ca37194feae01, type: 3}
       propertyPath: m_LocalPosition.z
@@ -7176,7 +7186,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 016970e03a684450ea193d443c03c8ed, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Pawn.PawnView
 --- !u!1001 &2021103190
 PrefabInstance:
@@ -7257,7 +7267,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &2031788735
 PrefabInstance:
@@ -7334,7 +7344,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &2038006839
 PrefabInstance:
@@ -7415,7 +7425,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &2045315298
 PrefabInstance:
@@ -7496,7 +7506,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &2085341654
 PrefabInstance:
@@ -7577,7 +7587,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &2098854975
 PrefabInstance:
@@ -7658,7 +7668,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1001 &2125711722
 PrefabInstance:
@@ -7735,7 +7745,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094162d9a9d124bc681ba0a8860e80cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Board.CellView
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

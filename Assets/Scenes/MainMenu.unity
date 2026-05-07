@@ -174,6 +174,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Menu.CharacterSelectButton
   menuController: {fileID: 1114364207}
   button: {fileID: 16197433}
+  characterId: kokkoro
   characterName: "\u53EF\u53EF\u841D"
 --- !u!114 &16197433
 MonoBehaviour:
@@ -823,6 +824,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Menu.CharacterSelectButton
   menuController: {fileID: 1114364207}
   button: {fileID: 344055154}
+  characterId: pecorine
   characterName: "\u4F69\u53EF\u8389\u59C6"
 --- !u!114 &344055154
 MonoBehaviour:
@@ -1518,7 +1520,7 @@ MonoBehaviour:
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 40
+    m_MaxSize: 84
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -2561,6 +2563,7 @@ MonoBehaviour:
   roomListText: {fileID: 2106205222}
   roomTitleText: {fileID: 1330751037}
   selectedCharacterText: {fileID: 895692572}
+  characterCatalog: {fileID: 11400000, guid: 2b75e541504c24c069bdafa3fbc6c50c, type: 2}
   singlePlayerButton: {fileID: 2033805842}
   twoPlayerButton: {fileID: 1162672723}
   settingsButton: {fileID: 288423359}
@@ -3034,6 +3037,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Menu.CharacterSelectButton
   menuController: {fileID: 1114364207}
   button: {fileID: 1283521786}
+  characterId: yui
   characterName: "\u4F18\u8863"
 --- !u!114 &1283521786
 MonoBehaviour:
@@ -3888,6 +3892,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Menu.CharacterSelectButton
   menuController: {fileID: 1114364207}
   button: {fileID: 1702627107}
+  characterId: karyl
   characterName: "\u51EF\u9732"
 --- !u!114 &1702627107
 MonoBehaviour:

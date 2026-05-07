@@ -15,6 +15,7 @@ namespace Quoridor.Pawn
         [SerializeField] private BoardView boardView;
         [SerializeField] private SpriteRenderer spriteRenderer;
         [SerializeField] private float moveDuration = 0.18f;
+        [SerializeField] private Vector2 visualOffset = new(0f, 0.1f);
 
         private Coroutine moveRoutine;
 
@@ -80,6 +81,23 @@ namespace Quoridor.Pawn
             }
         }
 
+        /// <summary>
+        /// Assigns the character sprite and board scale used by this pawn.
+        /// </summary>
+        public void SetCharacterVisual(Sprite sprite, float localScale, Vector2 offset)
+        {
+            CacheRenderer();
+
+            if (spriteRenderer != null && sprite != null)
+            {
+                spriteRenderer.sprite = sprite;
+            }
+
+            transform.localScale = new Vector3(Mathf.Max(0.01f, localScale), Mathf.Max(0.01f, localScale), 1f);
+            visualOffset = offset;
+            transform.position = GetWorldPosition(Position);
+        }
+
         private void Reset()
         {
             CacheRenderer();
@@ -114,7 +132,7 @@ namespace Quoridor.Pawn
             if (boardView != null && boardView.TryGetCell(position, out CellView cell))
             {
                 Vector3 cellPosition = cell.transform.position;
-                return new Vector3(cellPosition.x, cellPosition.y, transform.position.z);
+                return new Vector3(cellPosition.x + visualOffset.x, cellPosition.y + visualOffset.y, transform.position.z);
             }
 
             return transform.position;
