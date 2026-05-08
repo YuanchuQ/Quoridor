@@ -113,14 +113,14 @@ TextureImporter:
       name: PecorinePawnCharacter
       rect:
         serializedVersion: 2
-        x: 263
+        x: 252
         y: 220
-        width: 462
+        width: 515
         height: 836
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
@@ -128,17 +128,17 @@ TextureImporter:
       spriteID: 4042dee3f49024862b45b47c79847f61
       internalID: 1930214956
       vertices: []
-      indices:
+      indices: 
       edges: []
       weights: []
     outline: []
-    customData:
+    customData: 
     physicsShape: []
     bones: []
     spriteID: 3258f41334f224823bac1d7a5632d53e
     internalID: 0
     vertices: []
-    indices:
+    indices: 
     edges: []
     weights: []
     secondaryTextures: []
@@ -146,8 +146,8 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       PecorinePawnCharacter: 1930214956
-  mipmapLimitGroupName:
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  userData:
-  assetBundleName:
-  assetBundleVariant:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -113,14 +113,14 @@ TextureImporter:
       name: YuiPawnCharacter
       rect:
         serializedVersion: 2
-        x: 302
+        x: 253
         y: 220
-        width: 410
-        height: 772
+        width: 515
+        height: 836
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
@@ -128,17 +128,17 @@ TextureImporter:
       spriteID: ccdce9456e282497fbe9e4ab855020ee
       internalID: 846943051
       vertices: []
-      indices:
+      indices: 
       edges: []
       weights: []
     outline: []
-    customData:
+    customData: 
     physicsShape: []
     bones: []
     spriteID: 76378725f321a4361907e8b4c2eda34a
     internalID: -659564723
     vertices: []
-    indices:
+    indices: 
     edges: []
     weights: []
     secondaryTextures: []
@@ -146,8 +146,8 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       YuiPawnCharacter: 846943051
-  mipmapLimitGroupName:
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  userData:
-  assetBundleName:
-  assetBundleVariant:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
