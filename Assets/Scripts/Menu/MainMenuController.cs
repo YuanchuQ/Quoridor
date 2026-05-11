@@ -17,11 +17,15 @@ namespace Quoridor.Menu
         [SerializeField] private GameObject mainPanel;
         [SerializeField] private GameObject twoPlayerPanel;
         [SerializeField] private GameObject lanPanel;
+        [SerializeField] private GameObject roomListPanel;
         [SerializeField] private GameObject roomPanel;
         [SerializeField] private GameObject settingsPanel;
         [SerializeField] private Text statusText;
+        [SerializeField] private InputField nicknameInputField;
+        [SerializeField] private Text lanSelectedCharacterText;
         [SerializeField] private Text roomListText;
         [SerializeField] private Text roomTitleText;
+        [SerializeField] private Text roomWaitingText;
         [SerializeField] private Text selectedCharacterText;
         [SerializeField] private CharacterVisualCatalog characterCatalog;
         [SerializeField] private Button singlePlayerButton;
@@ -34,12 +38,19 @@ namespace Quoridor.Menu
         [SerializeField] private Button joinRoomButton;
         [SerializeField] private Button createRoomButton;
         [SerializeField] private Button lanBackButton;
+        [SerializeField] private Button roomListFirstRoomButton;
+        [SerializeField] private Button roomListSecondRoomButton;
+        [SerializeField] private Button roomListBackButton;
         [SerializeField] private Button roomBackButton;
+        [SerializeField] private Button simulateSecondPlayerButton;
         [SerializeField] private Button startLocalFromRoomButton;
         [SerializeField] private Button settingsBackButton;
 
         private const string DefaultStatus = "Ready";
-        private const string OfflineRoomName = "Local Preview Room";
+        private const string DefaultNickname = "Player";
+        private const string CreatedRoomName = "我的房间";
+        private const string FirstRoomName = "Princess Room";
+        private const string SecondRoomName = "Practice Room";
         private static readonly string[] PreferredFontNames =
         {
             "PingFang SC",
@@ -52,6 +63,8 @@ namespace Quoridor.Menu
 
         private string selectedCharacterName = string.Empty;
         private string selectedCharacterId = string.Empty;
+        private string activeRoomName = string.Empty;
+        private bool secondPlayerReady;
 
         /// <summary>
         /// Selects a character by display name from a character card button.
@@ -97,7 +110,11 @@ namespace Quoridor.Menu
             Add(joinRoomButton, JoinRoom);
             Add(createRoomButton, CreateRoom);
             Add(lanBackButton, ShowTwoPlayer);
+            Add(roomListFirstRoomButton, JoinFirstRoom);
+            Add(roomListSecondRoomButton, JoinSecondRoom);
+            Add(roomListBackButton, ShowLan);
             Add(roomBackButton, ShowLan);
+            Add(simulateSecondPlayerButton, SimulateSecondPlayerJoined);
             Add(startLocalFromRoomButton, LoadLocalGame);
             Add(settingsBackButton, ShowMain);
         }
@@ -114,7 +131,11 @@ namespace Quoridor.Menu
             Remove(joinRoomButton, JoinRoom);
             Remove(createRoomButton, CreateRoom);
             Remove(lanBackButton, ShowTwoPlayer);
+            Remove(roomListFirstRoomButton, JoinFirstRoom);
+            Remove(roomListSecondRoomButton, JoinSecondRoom);
+            Remove(roomListBackButton, ShowLan);
             Remove(roomBackButton, ShowLan);
+            Remove(simulateSecondPlayerButton, SimulateSecondPlayerJoined);
             Remove(startLocalFromRoomButton, LoadLocalGame);
             Remove(settingsBackButton, ShowMain);
         }
@@ -150,12 +171,20 @@ namespace Quoridor.Menu
         private void ShowLan()
         {
             ShowPanel(lanPanel);
+            EnsureDefaultCharacterSelection();
+            RefreshLanPanel();
+            SetStatus("输入昵称并选择角色");
+        }
+
+        private void ShowRoomList()
+        {
+            ShowPanel(roomListPanel);
             if (roomListText != null)
             {
-                roomListText.text = $"{OfflineRoomName}    1/2    LAN placeholder";
+                roomListText.text = $"{FirstRoomName}    1/2\n{SecondRoomName}    1/2";
             }
 
-            SetStatus("LAN room browser placeholder");
+            SetStatus("选择一个房间加入");
         }
 
         private void ShowSettings()
@@ -166,29 +195,40 @@ namespace Quoridor.Menu
 
         private void ShowRoom(string roomName)
         {
+            activeRoomName = roomName;
             ShowPanel(roomPanel);
+            EnsureDefaultCharacterSelection();
+            secondPlayerReady = false;
             if (roomTitleText != null)
             {
                 roomTitleText.text = roomName;
             }
 
-            if (string.IsNullOrEmpty(selectedCharacterName))
-            {
-                selectedCharacterName = "Not selected";
-            }
-
             RefreshSelectedCharacter();
-            SetStatus("Choose a character");
+            RefreshRoomState();
+            SetStatus("等待第二位玩家");
         }
 
         private void JoinRoom()
         {
-            ShowRoom(OfflineRoomName);
+            ShowRoomList();
         }
 
         private void CreateRoom()
         {
-            ShowRoom("Created Room");
+            ShowRoom(CreatedRoomName);
+        }
+
+        private void JoinFirstRoom()
+        {
+            ShowRoom(FirstRoomName);
+            SetJoinedRoomReady();
+        }
+
+        private void JoinSecondRoom()
+        {
+            ShowRoom(SecondRoomName);
+            SetJoinedRoomReady();
         }
 
         private void HandleSinglePlayer()
@@ -198,6 +238,12 @@ namespace Quoridor.Menu
 
         private void LoadLocalGame()
         {
+            if (!secondPlayerReady && roomPanel != null && roomPanel.activeSelf)
+            {
+                SetStatus("等待第二位玩家进入后才能开始");
+                return;
+            }
+
             ApplyLocalCharacterSelection();
             SceneManager.LoadScene(localGameSceneName);
         }
@@ -216,6 +262,7 @@ namespace Quoridor.Menu
             SetActive(mainPanel, activePanel == mainPanel);
             SetActive(twoPlayerPanel, activePanel == twoPlayerPanel);
             SetActive(lanPanel, activePanel == lanPanel);
+            SetActive(roomListPanel, activePanel == roomListPanel);
             SetActive(roomPanel, activePanel == roomPanel);
             SetActive(settingsPanel, activePanel == settingsPanel);
         }
@@ -240,8 +287,83 @@ namespace Quoridor.Menu
         {
             if (selectedCharacterText != null)
             {
-                selectedCharacterText.text = $"Selected: {selectedCharacterName}";
+                selectedCharacterText.text = $"角色：{selectedCharacterName}";
             }
+
+            if (lanSelectedCharacterText != null)
+            {
+                lanSelectedCharacterText.text = $"角色：{selectedCharacterName}";
+            }
+        }
+
+        private void RefreshLanPanel()
+        {
+            if (nicknameInputField != null && string.IsNullOrWhiteSpace(nicknameInputField.text))
+            {
+                nicknameInputField.text = DefaultNickname;
+            }
+
+            RefreshSelectedCharacter();
+        }
+
+        private void RefreshRoomState()
+        {
+            if (roomWaitingText != null)
+            {
+                string nickname = GetNickname();
+                roomWaitingText.text = secondPlayerReady
+                    ? $"{nickname} 已就绪\n第二位玩家已进入"
+                    : $"{nickname} 已就绪\n等待第二位玩家进入...";
+            }
+
+            if (startLocalFromRoomButton != null)
+            {
+                startLocalFromRoomButton.interactable = secondPlayerReady;
+            }
+        }
+
+        private void SimulateSecondPlayerJoined()
+        {
+            secondPlayerReady = true;
+            RefreshRoomState();
+            SetStatus("第二位玩家已进入，可以开始");
+        }
+
+        private void SetJoinedRoomReady()
+        {
+            secondPlayerReady = true;
+            RefreshRoomState();
+            SetStatus("已加入房间，可以开始");
+        }
+
+        private void EnsureDefaultCharacterSelection()
+        {
+            if (!string.IsNullOrWhiteSpace(selectedCharacterId))
+            {
+                return;
+            }
+
+            CharacterVisualDefinition defaultCharacter = characterCatalog != null
+                ? characterCatalog.GetDefault(PlayerId.PlayerOne)
+                : null;
+            if (defaultCharacter == null)
+            {
+                selectedCharacterName = "Not selected";
+                return;
+            }
+
+            selectedCharacterId = defaultCharacter.CharacterId;
+            selectedCharacterName = defaultCharacter.DisplayName;
+        }
+
+        private string GetNickname()
+        {
+            if (nicknameInputField == null || string.IsNullOrWhiteSpace(nicknameInputField.text))
+            {
+                return DefaultNickname;
+            }
+
+            return nicknameInputField.text.Trim();
         }
 
         private void ApplyLocalCharacterSelection()

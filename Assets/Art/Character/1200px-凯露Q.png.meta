@@ -113,14 +113,14 @@ TextureImporter:
       name: KarylPawnCharacter
       rect:
         serializedVersion: 2
-        x: 261
-        y: 220
+        x: 239
+        y: 221
         width: 515
-        height: 789
+        height: 836
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
@@ -128,17 +128,17 @@ TextureImporter:
       spriteID: 3dc7d9a134c654b07886b40647cc0d07
       internalID: 198139043
       vertices: []
-      indices:
+      indices: 
       edges: []
       weights: []
     outline: []
-    customData:
+    customData: 
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
-    indices:
+    indices: 
     edges: []
     weights: []
     secondaryTextures: []
@@ -146,8 +146,8 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       KarylPawnCharacter: 198139043
-  mipmapLimitGroupName:
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  userData:
-  assetBundleName:
-  assetBundleVariant:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
