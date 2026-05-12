@@ -23,7 +23,7 @@ namespace Quoridor.Editor.MenuGeneration
         private static readonly Color TextColor = new(0.18f, 0.12f, 0.13f, 1f);
 
         /// <summary>
-        /// Adds or refreshes LAN nickname, character selection, room list, and waiting-room UI.
+        /// Adds or refreshes LAN character selection, room list, and waiting-room UI.
         /// </summary>
         [MenuItem("Tools/Quoridor/Generate LAN Menu Flow")]
         public static void GenerateLanMenuFlow()
@@ -52,13 +52,11 @@ namespace Quoridor.Editor.MenuGeneration
             Text lanTitle = EnsureText(lanPanel, "PanelTitle", "局域网", 36, FontStyle.Bold, TextAnchor.MiddleCenter);
             SetAnchored(lanTitle.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -44f), new Vector2(360f, 54f));
 
-            Text nicknameLabel = EnsureText(lanPanel, "NicknameLabel", "昵称", 22, FontStyle.Bold, TextAnchor.MiddleLeft);
-            SetAnchored(nicknameLabel.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(-250f, -100f), new Vector2(90f, 34f));
-            InputField nicknameInput = EnsureInputField(lanPanel, "NicknameInputField", "Player");
-            SetAnchored(nicknameInput.GetComponent<RectTransform>(), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(-62f, -100f), new Vector2(270f, 40f));
+            RemoveChild(lanPanel, "NicknameLabel");
+            RemoveChild(lanPanel, "NicknameInputField");
 
             Text selectedCharacterText = EnsureText(lanPanel, "LanSelectedCharacterText", "角色：优衣", 22, FontStyle.Bold, TextAnchor.MiddleLeft);
-            SetAnchored(selectedCharacterText.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(230f, -100f), new Vector2(220f, 34f));
+            SetAnchored(selectedCharacterText.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -100f), new Vector2(260f, 34f));
 
             EnsureLanCharacterGrid(lanPanel, controller, catalog);
 
@@ -102,7 +100,6 @@ namespace Quoridor.Editor.MenuGeneration
                 lanPanel.gameObject,
                 roomListPanel.gameObject,
                 roomPanel.gameObject,
-                nicknameInput,
                 selectedCharacterText,
                 roomListText,
                 roomWaitingText,
@@ -133,6 +130,15 @@ namespace Quoridor.Editor.MenuGeneration
             if (rectTransform != null)
             {
                 rectTransform.sizeDelta = size;
+            }
+        }
+
+        private static void RemoveChild(Transform parent, string childName)
+        {
+            Transform child = parent.Find(childName);
+            if (child != null)
+            {
+                UnityEngine.Object.DestroyImmediate(child.gameObject);
             }
         }
 
@@ -201,38 +207,6 @@ namespace Quoridor.Editor.MenuGeneration
             Image image = panel.GetComponent<Image>();
             image.color = color;
             return panel;
-        }
-
-        private static InputField EnsureInputField(Transform parent, string name, string defaultValue)
-        {
-            Transform existing = parent.Find(name);
-            GameObject fieldObject = existing != null
-                ? existing.gameObject
-                : new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(InputField));
-            fieldObject.transform.SetParent(parent, false);
-
-            Image image = fieldObject.GetComponent<Image>();
-            image.color = FieldColor;
-
-            InputField input = fieldObject.GetComponent<InputField>();
-            Text text = EnsureText(fieldObject.transform, "Text", defaultValue, 22, FontStyle.Normal, TextAnchor.MiddleLeft);
-            SetAnchored(text.rectTransform, Vector2.zero, Vector2.one, new Vector2(0.5f, 0.5f), Vector2.zero, Vector2.zero);
-            text.rectTransform.offsetMin = new Vector2(14f, 4f);
-            text.rectTransform.offsetMax = new Vector2(-14f, -4f);
-            Text placeholder = EnsureText(fieldObject.transform, "Placeholder", "请输入昵称", 20, FontStyle.Italic, TextAnchor.MiddleLeft);
-            SetAnchored(placeholder.rectTransform, Vector2.zero, Vector2.one, new Vector2(0.5f, 0.5f), Vector2.zero, Vector2.zero);
-            placeholder.rectTransform.offsetMin = new Vector2(14f, 4f);
-            placeholder.rectTransform.offsetMax = new Vector2(-14f, -4f);
-            placeholder.color = new Color(0.42f, 0.36f, 0.34f, 0.65f);
-
-            input.textComponent = text;
-            input.placeholder = placeholder;
-            if (string.IsNullOrWhiteSpace(input.text))
-            {
-                input.text = defaultValue;
-            }
-
-            return input;
         }
 
         private static Button EnsureButton(Transform parent, string name, string label)
@@ -325,7 +299,6 @@ namespace Quoridor.Editor.MenuGeneration
             GameObject lanPanel,
             GameObject roomListPanel,
             GameObject roomPanel,
-            InputField nicknameInput,
             Text lanSelectedCharacterText,
             Text roomListText,
             Text roomWaitingText,
@@ -344,7 +317,6 @@ namespace Quoridor.Editor.MenuGeneration
             serializedController.FindProperty("lanPanel").objectReferenceValue = lanPanel;
             serializedController.FindProperty("roomListPanel").objectReferenceValue = roomListPanel;
             serializedController.FindProperty("roomPanel").objectReferenceValue = roomPanel;
-            serializedController.FindProperty("nicknameInputField").objectReferenceValue = nicknameInput;
             serializedController.FindProperty("lanSelectedCharacterText").objectReferenceValue = lanSelectedCharacterText;
             serializedController.FindProperty("roomListText").objectReferenceValue = roomListText;
             serializedController.FindProperty("roomWaitingText").objectReferenceValue = roomWaitingText;
