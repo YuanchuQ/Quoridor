@@ -21,7 +21,6 @@ namespace Quoridor.Menu
         [SerializeField] private GameObject roomPanel;
         [SerializeField] private GameObject settingsPanel;
         [SerializeField] private Text statusText;
-        [SerializeField] private InputField nicknameInputField;
         [SerializeField] private Text lanSelectedCharacterText;
         [SerializeField] private Text roomListText;
         [SerializeField] private Text roomTitleText;
@@ -47,7 +46,6 @@ namespace Quoridor.Menu
         [SerializeField] private Button settingsBackButton;
 
         private const string DefaultStatus = "Ready";
-        private const string DefaultNickname = "Player";
         private const string CreatedRoomName = "我的房间";
         private const string FirstRoomName = "Princess Room";
         private const string SecondRoomName = "Practice Room";
@@ -173,7 +171,7 @@ namespace Quoridor.Menu
             ShowPanel(lanPanel);
             EnsureDefaultCharacterSelection();
             RefreshLanPanel();
-            SetStatus("输入昵称并选择角色");
+            SetStatus("选择角色");
         }
 
         private void ShowRoomList()
@@ -298,11 +296,6 @@ namespace Quoridor.Menu
 
         private void RefreshLanPanel()
         {
-            if (nicknameInputField != null && string.IsNullOrWhiteSpace(nicknameInputField.text))
-            {
-                nicknameInputField.text = DefaultNickname;
-            }
-
             RefreshSelectedCharacter();
         }
 
@@ -310,10 +303,9 @@ namespace Quoridor.Menu
         {
             if (roomWaitingText != null)
             {
-                string nickname = GetNickname();
                 roomWaitingText.text = secondPlayerReady
-                    ? $"{nickname} 已就绪\n第二位玩家已进入"
-                    : $"{nickname} 已就绪\n等待第二位玩家进入...";
+                    ? "你已就绪\n第二位玩家已进入"
+                    : "你已就绪\n等待第二位玩家进入...";
             }
 
             if (startLocalFromRoomButton != null)
@@ -354,16 +346,6 @@ namespace Quoridor.Menu
 
             selectedCharacterId = defaultCharacter.CharacterId;
             selectedCharacterName = defaultCharacter.DisplayName;
-        }
-
-        private string GetNickname()
-        {
-            if (nicknameInputField == null || string.IsNullOrWhiteSpace(nicknameInputField.text))
-            {
-                return DefaultNickname;
-            }
-
-            return nicknameInputField.text.Trim();
         }
 
         private void ApplyLocalCharacterSelection()
