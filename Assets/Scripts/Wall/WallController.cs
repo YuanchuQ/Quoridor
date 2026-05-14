@@ -29,6 +29,8 @@ namespace Quoridor.Wall
         private WallPlacement currentPreview;
         private bool hasPreview;
         private bool inputEnabled = true;
+        private bool directInputEnabled = true;
+        private bool suppressWallEvent;
 
         /// <summary>
         /// Raised after a wall is placed successfully.
@@ -53,6 +55,11 @@ namespace Quoridor.Wall
         /// True when wall placement input is accepted.
         /// </summary>
         public bool InputEnabled => inputEnabled;
+
+        /// <summary>
+        /// True when this controller consumes board input directly.
+        /// </summary>
+        public bool DirectInputEnabled => directInputEnabled;
 
         /// <summary>
         /// Reinitializes wall state for a fresh local match.
@@ -85,7 +92,7 @@ namespace Quoridor.Wall
 
             WallPlacement candidate = new WallPlacement(anchor, GetCurrentOrientation());
             PlayerId playerId = GetActivePlayer();
-            WallValidationResult result = TryPlaceWall(playerId, candidate);
+            WallValidationResult result = TryCommitWall(playerId, candidate);
             if (!result.IsValid)
             {
                 ShowPreview(candidate, false);
@@ -105,8 +112,65 @@ namespace Quoridor.Wall
             }
 
             HidePreview();
-            WallPlaced?.Invoke(new WallPlacedEvent(playerId, candidate, wallState.GetRemainingWalls(playerId)));
+            if (!suppressWallEvent)
+            {
+                WallPlaced?.Invoke(new WallPlacedEvent(playerId, candidate, wallState.GetRemainingWalls(playerId)));
+            }
+
             return true;
+        }
+
+        /// <summary>
+        /// Attempts to place a specific wall for a specific player.
+        /// </summary>
+        public bool TryPlaceWall(PlayerId playerId, WallPlacement placement)
+        {
+            if (!inputEnabled)
+            {
+                return false;
+            }
+
+            WallValidationResult result = TryCommitWall(playerId, placement);
+            if (!result.IsValid)
+            {
+                ShowPreview(placement, false);
+                return false;
+            }
+
+            CreatePlacedWall(placement);
+
+            if (pawnController != null)
+            {
+                pawnController.SetBoardGraph(wallState.Graph);
+            }
+
+            if (inputRouter != null)
+            {
+                inputRouter.SetInputMode(InputMode.PawnMove);
+            }
+
+            HidePreview();
+            if (!suppressWallEvent)
+            {
+                WallPlaced?.Invoke(new WallPlacedEvent(playerId, placement, wallState.GetRemainingWalls(playerId)));
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Applies a validated wall placement without raising a local wall event.
+        /// </summary>
+        public bool ApplyRemoteWall(PlayerId playerId, WallPlacement placement)
+        {
+            bool previousSuppressWallEvent = suppressWallEvent;
+            bool previousInputEnabled = inputEnabled;
+            suppressWallEvent = true;
+            inputEnabled = true;
+            bool placed = TryPlaceWall(playerId, placement);
+            inputEnabled = previousInputEnabled;
+            suppressWallEvent = previousSuppressWallEvent;
+            return placed;
         }
 
         /// <summary>
@@ -120,6 +184,14 @@ namespace Quoridor.Wall
             {
                 HidePreview();
             }
+        }
+
+        /// <summary>
+        /// Enables or disables direct local board input handling.
+        /// </summary>
+        public void SetDirectInputEnabled(bool isEnabled)
+        {
+            directInputEnabled = isEnabled;
         }
 
         private void Awake()
@@ -153,7 +225,7 @@ namespace Quoridor.Wall
 
         private void HandleBoardCellInput(BoardCellInputEvent inputEvent)
         {
-            if (!inputEnabled)
+            if (!inputEnabled || !directInputEnabled)
             {
                 return;
             }
@@ -209,7 +281,7 @@ namespace Quoridor.Wall
                 GetPlayerPosition(PlayerId.PlayerTwo));
         }
 
-        private WallValidationResult TryPlaceWall(PlayerId playerId, WallPlacement candidate)
+        private WallValidationResult TryCommitWall(PlayerId playerId, WallPlacement candidate)
         {
             EnsureGraph();
             return wallState.TryPlaceWall(

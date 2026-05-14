@@ -25,6 +25,8 @@ namespace Quoridor.Pawn
         private BoardGraph boardGraph;
         private PlayerId activePlayer = PlayerId.PlayerOne;
         private bool inputEnabled = true;
+        private bool directInputEnabled = true;
+        private bool suppressMoveEvent;
 
         /// <summary>
         /// Raised after a pawn successfully moves.
@@ -50,6 +52,11 @@ namespace Quoridor.Pawn
         /// True when pawn movement input is accepted.
         /// </summary>
         public bool InputEnabled => inputEnabled;
+
+        /// <summary>
+        /// True when this controller consumes board input directly.
+        /// </summary>
+        public bool DirectInputEnabled => directInputEnabled;
 
         /// <summary>
         /// Reinitializes the pawn controller with current inspector references.
@@ -103,9 +110,45 @@ namespace Quoridor.Pawn
 
             BoardPosition from = activePawn.Position;
             activePawn.MoveTo(destination);
-            PawnMoved?.Invoke(new PawnMoveEvent(activePlayer, from, destination));
+            if (!suppressMoveEvent)
+            {
+                PawnMoved?.Invoke(new PawnMoveEvent(activePlayer, from, destination));
+            }
+
             RefreshMoveHints();
             return true;
+        }
+
+        /// <summary>
+        /// Attempts to move a specific player's pawn to the requested board position.
+        /// </summary>
+        public bool TryMovePawn(PlayerId playerId, BoardPosition destination)
+        {
+            PlayerId previousActivePlayer = activePlayer;
+            activePlayer = playerId;
+            bool moved = TryMoveActivePawn(destination);
+            if (!moved)
+            {
+                activePlayer = previousActivePlayer;
+                RefreshMoveHints();
+            }
+
+            return moved;
+        }
+
+        /// <summary>
+        /// Applies a validated pawn move without raising a local move event.
+        /// </summary>
+        public bool ApplyRemoteMove(PlayerId playerId, BoardPosition destination)
+        {
+            bool previousSuppressMoveEvent = suppressMoveEvent;
+            bool previousInputEnabled = inputEnabled;
+            suppressMoveEvent = true;
+            inputEnabled = true;
+            bool moved = TryMovePawn(playerId, destination);
+            inputEnabled = previousInputEnabled;
+            suppressMoveEvent = previousSuppressMoveEvent;
+            return moved;
         }
 
         /// <summary>
@@ -143,6 +186,14 @@ namespace Quoridor.Pawn
             }
         }
 
+        /// <summary>
+        /// Enables or disables direct local board input handling.
+        /// </summary>
+        public void SetDirectInputEnabled(bool isEnabled)
+        {
+            directInputEnabled = isEnabled;
+        }
+
         private void Awake()
         {
             ResetMatch();
@@ -166,7 +217,7 @@ namespace Quoridor.Pawn
 
         private void HandleBoardCellInput(BoardCellInputEvent inputEvent)
         {
-            if (!inputEnabled)
+            if (!inputEnabled || !directInputEnabled)
             {
                 return;
             }

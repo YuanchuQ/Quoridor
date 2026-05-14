@@ -25,6 +25,7 @@ namespace Quoridor.GameFlow
         private GameState state = GameState.PlayerOneTurn;
         private PlayerId activePlayer = PlayerId.PlayerOne;
         private PlayerId winner = PlayerId.PlayerOne;
+        private bool networkControlled;
 
         /// <summary>
         /// Raised whenever the high-level match state changes.
@@ -76,6 +77,44 @@ namespace Quoridor.GameFlow
             StateChanged?.Invoke(state);
             RefreshPlayerCharacters();
             RefreshUi();
+            RefreshNetworkInputState();
+        }
+
+        /// <summary>
+        /// Enables network-controlled input gating for this match.
+        /// </summary>
+        public void SetNetworkControlled(bool isNetworkControlled)
+        {
+            networkControlled = isNetworkControlled;
+            if (pawnController != null)
+            {
+                pawnController.SetDirectInputEnabled(!networkControlled);
+            }
+
+            if (wallController != null)
+            {
+                wallController.SetDirectInputEnabled(!networkControlled);
+            }
+
+            RefreshNetworkInputState();
+        }
+
+        /// <summary>
+        /// Applies a completed pawn move to turn state and UI without relying on local events.
+        /// </summary>
+        public void ApplyNetworkPawnMove(PawnMoveEvent moveEvent)
+        {
+            HandlePawnMoved(moveEvent);
+            RefreshNetworkInputState();
+        }
+
+        /// <summary>
+        /// Applies a completed wall placement to turn state and UI without relying on local events.
+        /// </summary>
+        public void ApplyNetworkWallPlacement(WallPlacedEvent placedEvent)
+        {
+            HandleWallPlaced(placedEvent);
+            RefreshNetworkInputState();
         }
 
         private void Start()
@@ -169,6 +208,7 @@ namespace Quoridor.GameFlow
 
             StateChanged?.Invoke(state);
             RefreshUi();
+            RefreshNetworkInputState();
         }
 
         private void SetGameOver(PlayerId winningPlayer)
@@ -188,6 +228,7 @@ namespace Quoridor.GameFlow
 
             StateChanged?.Invoke(state);
             RefreshUi();
+            RefreshNetworkInputState();
         }
 
         private bool HasWon(PlayerId playerId, BoardPosition position)
@@ -221,6 +262,25 @@ namespace Quoridor.GameFlow
                 wallController != null ? wallController.PlayerOneWallsRemaining : QuoridorRules.InitialWallCount,
                 wallController != null ? wallController.PlayerTwoWallsRemaining : QuoridorRules.InitialWallCount,
                 winner);
+        }
+
+        private void RefreshNetworkInputState()
+        {
+            if (!networkControlled)
+            {
+                return;
+            }
+
+            bool isEnabled = state != GameState.GameOver;
+            if (pawnController != null)
+            {
+                pawnController.SetInputEnabled(isEnabled);
+            }
+
+            if (wallController != null)
+            {
+                wallController.SetInputEnabled(isEnabled);
+            }
         }
 
         private void RefreshPlayerCharacters()
