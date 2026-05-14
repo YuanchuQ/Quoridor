@@ -1,6 +1,7 @@
 using System;
 using Quoridor.Config;
 using Quoridor.Core;
+using Quoridor.Networking;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -27,6 +28,7 @@ namespace Quoridor.Menu
         [SerializeField] private Text roomWaitingText;
         [SerializeField] private Text selectedCharacterText;
         [SerializeField] private CharacterVisualCatalog characterCatalog;
+        [SerializeField] private QuoridorNetworkManager networkManager;
         [SerializeField] private Button singlePlayerButton;
         [SerializeField] private Button twoPlayerButton;
         [SerializeField] private Button settingsButton;
@@ -63,6 +65,11 @@ namespace Quoridor.Menu
         private string selectedCharacterId = string.Empty;
         private string activeRoomName = string.Empty;
         private bool secondPlayerReady;
+        private bool activeRoomIsNetworked;
+        private QuoridorLanRoomInfo firstDiscoveredRoom;
+        private QuoridorLanRoomInfo secondDiscoveredRoom;
+        private bool hasFirstDiscoveredRoom;
+        private bool hasSecondDiscoveredRoom;
 
         /// <summary>
         /// Selects a character by display name from a character card button.
@@ -74,6 +81,14 @@ namespace Quoridor.Menu
                 : characterId;
             selectedCharacterName = string.IsNullOrWhiteSpace(characterName) ? "Unknown" : characterName;
             RefreshSelectedCharacter();
+            if (networkManager != null && networkManager.IsClientConnected)
+            {
+                QuoridorRoomPlayer localRoomPlayer = GetLocalRoomPlayer();
+                if (localRoomPlayer != null)
+                {
+                    localRoomPlayer.SetLocalCharacter(selectedCharacterId);
+                }
+            }
         }
 
         /// <summary>
@@ -87,13 +102,24 @@ namespace Quoridor.Menu
         private void Awake()
         {
             ApplyReadableFont();
+            ResolveNetworkManager();
             BindButtons();
+            if (networkManager != null)
+            {
+                networkManager.RoomStateChanged += HandleNetworkRoomStateChanged;
+            }
+
             ShowMain();
         }
 
         private void OnDestroy()
         {
             UnbindButtons();
+            if (networkManager != null)
+            {
+                networkManager.RoomStateChanged -= HandleNetworkRoomStateChanged;
+                networkManager.StopLanSearch(HandleRoomFound);
+            }
         }
 
         private void BindButtons()
@@ -162,6 +188,7 @@ namespace Quoridor.Menu
 
         private void ShowTwoPlayer()
         {
+            StopRoomSearch();
             ShowPanel(twoPlayerPanel);
             SetStatus("Choose a multiplayer mode");
         }
@@ -170,6 +197,7 @@ namespace Quoridor.Menu
         {
             ShowPanel(lanPanel);
             EnsureDefaultCharacterSelection();
+            StopRoomSearch();
             RefreshLanPanel();
             SetStatus("选择角色");
         }
@@ -177,12 +205,12 @@ namespace Quoridor.Menu
         private void ShowRoomList()
         {
             ShowPanel(roomListPanel);
-            if (roomListText != null)
-            {
-                roomListText.text = $"{FirstRoomName}    1/2\n{SecondRoomName}    1/2";
-            }
-
-            SetStatus("选择一个房间加入");
+            ClearDiscoveredRooms();
+            SetRoomListButton(roomListFirstRoomButton, "搜索中...", false);
+            SetRoomListButton(roomListSecondRoomButton, "搜索中...", false);
+            SetRoomListText("正在搜索局域网房间...");
+            StartRoomSearch();
+            SetStatus("搜索局域网房间");
         }
 
         private void ShowSettings()
@@ -214,19 +242,30 @@ namespace Quoridor.Menu
 
         private void CreateRoom()
         {
+            ResolveNetworkManager();
+            if (networkManager == null)
+            {
+                SetStatus("NetworkManager 未配置");
+                return;
+            }
+
+            EnsureDefaultCharacterSelection();
+            activeRoomName = CreatedRoomName;
             ShowRoom(CreatedRoomName);
+            activeRoomIsNetworked = true;
+            networkManager.StartLanHost(selectedCharacterId);
+            RefreshRoomState();
+            SetStatus("房间已创建，等待第二位玩家");
         }
 
         private void JoinFirstRoom()
         {
-            ShowRoom(FirstRoomName);
-            SetJoinedRoomReady();
+            JoinDiscoveredRoom(firstDiscoveredRoom, hasFirstDiscoveredRoom);
         }
 
         private void JoinSecondRoom()
         {
-            ShowRoom(SecondRoomName);
-            SetJoinedRoomReady();
+            JoinDiscoveredRoom(secondDiscoveredRoom, hasSecondDiscoveredRoom);
         }
 
         private void HandleSinglePlayer()
@@ -236,6 +275,12 @@ namespace Quoridor.Menu
 
         private void LoadLocalGame()
         {
+            if (activeRoomIsNetworked)
+            {
+                StartNetworkGame();
+                return;
+            }
+
             if (!secondPlayerReady && roomPanel != null && roomPanel.activeSelf)
             {
                 SetStatus("等待第二位玩家进入后才能开始");
@@ -301,6 +346,12 @@ namespace Quoridor.Menu
 
         private void RefreshRoomState()
         {
+            if (activeRoomIsNetworked)
+            {
+                RefreshNetworkRoomState();
+                return;
+            }
+
             if (roomWaitingText != null)
             {
                 roomWaitingText.text = secondPlayerReady
@@ -316,6 +367,12 @@ namespace Quoridor.Menu
 
         private void SimulateSecondPlayerJoined()
         {
+            if (activeRoomIsNetworked)
+            {
+                SetStatus("局域网房间会等待真实玩家加入");
+                return;
+            }
+
             secondPlayerReady = true;
             RefreshRoomState();
             SetStatus("第二位玩家已进入，可以开始");
@@ -326,6 +383,190 @@ namespace Quoridor.Menu
             secondPlayerReady = true;
             RefreshRoomState();
             SetStatus("已加入房间，可以开始");
+        }
+
+        private void StartRoomSearch()
+        {
+            ResolveNetworkManager();
+            if (networkManager == null)
+            {
+                SetRoomListText("NetworkManager 未配置");
+                return;
+            }
+
+            networkManager.SearchLanRooms(HandleRoomFound);
+        }
+
+        private void StopRoomSearch()
+        {
+            if (networkManager != null)
+            {
+                networkManager.StopLanSearch(HandleRoomFound);
+            }
+        }
+
+        private void ClearDiscoveredRooms()
+        {
+            firstDiscoveredRoom = default;
+            secondDiscoveredRoom = default;
+            hasFirstDiscoveredRoom = false;
+            hasSecondDiscoveredRoom = false;
+        }
+
+        private void HandleRoomFound(QuoridorLanRoomInfo roomInfo)
+        {
+            if (!hasFirstDiscoveredRoom || firstDiscoveredRoom.ServerId == roomInfo.ServerId)
+            {
+                firstDiscoveredRoom = roomInfo;
+                hasFirstDiscoveredRoom = true;
+            }
+            else if (!hasSecondDiscoveredRoom || secondDiscoveredRoom.ServerId == roomInfo.ServerId)
+            {
+                secondDiscoveredRoom = roomInfo;
+                hasSecondDiscoveredRoom = true;
+            }
+
+            RefreshRoomList();
+        }
+
+        private void RefreshRoomList()
+        {
+            SetRoomListText(BuildRoomListText());
+            SetRoomListButton(roomListFirstRoomButton, hasFirstDiscoveredRoom ? firstDiscoveredRoom.DisplayLabel : "未发现房间", hasFirstDiscoveredRoom);
+            SetRoomListButton(roomListSecondRoomButton, hasSecondDiscoveredRoom ? secondDiscoveredRoom.DisplayLabel : "继续搜索...", hasSecondDiscoveredRoom);
+        }
+
+        private string BuildRoomListText()
+        {
+            if (!hasFirstDiscoveredRoom && !hasSecondDiscoveredRoom)
+            {
+                return "正在搜索局域网房间...";
+            }
+
+            string first = hasFirstDiscoveredRoom ? firstDiscoveredRoom.DisplayLabel : string.Empty;
+            string second = hasSecondDiscoveredRoom ? secondDiscoveredRoom.DisplayLabel : string.Empty;
+            return string.IsNullOrWhiteSpace(second) ? first : $"{first}\n{second}";
+        }
+
+        private void SetRoomListText(string value)
+        {
+            if (roomListText != null)
+            {
+                roomListText.text = value;
+            }
+        }
+
+        private static void SetRoomListButton(Button button, string label, bool interactable)
+        {
+            if (button == null)
+            {
+                return;
+            }
+
+            button.interactable = interactable;
+            Text text = button.GetComponentInChildren<Text>(true);
+            if (text != null)
+            {
+                text.text = label;
+            }
+        }
+
+        private void JoinDiscoveredRoom(QuoridorLanRoomInfo roomInfo, bool hasRoom)
+        {
+            if (!hasRoom)
+            {
+                SetStatus("还没有发现可加入的房间");
+                return;
+            }
+
+            ResolveNetworkManager();
+            if (networkManager == null)
+            {
+                SetStatus("NetworkManager 未配置");
+                return;
+            }
+
+            StopRoomSearch();
+            activeRoomName = roomInfo.RoomName;
+            ShowRoom(roomInfo.RoomName);
+            activeRoomIsNetworked = true;
+            networkManager.JoinLanRoom(roomInfo, selectedCharacterId);
+            RefreshRoomState();
+            SetStatus("正在加入房间");
+        }
+
+        private void RefreshNetworkRoomState()
+        {
+            bool canStart = networkManager != null && networkManager.CanStartMatch;
+            bool isHost = networkManager != null && networkManager.IsHostActive;
+            if (roomWaitingText != null)
+            {
+                if (networkManager == null)
+                {
+                    roomWaitingText.text = "NetworkManager 未配置";
+                }
+                else if (canStart)
+                {
+                    roomWaitingText.text = "第二位玩家已进入\n房主可以开始游戏";
+                }
+                else if (isHost)
+                {
+                    roomWaitingText.text = "你已创建房间\n等待第二位玩家进入...";
+                }
+                else
+                {
+                    roomWaitingText.text = networkManager.IsClientConnected
+                        ? "已加入房间\n等待房主开始..."
+                        : "正在连接房间...";
+                }
+            }
+
+            if (startLocalFromRoomButton != null)
+            {
+                startLocalFromRoomButton.interactable = canStart;
+            }
+        }
+
+        private void StartNetworkGame()
+        {
+            if (networkManager == null || !networkManager.CanStartMatch)
+            {
+                SetStatus("等待第二位玩家进入后才能开始");
+                return;
+            }
+
+            networkManager.StartNetworkMatch();
+            SetStatus("正在进入游戏");
+        }
+
+        private void HandleNetworkRoomStateChanged()
+        {
+            if (roomPanel != null && roomPanel.activeSelf)
+            {
+                RefreshRoomState();
+            }
+        }
+
+        private QuoridorRoomPlayer GetLocalRoomPlayer()
+        {
+            QuoridorRoomPlayer[] players = FindObjectsByType<QuoridorRoomPlayer>(FindObjectsSortMode.None);
+            foreach (QuoridorRoomPlayer player in players)
+            {
+                if (player != null && player.IsLocalRoomPlayer)
+                {
+                    return player;
+                }
+            }
+
+            return null;
+        }
+
+        private void ResolveNetworkManager()
+        {
+            if (networkManager == null)
+            {
+                networkManager = FindFirstObjectByType<QuoridorNetworkManager>();
+            }
         }
 
         private void EnsureDefaultCharacterSelection()
