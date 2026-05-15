@@ -215,8 +215,8 @@ namespace Quoridor.Networking
         /// </summary>
         public override void OnClientSceneChanged()
         {
-            ApplyVisibleRoomSelections();
             base.OnClientSceneChanged();
+            ApplyVisibleRoomSelections();
         }
 
         private void EnsureDiscovery()
