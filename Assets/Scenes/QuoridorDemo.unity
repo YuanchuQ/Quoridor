@@ -1881,6 +1881,7 @@ GameObject:
   - component: {fileID: 574020597}
   - component: {fileID: 574020598}
   - component: {fileID: 574020599}
+  - component: {fileID: 574020600}
   m_Layer: 0
   m_Name: Systems
   m_TagString: Untagged
@@ -1979,6 +1980,22 @@ MonoBehaviour:
   wallController: {fileID: 574020598}
   matchUiView: {fileID: 12034157}
   characterCatalog: {fileID: 11400000, guid: 2b75e541504c24c069bdafa3fbc6c50c, type: 2}
+--- !u!114 &574020600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 574020594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa8f91198c4b84a86ab2bebe1f499434, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::Quoridor.Networking.NetworkMatchController
+  inputRouter: {fileID: 574020596}
+  pawnController: {fileID: 574020597}
+  wallController: {fileID: 574020598}
+  gameFlowController: {fileID: 574020599}
 --- !u!1001 &582402401
 PrefabInstance:
   m_ObjectHideFlags: 0
