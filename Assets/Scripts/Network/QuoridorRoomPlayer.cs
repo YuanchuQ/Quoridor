@@ -33,6 +33,19 @@ namespace Quoridor.Networking
         public bool IsLocalRoomPlayer => isLocalPlayer;
 
         /// <summary>
+        /// Last one-based slot assigned to the local network player.
+        /// </summary>
+        public static int LocalPlayerSlot { get; private set; }
+
+        /// <summary>
+        /// Clears cached local slot information when leaving network play.
+        /// </summary>
+        public static void ClearLocalPlayerSlot()
+        {
+            LocalPlayerSlot = 0;
+        }
+
+        /// <summary>
         /// Called on clients when visible room data changes.
         /// </summary>
         public event System.Action StateChanged;
@@ -62,6 +75,7 @@ namespace Quoridor.Networking
         public override void OnStartLocalPlayer()
         {
             base.OnStartLocalPlayer();
+            CacheLocalSlot();
 
             string selectedId = LocalPlayerSelection.GetCharacterId(PlayerId.PlayerOne);
             if (!string.IsNullOrWhiteSpace(selectedId))
@@ -83,7 +97,16 @@ namespace Quoridor.Networking
 
         private void HandleSlotChanged(int oldValue, int newValue)
         {
+            CacheLocalSlot();
             StateChanged?.Invoke();
+        }
+
+        private void CacheLocalSlot()
+        {
+            if (isLocalPlayer && playerSlot > 0)
+            {
+                LocalPlayerSlot = playerSlot;
+            }
         }
     }
 }

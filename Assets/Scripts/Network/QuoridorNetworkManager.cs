@@ -18,6 +18,8 @@ namespace Quoridor.Networking
         [SerializeField] private QuoridorLanDiscovery discovery;
 
         private readonly List<QuoridorRoomPlayer> roomPlayers = new();
+        private string matchPlayerOneCharacterId = string.Empty;
+        private string matchPlayerTwoCharacterId = string.Empty;
 
         /// <summary>
         /// Raised when connection or room player state changes.
@@ -107,6 +109,8 @@ namespace Quoridor.Networking
         /// </summary>
         public void StopLanSession()
         {
+            QuoridorRoomPlayer.ClearLocalPlayerSlot();
+
             if (NetworkServer.active && NetworkClient.isConnected)
             {
                 StopHost();
@@ -142,6 +146,7 @@ namespace Quoridor.Networking
         {
             base.OnStartServer();
             roomPlayers.Clear();
+            NetworkServer.ReplaceHandler<MatchConfigRequestMessage>(HandleMatchConfigRequest);
             NotifyRoomStateChanged();
         }
 
@@ -152,6 +157,8 @@ namespace Quoridor.Networking
         {
             base.OnStopServer();
             roomPlayers.Clear();
+            matchPlayerOneCharacterId = string.Empty;
+            matchPlayerTwoCharacterId = string.Empty;
             NotifyRoomStateChanged();
         }
 
@@ -207,6 +214,7 @@ namespace Quoridor.Networking
         public override void OnClientDisconnect()
         {
             base.OnClientDisconnect();
+            QuoridorRoomPlayer.ClearLocalPlayerSlot();
             NotifyRoomStateChanged();
         }
 
@@ -237,10 +245,29 @@ namespace Quoridor.Networking
 
         private void ApplyNetworkCharacterSelection()
         {
-            string first = roomPlayers.Count > 0 ? roomPlayers[0].CharacterId : string.Empty;
-            string second = roomPlayers.Count > 1 ? roomPlayers[1].CharacterId : string.Empty;
-            LocalPlayerSelection.SetCharacter(PlayerId.PlayerOne, first);
-            LocalPlayerSelection.SetCharacter(PlayerId.PlayerTwo, second);
+            matchPlayerOneCharacterId = roomPlayers.Count > 0 ? roomPlayers[0].CharacterId : string.Empty;
+            matchPlayerTwoCharacterId = roomPlayers.Count > 1 ? roomPlayers[1].CharacterId : string.Empty;
+            LocalPlayerSelection.SetCharacter(PlayerId.PlayerOne, matchPlayerOneCharacterId);
+            LocalPlayerSelection.SetCharacter(PlayerId.PlayerTwo, matchPlayerTwoCharacterId);
+        }
+
+        private void HandleMatchConfigRequest(NetworkConnectionToClient connection, MatchConfigRequestMessage message)
+        {
+            if (connection == null)
+            {
+                return;
+            }
+
+            connection.Send(CreateMatchConfigMessage());
+        }
+
+        private MatchConfigMessage CreateMatchConfigMessage()
+        {
+            return new MatchConfigMessage
+            {
+                PlayerOneCharacterId = matchPlayerOneCharacterId,
+                PlayerTwoCharacterId = matchPlayerTwoCharacterId
+            };
         }
 
         private static void ApplyVisibleRoomSelections()
