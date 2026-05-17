@@ -117,6 +117,7 @@ namespace Quoridor.Networking
 
         private void HandleClientMatchConfig(MatchConfigMessage message)
         {
+            QuoridorRoomPlayer.SetLocalPlayerSlot(message.LocalPlayerSlot);
             LocalPlayerSelection.SetCharacter(PlayerId.PlayerOne, message.PlayerOneCharacterId);
             LocalPlayerSelection.SetCharacter(PlayerId.PlayerTwo, message.PlayerTwoCharacterId);
 
