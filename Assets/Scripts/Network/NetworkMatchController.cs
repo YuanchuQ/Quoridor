@@ -1,4 +1,5 @@
 using Mirror;
+using Quoridor.Config;
 using Quoridor.Core;
 using Quoridor.GameFlow;
 using Quoridor.Input;
@@ -41,6 +42,8 @@ namespace Quoridor.Networking
             {
                 gameFlowController.SetNetworkControlled(true);
             }
+
+            RequestMatchConfig();
         }
 
         private void OnEnable()
@@ -106,8 +109,25 @@ namespace Quoridor.Networking
 
             if (NetworkClient.active)
             {
+                NetworkClient.ReplaceHandler<MatchConfigMessage>(HandleClientMatchConfig);
                 NetworkClient.ReplaceHandler<PawnMoveAppliedMessage>(HandleClientPawnMoveApplied);
                 NetworkClient.ReplaceHandler<WallPlaceAppliedMessage>(HandleClientWallPlaceApplied);
+            }
+        }
+
+        private void HandleClientMatchConfig(MatchConfigMessage message)
+        {
+            LocalPlayerSelection.SetCharacter(PlayerId.PlayerOne, message.PlayerOneCharacterId);
+            LocalPlayerSelection.SetCharacter(PlayerId.PlayerTwo, message.PlayerTwoCharacterId);
+
+            if (gameFlowController != null)
+            {
+                gameFlowController.RefreshPlayerCharacters();
+            }
+
+            if (pawnController != null)
+            {
+                pawnController.RefreshCharacterVisuals();
             }
         }
 
@@ -123,6 +143,14 @@ namespace Quoridor.Networking
                 X = destination.X,
                 Y = destination.Y
             });
+        }
+
+        private void RequestMatchConfig()
+        {
+            if (NetworkClient.active)
+            {
+                NetworkClient.Send(new MatchConfigRequestMessage());
+            }
         }
 
         private void SendWallPlaceRequest(WallPlacement placement)
@@ -279,6 +307,11 @@ namespace Quoridor.Networking
 
         private PlayerId GetLocalPlayerId()
         {
+            if (QuoridorRoomPlayer.LocalPlayerSlot > 0)
+            {
+                return QuoridorRoomPlayer.LocalPlayerSlot <= 1 ? PlayerId.PlayerOne : PlayerId.PlayerTwo;
+            }
+
             QuoridorRoomPlayer localPlayer = NetworkClient.localPlayer != null
                 ? NetworkClient.localPlayer.GetComponent<QuoridorRoomPlayer>()
                 : null;

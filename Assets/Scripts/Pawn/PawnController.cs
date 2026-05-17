@@ -194,6 +194,22 @@ namespace Quoridor.Pawn
             directInputEnabled = isEnabled;
         }
 
+        /// <summary>
+        /// Refreshes pawn sprites from the current local character selection.
+        /// </summary>
+        public void RefreshCharacterVisuals()
+        {
+            if (playerOnePawn != null)
+            {
+                ApplyCharacterVisual(playerOnePawn, PlayerId.PlayerOne);
+            }
+
+            if (playerTwoPawn != null)
+            {
+                ApplyCharacterVisual(playerTwoPawn, PlayerId.PlayerTwo);
+            }
+        }
+
         private void Awake()
         {
             ResetMatch();

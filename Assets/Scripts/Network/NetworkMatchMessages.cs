@@ -3,6 +3,29 @@ using Mirror;
 namespace Quoridor.Networking
 {
     /// <summary>
+    /// Client request for the authoritative match configuration.
+    /// </summary>
+    public struct MatchConfigRequestMessage : NetworkMessage
+    {
+    }
+
+    /// <summary>
+    /// Authoritative player setup broadcast from the server.
+    /// </summary>
+    public struct MatchConfigMessage : NetworkMessage
+    {
+        /// <summary>
+        /// Character id assigned to player one.
+        /// </summary>
+        public string PlayerOneCharacterId;
+
+        /// <summary>
+        /// Character id assigned to player two.
+        /// </summary>
+        public string PlayerTwoCharacterId;
+    }
+
+    /// <summary>
     /// Client request to move the active pawn.
     /// </summary>
     public struct PawnMoveRequestMessage : NetworkMessage

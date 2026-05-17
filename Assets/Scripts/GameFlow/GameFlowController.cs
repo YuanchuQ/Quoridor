@@ -117,6 +117,21 @@ namespace Quoridor.GameFlow
             RefreshNetworkInputState();
         }
 
+        /// <summary>
+        /// Refreshes player character portraits from the current local selection.
+        /// </summary>
+        public void RefreshPlayerCharacters()
+        {
+            if (matchUiView == null || characterCatalog == null)
+            {
+                return;
+            }
+
+            matchUiView.SetPlayerCharacters(
+                ResolveCharacter(PlayerId.PlayerOne),
+                ResolveCharacter(PlayerId.PlayerTwo));
+        }
+
         private void Start()
         {
             StartNewMatch();
@@ -281,18 +296,6 @@ namespace Quoridor.GameFlow
             {
                 wallController.SetInputEnabled(isEnabled);
             }
-        }
-
-        private void RefreshPlayerCharacters()
-        {
-            if (matchUiView == null || characterCatalog == null)
-            {
-                return;
-            }
-
-            matchUiView.SetPlayerCharacters(
-                ResolveCharacter(PlayerId.PlayerOne),
-                ResolveCharacter(PlayerId.PlayerTwo));
         }
 
         private CharacterVisualDefinition ResolveCharacter(PlayerId playerId)
