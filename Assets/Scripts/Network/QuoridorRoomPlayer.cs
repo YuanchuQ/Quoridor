@@ -46,6 +46,14 @@ namespace Quoridor.Networking
         }
 
         /// <summary>
+        /// Stores the local network player slot assigned by the server.
+        /// </summary>
+        public static void SetLocalPlayerSlot(int slot)
+        {
+            LocalPlayerSlot = slot > 0 ? slot : 0;
+        }
+
+        /// <summary>
         /// Called on clients when visible room data changes.
         /// </summary>
         public event System.Action StateChanged;

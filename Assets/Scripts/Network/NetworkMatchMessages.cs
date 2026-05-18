@@ -23,6 +23,11 @@ namespace Quoridor.Networking
         /// Character id assigned to player two.
         /// </summary>
         public string PlayerTwoCharacterId;
+
+        /// <summary>
+        /// One-based player slot assigned to the receiving client.
+        /// </summary>
+        public int LocalPlayerSlot;
     }
 
     /// <summary>

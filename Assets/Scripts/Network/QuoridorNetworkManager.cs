@@ -258,16 +258,38 @@ namespace Quoridor.Networking
                 return;
             }
 
-            connection.Send(CreateMatchConfigMessage());
+            connection.Send(CreateMatchConfigMessage(GetConnectionSlot(connection)));
         }
 
-        private MatchConfigMessage CreateMatchConfigMessage()
+        private MatchConfigMessage CreateMatchConfigMessage(int localPlayerSlot)
         {
             return new MatchConfigMessage
             {
                 PlayerOneCharacterId = matchPlayerOneCharacterId,
-                PlayerTwoCharacterId = matchPlayerTwoCharacterId
+                PlayerTwoCharacterId = matchPlayerTwoCharacterId,
+                LocalPlayerSlot = localPlayerSlot
             };
+        }
+
+        private int GetConnectionSlot(NetworkConnectionToClient connection)
+        {
+            QuoridorRoomPlayer roomPlayer = connection.identity != null
+                ? connection.identity.GetComponent<QuoridorRoomPlayer>()
+                : null;
+            if (roomPlayer != null)
+            {
+                return roomPlayer.PlayerSlot;
+            }
+
+            foreach (QuoridorRoomPlayer player in roomPlayers)
+            {
+                if (player != null && player.connectionToClient == connection)
+                {
+                    return player.PlayerSlot;
+                }
+            }
+
+            return 0;
         }
 
         private static void ApplyVisibleRoomSelections()
