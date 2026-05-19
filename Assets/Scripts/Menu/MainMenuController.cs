@@ -24,6 +24,7 @@ namespace Quoridor.Menu
         [SerializeField] private Text statusText;
         [SerializeField] private Text lanSelectedCharacterText;
         [SerializeField] private Text roomListText;
+        [SerializeField] private Text roomInfoText;
         [SerializeField] private Text roomTitleText;
         [SerializeField] private Text roomWaitingText;
         [SerializeField] private Text selectedCharacterText;
@@ -43,7 +44,6 @@ namespace Quoridor.Menu
         [SerializeField] private Button roomListSecondRoomButton;
         [SerializeField] private Button roomListBackButton;
         [SerializeField] private Button roomBackButton;
-        [SerializeField] private Button simulateSecondPlayerButton;
         [SerializeField] private Button startLocalFromRoomButton;
         [SerializeField] private Button settingsBackButton;
 
@@ -64,12 +64,13 @@ namespace Quoridor.Menu
         private string selectedCharacterName = string.Empty;
         private string selectedCharacterId = string.Empty;
         private string activeRoomName = string.Empty;
-        private bool secondPlayerReady;
         private bool activeRoomIsNetworked;
         private QuoridorLanRoomInfo firstDiscoveredRoom;
         private QuoridorLanRoomInfo secondDiscoveredRoom;
+        private QuoridorLanRoomInfo selectedDiscoveredRoom;
         private bool hasFirstDiscoveredRoom;
         private bool hasSecondDiscoveredRoom;
+        private bool hasSelectedDiscoveredRoom;
 
         /// <summary>
         /// Selects a character by display name from a character card button.
@@ -138,7 +139,6 @@ namespace Quoridor.Menu
             Add(roomListSecondRoomButton, JoinSecondRoom);
             Add(roomListBackButton, ShowLan);
             Add(roomBackButton, ShowLan);
-            Add(simulateSecondPlayerButton, SimulateSecondPlayerJoined);
             Add(startLocalFromRoomButton, LoadLocalGame);
             Add(settingsBackButton, ShowMain);
         }
@@ -159,7 +159,6 @@ namespace Quoridor.Menu
             Remove(roomListSecondRoomButton, JoinSecondRoom);
             Remove(roomListBackButton, ShowLan);
             Remove(roomBackButton, ShowLan);
-            Remove(simulateSecondPlayerButton, SimulateSecondPlayerJoined);
             Remove(startLocalFromRoomButton, LoadLocalGame);
             Remove(settingsBackButton, ShowMain);
         }
@@ -197,9 +196,12 @@ namespace Quoridor.Menu
         {
             ShowPanel(lanPanel);
             EnsureDefaultCharacterSelection();
-            StopRoomSearch();
+            ClearDiscoveredRooms();
             RefreshLanPanel();
-            SetStatus("选择角色");
+            SetRoomListButton(roomListFirstRoomButton, "搜索中...", false);
+            SetRoomListButton(roomListSecondRoomButton, "继续搜索...", false);
+            StartRoomSearch();
+            SetStatus("选择角色并加入房间");
         }
 
         private void ShowRoomList()
@@ -224,7 +226,6 @@ namespace Quoridor.Menu
             activeRoomName = roomName;
             ShowPanel(roomPanel);
             EnsureDefaultCharacterSelection();
-            secondPlayerReady = false;
             if (roomTitleText != null)
             {
                 roomTitleText.text = roomName;
@@ -237,7 +238,7 @@ namespace Quoridor.Menu
 
         private void JoinRoom()
         {
-            ShowRoomList();
+            JoinDiscoveredRoom(selectedDiscoveredRoom, hasSelectedDiscoveredRoom);
         }
 
         private void CreateRoom()
@@ -260,12 +261,12 @@ namespace Quoridor.Menu
 
         private void JoinFirstRoom()
         {
-            JoinDiscoveredRoom(firstDiscoveredRoom, hasFirstDiscoveredRoom);
+            SelectDiscoveredRoom(firstDiscoveredRoom, hasFirstDiscoveredRoom);
         }
 
         private void JoinSecondRoom()
         {
-            JoinDiscoveredRoom(secondDiscoveredRoom, hasSecondDiscoveredRoom);
+            SelectDiscoveredRoom(secondDiscoveredRoom, hasSecondDiscoveredRoom);
         }
 
         private void HandleSinglePlayer()
@@ -278,12 +279,6 @@ namespace Quoridor.Menu
             if (activeRoomIsNetworked)
             {
                 StartNetworkGame();
-                return;
-            }
-
-            if (!secondPlayerReady && roomPanel != null && roomPanel.activeSelf)
-            {
-                SetStatus("等待第二位玩家进入后才能开始");
                 return;
             }
 
@@ -342,6 +337,7 @@ namespace Quoridor.Menu
         private void RefreshLanPanel()
         {
             RefreshSelectedCharacter();
+            RefreshRoomList();
         }
 
         private void RefreshRoomState()
@@ -352,37 +348,10 @@ namespace Quoridor.Menu
                 return;
             }
 
-            if (roomWaitingText != null)
-            {
-                roomWaitingText.text = secondPlayerReady
-                    ? "你已就绪\n第二位玩家已进入"
-                    : "你已就绪\n等待第二位玩家进入...";
-            }
-
             if (startLocalFromRoomButton != null)
             {
-                startLocalFromRoomButton.interactable = secondPlayerReady;
+                startLocalFromRoomButton.interactable = true;
             }
-        }
-
-        private void SimulateSecondPlayerJoined()
-        {
-            if (activeRoomIsNetworked)
-            {
-                SetStatus("局域网房间会等待真实玩家加入");
-                return;
-            }
-
-            secondPlayerReady = true;
-            RefreshRoomState();
-            SetStatus("第二位玩家已进入，可以开始");
-        }
-
-        private void SetJoinedRoomReady()
-        {
-            secondPlayerReady = true;
-            RefreshRoomState();
-            SetStatus("已加入房间，可以开始");
         }
 
         private void StartRoomSearch()
@@ -409,8 +378,10 @@ namespace Quoridor.Menu
         {
             firstDiscoveredRoom = default;
             secondDiscoveredRoom = default;
+            selectedDiscoveredRoom = default;
             hasFirstDiscoveredRoom = false;
             hasSecondDiscoveredRoom = false;
+            hasSelectedDiscoveredRoom = false;
         }
 
         private void HandleRoomFound(QuoridorLanRoomInfo roomInfo)
@@ -426,14 +397,21 @@ namespace Quoridor.Menu
                 hasSecondDiscoveredRoom = true;
             }
 
+            if (!hasSelectedDiscoveredRoom)
+            {
+                SelectDiscoveredRoom(roomInfo, true);
+                return;
+            }
+
             RefreshRoomList();
         }
 
         private void RefreshRoomList()
         {
             SetRoomListText(BuildRoomListText());
-            SetRoomListButton(roomListFirstRoomButton, hasFirstDiscoveredRoom ? firstDiscoveredRoom.DisplayLabel : "未发现房间", hasFirstDiscoveredRoom);
-            SetRoomListButton(roomListSecondRoomButton, hasSecondDiscoveredRoom ? secondDiscoveredRoom.DisplayLabel : "继续搜索...", hasSecondDiscoveredRoom);
+            SetRoomListButton(roomListFirstRoomButton, BuildRoomButtonLabel(firstDiscoveredRoom, hasFirstDiscoveredRoom), hasFirstDiscoveredRoom);
+            SetRoomListButton(roomListSecondRoomButton, BuildRoomButtonLabel(secondDiscoveredRoom, hasSecondDiscoveredRoom), hasSecondDiscoveredRoom);
+            RefreshRoomInfo();
         }
 
         private string BuildRoomListText()
@@ -448,12 +426,54 @@ namespace Quoridor.Menu
             return string.IsNullOrWhiteSpace(second) ? first : $"{first}\n{second}";
         }
 
+        private string BuildRoomButtonLabel(QuoridorLanRoomInfo roomInfo, bool hasRoom)
+        {
+            if (!hasRoom)
+            {
+                return hasFirstDiscoveredRoom ? "继续搜索..." : "未发现房间";
+            }
+
+            string prefix = hasSelectedDiscoveredRoom && selectedDiscoveredRoom.ServerId == roomInfo.ServerId ? "✓ " : string.Empty;
+            return $"{prefix}{roomInfo.DisplayLabel}";
+        }
+
+        private void SelectDiscoveredRoom(QuoridorLanRoomInfo roomInfo, bool hasRoom)
+        {
+            if (!hasRoom)
+            {
+                SetStatus("还没有发现可加入的房间");
+                return;
+            }
+
+            selectedDiscoveredRoom = roomInfo;
+            hasSelectedDiscoveredRoom = true;
+            RefreshRoomList();
+            SetStatus($"已选择 {roomInfo.RoomName}");
+        }
+
         private void SetRoomListText(string value)
         {
             if (roomListText != null)
             {
                 roomListText.text = value;
             }
+        }
+
+        private void RefreshRoomInfo()
+        {
+            if (roomInfoText == null)
+            {
+                return;
+            }
+
+            if (!hasSelectedDiscoveredRoom)
+            {
+                roomInfoText.text = "房主：-\n人数：- / -\n状态：搜索中";
+                return;
+            }
+
+            string status = selectedDiscoveredRoom.PlayerCount >= selectedDiscoveredRoom.MaxPlayers ? "已满" : "等待中";
+            roomInfoText.text = $"房主：{selectedDiscoveredRoom.RoomName}\n人数：{selectedDiscoveredRoom.PlayerCount} / {selectedDiscoveredRoom.MaxPlayers}\n状态：{status}";
         }
 
         private static void SetRoomListButton(Button button, string label, bool interactable)
