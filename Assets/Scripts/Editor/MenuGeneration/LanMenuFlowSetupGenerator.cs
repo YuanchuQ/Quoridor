@@ -10,20 +10,24 @@ using UnityEngine.UI;
 namespace Quoridor.Editor.MenuGeneration
 {
     /// <summary>
-    /// Incremental editor setup for LAN menu prototype panels in the existing main menu scene.
+    /// Editor-only setup for the Canvas LAN lobby layout.
     /// </summary>
     public static class LanMenuFlowSetupGenerator
     {
         private const string MainMenuScenePath = "Assets/Scenes/MainMenu.unity";
         private const string CatalogPath = "Assets/Config/CharacterVisualCatalog.asset";
-        private static readonly Color PanelColor = new(0.93f, 0.84f, 0.74f, 0.94f);
-        private static readonly Color FieldColor = new(1f, 0.96f, 0.9f, 0.92f);
-        private static readonly Color ButtonColor = new(0.72f, 0.46f, 0.52f, 1f);
-        private static readonly Color ButtonHighlightColor = new(0.84f, 0.58f, 0.64f, 1f);
-        private static readonly Color TextColor = new(0.18f, 0.12f, 0.13f, 1f);
+        private const string SelectedGlowMaterialPath = "Assets/Art/Materials/CharacterSelectedGlow.mat";
+
+        private static readonly Color LobbyPanelColor = new(0.12f, 0.14f, 0.22f, 0.88f);
+        private static readonly Color RoomCardColor = new(1f, 1f, 1f, 0.10f);
+        private static readonly Color ButtonColor = new(0.30f, 0.55f, 1f, 1f);
+        private static readonly Color ButtonHighlightColor = new(0.42f, 0.63f, 1f, 1f);
+        private static readonly Color TextColor = new(0.96f, 0.96f, 1f, 1f);
+        private static readonly Color MutedTextColor = new(0.78f, 0.80f, 0.90f, 1f);
+        private static readonly Color CharacterCardColor = new(1f, 1f, 1f, 0.12f);
 
         /// <summary>
-        /// Adds or refreshes LAN character selection, room list, and waiting-room UI.
+        /// Rebuilds the LAN lobby into a single Canvas page with room list, room info, and character select.
         /// </summary>
         [MenuItem("Tools/Quoridor/Generate LAN Menu Flow")]
         public static void GenerateLanMenuFlow()
@@ -46,73 +50,18 @@ namespace Quoridor.Editor.MenuGeneration
             }
 
             CharacterVisualCatalog catalog = AssetDatabase.LoadAssetAtPath<CharacterVisualCatalog>(CatalogPath);
-            ResizePanel(lanPanel, new Vector2(760f, 500f));
-            ResizePanel(roomPanel, new Vector2(820f, 500f));
-
-            Text lanTitle = EnsureText(lanPanel, "PanelTitle", "局域网", 36, FontStyle.Bold, TextAnchor.MiddleCenter);
-            SetAnchored(lanTitle.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -44f), new Vector2(360f, 54f));
-
-            RemoveChild(lanPanel, "NicknameLabel");
-            RemoveChild(lanPanel, "NicknameInputField");
-
-            Text selectedCharacterText = EnsureText(lanPanel, "LanSelectedCharacterText", "角色：优衣", 22, FontStyle.Bold, TextAnchor.MiddleLeft);
-            SetAnchored(selectedCharacterText.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -100f), new Vector2(260f, 34f));
-
-            EnsureLanCharacterGrid(lanPanel, controller, catalog);
-
-            Button joinRoomButton = EnsureButton(lanPanel, "JoinRoomButton", "加入房间");
-            SetAnchored(joinRoomButton.GetComponent<RectTransform>(), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(-160f, 86f), new Vector2(220f, 54f));
-            Button createRoomButton = EnsureButton(lanPanel, "CreateRoomButton", "创建房间");
-            SetAnchored(createRoomButton.GetComponent<RectTransform>(), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(160f, 86f), new Vector2(220f, 54f));
-            Button lanBackButton = EnsureButton(lanPanel, "BackButton", "返回");
-            SetAnchored(lanBackButton.GetComponent<RectTransform>(), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 26f), new Vector2(220f, 46f));
-
-            Transform roomListPanel = EnsureRoomListPanel(root);
-            Text roomListText = EnsureText(roomListPanel, "RoomListText", "Princess Room    1/2\nPractice Room    1/2", 22, FontStyle.Bold, TextAnchor.MiddleCenter);
-            SetAnchored(roomListText.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -120f), new Vector2(520f, 80f));
-            Button firstRoomButton = EnsureButton(roomListPanel, "FirstRoomButton", "Princess Room    1/2");
-            SetAnchored(firstRoomButton.GetComponent<RectTransform>(), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 52f), new Vector2(430f, 58f));
-            Button secondRoomButton = EnsureButton(roomListPanel, "SecondRoomButton", "Practice Room    1/2");
-            SetAnchored(secondRoomButton.GetComponent<RectTransform>(), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -22f), new Vector2(430f, 58f));
-            Button roomListBackButton = EnsureButton(roomListPanel, "BackButton", "返回");
-            SetAnchored(roomListBackButton.GetComponent<RectTransform>(), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 36f), new Vector2(220f, 48f));
-
-            Text roomWaitingText = EnsureText(roomPanel, "RoomWaitingText", "等待第二位玩家进入...", 24, FontStyle.Bold, TextAnchor.MiddleCenter);
-            SetAnchored(roomWaitingText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -102f), new Vector2(520f, 80f));
-            Button simulateButton = EnsureButton(roomPanel, "SimulateSecondPlayerButton", "模拟第二玩家进入");
-            SetAnchored(simulateButton.GetComponent<RectTransform>(), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 108f), new Vector2(260f, 48f));
-
-            Button startButton = FindButton(roomPanel, "StartLocalButton");
-            if (startButton != null)
+            Material selectedGlowMaterial = EnsureSelectedGlowMaterial();
+            Canvas canvas = controller.GetComponentInParent<Canvas>();
+            if (canvas != null)
             {
-                SetAnchored(startButton.GetComponent<RectTransform>(), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(150f, 40f), new Vector2(240f, 50f));
-                SetButtonLabel(startButton, "开始");
+                canvas.transform.localScale = Vector3.one;
             }
 
-            Button roomBackButton = FindButton(roomPanel, "BackButton");
-            if (roomBackButton != null)
-            {
-                SetAnchored(roomBackButton.GetComponent<RectTransform>(), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(-150f, 40f), new Vector2(220f, 50f));
-            }
+            RebuildLobbyPanel(lanPanel, controller, catalog, selectedGlowMaterial, out LobbyReferences lobby);
+            RebuildWaitingRoomPanel(roomPanel, out WaitingRoomReferences waitingRoom);
+            Transform roomListPanel = EnsureLegacyRoomListPanel(root);
 
-            WireController(
-                controller,
-                lanPanel.gameObject,
-                roomListPanel.gameObject,
-                roomPanel.gameObject,
-                selectedCharacterText,
-                roomListText,
-                roomWaitingText,
-                joinRoomButton,
-                createRoomButton,
-                lanBackButton,
-                firstRoomButton,
-                secondRoomButton,
-                roomListBackButton,
-                roomBackButton,
-                simulateButton,
-                startButton,
-                catalog);
+            WireController(controller, lanPanel.gameObject, roomListPanel.gameObject, roomPanel.gameObject, lobby, waitingRoom, catalog);
 
             roomListPanel.gameObject.SetActive(false);
             lanPanel.gameObject.SetActive(false);
@@ -124,68 +73,170 @@ namespace Quoridor.Editor.MenuGeneration
             AssetDatabase.SaveAssets();
         }
 
-        private static void ResizePanel(Transform panel, Vector2 size)
+        private static void RebuildLobbyPanel(
+            Transform panel,
+            MainMenuController controller,
+            CharacterVisualCatalog catalog,
+            Material selectedGlowMaterial,
+            out LobbyReferences references)
         {
-            RectTransform rectTransform = panel.GetComponent<RectTransform>();
-            if (rectTransform != null)
-            {
-                rectTransform.sizeDelta = size;
-            }
+            ClearChildren(panel);
+            SetStretch(panel.GetComponent<RectTransform>(), new Vector2(44f, 42f), new Vector2(-44f, -44f));
+            Image panelImage = EnsureImage(panel, "Background", null);
+            SetStretch(panelImage.rectTransform, Vector2.zero, Vector2.zero);
+            panelImage.color = new Color(0.05f, 0.06f, 0.10f, 0.58f);
+
+            Text title = EnsureText(panel, "PanelTitle", "局域网大厅", 42, FontStyle.Bold, TextAnchor.MiddleLeft, TextColor);
+            SetAnchored(title.rectTransform, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(24f, -28f), new Vector2(420f, 56f));
+
+            RectTransform topArea = CreateRect(panel, "TopArea");
+            topArea.anchorMin = new Vector2(0f, 0.30f);
+            topArea.anchorMax = new Vector2(1f, 1f);
+            topArea.offsetMin = new Vector2(0f, 8f);
+            topArea.offsetMax = new Vector2(0f, -84f);
+
+            Transform roomList = CreateBox(topArea, "RoomList", LobbyPanelColor).transform;
+            RectTransform roomListRect = roomList.GetComponent<RectTransform>();
+            roomListRect.anchorMin = new Vector2(0f, 0f);
+            roomListRect.anchorMax = new Vector2(0.75f, 1f);
+            roomListRect.offsetMin = new Vector2(10f, 10f);
+            roomListRect.offsetMax = new Vector2(-10f, -10f);
+
+            Text roomListTitle = EnsureText(roomList, "Title", "当前房间", 30, FontStyle.Bold, TextAnchor.MiddleLeft, TextColor);
+            SetAnchored(roomListTitle.rectTransform, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, 1f), new Vector2(20f, -18f), new Vector2(-40f, 42f));
+
+            Text roomListText = EnsureText(roomList, "RoomListText", "正在搜索局域网房间...", 18, FontStyle.Normal, TextAnchor.UpperLeft, MutedTextColor);
+            SetAnchored(roomListText.rectTransform, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, 1f), new Vector2(20f, -64f), new Vector2(-40f, 34f));
+
+            Button firstRoomButton = EnsureButton(roomList, "FirstRoomButton", "搜索中...");
+            SetAnchored(firstRoomButton.GetComponent<RectTransform>(), new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, 1f), new Vector2(20f, -118f), new Vector2(-40f, 58f));
+            SetButtonImage(firstRoomButton, RoomCardColor);
+            Button secondRoomButton = EnsureButton(roomList, "SecondRoomButton", "继续搜索...");
+            SetAnchored(secondRoomButton.GetComponent<RectTransform>(), new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, 1f), new Vector2(20f, -188f), new Vector2(-40f, 58f));
+            SetButtonImage(secondRoomButton, RoomCardColor);
+
+            Transform roomInfo = CreateBox(topArea, "RoomInfo", LobbyPanelColor).transform;
+            RectTransform roomInfoRect = roomInfo.GetComponent<RectTransform>();
+            roomInfoRect.anchorMin = new Vector2(0.75f, 0f);
+            roomInfoRect.anchorMax = new Vector2(1f, 1f);
+            roomInfoRect.offsetMin = new Vector2(10f, 10f);
+            roomInfoRect.offsetMax = new Vector2(-10f, -10f);
+
+            Text roomInfoTitle = EnsureText(roomInfo, "Title", "房间信息", 30, FontStyle.Bold, TextAnchor.MiddleLeft, TextColor);
+            SetAnchored(roomInfoTitle.rectTransform, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, 1f), new Vector2(20f, -18f), new Vector2(-40f, 42f));
+
+            Text roomInfoText = EnsureText(roomInfo, "RoomInfoText", "房主：-\n人数：- / -\n状态：搜索中", 22, FontStyle.Normal, TextAnchor.UpperLeft, MutedTextColor);
+            SetAnchored(roomInfoText.rectTransform, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, 1f), new Vector2(20f, -86f), new Vector2(-40f, 170f));
+
+            RectTransform bottomArea = CreateRect(panel, "BottomArea");
+            bottomArea.anchorMin = new Vector2(0f, 0f);
+            bottomArea.anchorMax = new Vector2(1f, 0.30f);
+            bottomArea.offsetMin = new Vector2(10f, 12f);
+            bottomArea.offsetMax = new Vector2(-10f, -8f);
+
+            Transform buttonColumn = CreateRect(bottomArea, "BottomButtons").transform;
+            RectTransform buttonColumnRect = buttonColumn.GetComponent<RectTransform>();
+            buttonColumnRect.anchorMin = new Vector2(0f, 0f);
+            buttonColumnRect.anchorMax = new Vector2(0f, 1f);
+            buttonColumnRect.pivot = new Vector2(0f, 0.5f);
+            buttonColumnRect.anchoredPosition = Vector2.zero;
+            buttonColumnRect.sizeDelta = new Vector2(320f, 0f);
+
+            Button createRoomButton = EnsureButton(buttonColumn, "CreateRoomButton", "创建房间");
+            SetAnchored(createRoomButton.GetComponent<RectTransform>(), new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -2f), new Vector2(0f, 48f));
+            Button joinRoomButton = EnsureButton(buttonColumn, "JoinRoomButton", "加入房间");
+            SetAnchored(joinRoomButton.GetComponent<RectTransform>(), new Vector2(0f, 0.5f), new Vector2(1f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(0f, 48f));
+            Button backButton = EnsureButton(buttonColumn, "BackButton", "返回");
+            SetAnchored(backButton.GetComponent<RectTransform>(), new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 2f), new Vector2(0f, 48f));
+
+            Text selectedCharacterText = EnsureText(bottomArea, "LanSelectedCharacterText", "角色：优衣", 20, FontStyle.Bold, TextAnchor.MiddleLeft, TextColor);
+            SetAnchored(selectedCharacterText.rectTransform, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(350f, -4f), new Vector2(260f, 30f));
+
+            EnsureCharacterGrid(bottomArea, controller, catalog, selectedGlowMaterial);
+
+            references = new LobbyReferences(
+                selectedCharacterText,
+                roomListText,
+                roomInfoText,
+                joinRoomButton,
+                createRoomButton,
+                backButton,
+                firstRoomButton,
+                secondRoomButton);
         }
 
-        private static void RemoveChild(Transform parent, string childName)
+        private static void RebuildWaitingRoomPanel(Transform roomPanel, out WaitingRoomReferences references)
         {
-            Transform child = parent.Find(childName);
-            if (child != null)
+            ClearChildren(roomPanel);
+            SetAnchored(roomPanel.GetComponent<RectTransform>(), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -30f), new Vector2(760f, 420f));
+            Image background = roomPanel.GetComponent<Image>();
+            if (background != null)
             {
-                UnityEngine.Object.DestroyImmediate(child.gameObject);
+                background.color = LobbyPanelColor;
             }
+
+            Text roomWaitingText = EnsureText(roomPanel, "RoomWaitingText", "等待第二位玩家进入...", 24, FontStyle.Bold, TextAnchor.MiddleCenter, TextColor);
+            SetAnchored(roomWaitingText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -70f), new Vector2(540f, 84f));
+
+            Button startButton = EnsureButton(roomPanel, "StartLocalButton", "开始");
+            SetAnchored(startButton.GetComponent<RectTransform>(), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(150f, 40f), new Vector2(240f, 50f));
+
+            Button roomBackButton = EnsureButton(roomPanel, "BackButton", "返回");
+            SetAnchored(roomBackButton.GetComponent<RectTransform>(), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(-150f, 40f), new Vector2(220f, 50f));
+
+            references = new WaitingRoomReferences(roomWaitingText, roomBackButton, startButton);
         }
 
-        private static void EnsureLanCharacterGrid(Transform parent, MainMenuController controller, CharacterVisualCatalog catalog)
+        private static void EnsureCharacterGrid(Transform parent, MainMenuController controller, CharacterVisualCatalog catalog, Material selectedGlowMaterial)
         {
-            Transform grid = parent.Find("LanCharacterGrid");
-            if (grid == null)
-            {
-                grid = new GameObject("LanCharacterGrid", typeof(RectTransform)).transform;
-                grid.SetParent(parent, false);
-            }
-
+            Transform grid = CreateRect(parent, "LanCharacterGrid").transform;
             RectTransform gridRect = grid.GetComponent<RectTransform>();
-            SetAnchored(gridRect, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -210f), new Vector2(640f, 170f));
+            gridRect.anchorMin = new Vector2(0f, 0f);
+            gridRect.anchorMax = new Vector2(1f, 1f);
+            gridRect.offsetMin = new Vector2(350f, 8f);
+            gridRect.offsetMax = new Vector2(-10f, -34f);
 
             CharacterVisualDefinition[] characters = catalog != null ? catalog.Characters : Array.Empty<CharacterVisualDefinition>();
-            for (int i = 0; i < characters.Length; i++)
+            int visibleCount = Mathf.Min(characters.Length, 4);
+            for (int index = 0; index < visibleCount; index++)
             {
-                CharacterVisualDefinition character = characters[i];
+                CharacterVisualDefinition character = characters[index];
                 if (character == null)
                 {
                     continue;
                 }
 
-                Transform card = grid.Find($"{character.CharacterId}Card");
-                if (card == null)
-                {
-                    card = CreatePanel(grid, $"{character.CharacterId}Card", FieldColor).transform;
-                    Button button = card.gameObject.AddComponent<Button>();
-                    CharacterSelectButton selector = card.gameObject.AddComponent<CharacterSelectButton>();
-                    var serializedSelector = new SerializedObject(selector);
-                    serializedSelector.FindProperty("menuController").objectReferenceValue = controller;
-                    serializedSelector.FindProperty("button").objectReferenceValue = button;
-                    serializedSelector.FindProperty("characterId").stringValue = character.CharacterId;
-                    serializedSelector.FindProperty("characterName").stringValue = character.DisplayName;
-                    serializedSelector.ApplyModifiedPropertiesWithoutUndo();
-                }
+                Transform card = CreateBox(grid, $"{character.CharacterId}Card", CharacterCardColor).transform;
+                card.gameObject.AddComponent<RectMask2D>();
+                Button button = card.gameObject.AddComponent<Button>();
+                SetButtonImage(button, CharacterCardColor);
+                RectTransform rect = card.GetComponent<RectTransform>();
+                float normalizedMin = index / 4f;
+                float normalizedMax = (index + 1) / 4f;
+                rect.anchorMin = new Vector2(normalizedMin, 0f);
+                rect.anchorMax = new Vector2(normalizedMax, 1f);
+                rect.offsetMin = new Vector2(10f, 0f);
+                rect.offsetMax = new Vector2(-10f, 0f);
 
-                SetAnchored(card.GetComponent<RectTransform>(), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(-240f + i * 160f, 0f), new Vector2(132f, 156f));
                 Image portrait = EnsureImage(card, "Portrait", character.PortraitSprite);
-                SetAnchored(portrait.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -60f), new Vector2(104f, 100f));
-                Text label = EnsureText(card, "Label", character.DisplayName, 18, FontStyle.Bold, TextAnchor.MiddleCenter);
-                SetAnchored(label.rectTransform, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 16f), new Vector2(120f, 26f));
+                SetAnchored(portrait.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 18f), new Vector2(74f, 88f));
+
+                Text label = EnsureText(card, "Label", character.DisplayName, 15, FontStyle.Bold, TextAnchor.MiddleCenter, TextColor);
+                SetAnchored(label.rectTransform, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 10f), new Vector2(-12f, 26f));
+
+                CharacterSelectButton selector = card.gameObject.AddComponent<CharacterSelectButton>();
+                SerializedObject serializedSelector = new(selector);
+                serializedSelector.FindProperty("menuController").objectReferenceValue = controller;
+                serializedSelector.FindProperty("button").objectReferenceValue = button;
+                serializedSelector.FindProperty("characterId").stringValue = character.CharacterId;
+                serializedSelector.FindProperty("characterName").stringValue = character.DisplayName;
+                serializedSelector.FindProperty("portraitImage").objectReferenceValue = portrait;
+                serializedSelector.FindProperty("selectedMaterial").objectReferenceValue = selectedGlowMaterial;
+                serializedSelector.ApplyModifiedPropertiesWithoutUndo();
             }
         }
 
-        private static Transform EnsureRoomListPanel(Transform root)
+        private static Transform EnsureLegacyRoomListPanel(Transform root)
         {
             Transform existing = root.Find("RoomListPanel");
             if (existing != null)
@@ -193,14 +244,45 @@ namespace Quoridor.Editor.MenuGeneration
                 return existing;
             }
 
-            GameObject panel = CreatePanel(root, "RoomListPanel", PanelColor);
-            SetAnchored(panel.GetComponent<RectTransform>(), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -82f), new Vector2(620f, 420f));
-            Text title = EnsureText(panel.transform, "PanelTitle", "房间列表", 36, FontStyle.Bold, TextAnchor.MiddleCenter);
-            SetAnchored(title.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -48f), new Vector2(360f, 54f));
+            GameObject panel = CreateBox(root, "RoomListPanel", LobbyPanelColor);
+            SetAnchored(panel.GetComponent<RectTransform>(), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(760f, 420f));
             return panel.transform;
         }
 
-        private static GameObject CreatePanel(Transform parent, string name, Color color)
+        private static Material EnsureSelectedGlowMaterial()
+        {
+            Material material = AssetDatabase.LoadAssetAtPath<Material>(SelectedGlowMaterialPath);
+            if (material != null)
+            {
+                return material;
+            }
+
+            Shader shader = Shader.Find("Quoridor/UI/Character Selected Glow");
+            if (shader == null)
+            {
+                Debug.LogWarning("Character selected glow shader is unavailable.");
+                return null;
+            }
+
+            material = new Material(shader)
+            {
+                name = "CharacterSelectedGlow"
+            };
+            material.SetColor("_GlowColor", new Color(1f, 0.82f, 0.22f, 1f));
+            material.SetFloat("_GlowSize", 4f);
+            material.SetFloat("_GlowStrength", 1.5f);
+            AssetDatabase.CreateAsset(material, SelectedGlowMaterialPath);
+            return material;
+        }
+
+        private static RectTransform CreateRect(Transform parent, string name)
+        {
+            GameObject rectObject = new(name, typeof(RectTransform));
+            rectObject.transform.SetParent(parent, false);
+            return rectObject.GetComponent<RectTransform>();
+        }
+
+        private static GameObject CreateBox(Transform parent, string name, Color color)
         {
             GameObject panel = new(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
             panel.transform.SetParent(parent, false);
@@ -209,62 +291,57 @@ namespace Quoridor.Editor.MenuGeneration
             return panel;
         }
 
+        private static void ClearChildren(Transform parent)
+        {
+            for (int index = parent.childCount - 1; index >= 0; index--)
+            {
+                UnityEngine.Object.DestroyImmediate(parent.GetChild(index).gameObject);
+            }
+        }
+
         private static Button EnsureButton(Transform parent, string name, string label)
         {
-            Transform existing = parent.Find(name);
-            GameObject buttonObject = existing != null
-                ? existing.gameObject
-                : new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
-            buttonObject.transform.SetParent(parent, false);
-
-            Image image = buttonObject.GetComponent<Image>();
-            image.color = ButtonColor;
-            Button button = buttonObject.GetComponent<Button>();
-            button.targetGraphic = image;
-            ColorBlock colors = button.colors;
-            colors.normalColor = Color.white;
-            colors.highlightedColor = ButtonHighlightColor;
-            colors.pressedColor = new Color(0.58f, 0.34f, 0.4f, 1f);
-            colors.selectedColor = ButtonHighlightColor;
-            button.colors = colors;
+            GameObject buttonObject = CreateBox(parent, name, ButtonColor);
+            Button button = buttonObject.AddComponent<Button>();
+            SetButtonImage(button, ButtonColor);
             SetButtonLabel(button, label);
             return button;
         }
 
-        private static Button FindButton(Transform parent, string name)
+        private static void SetButtonImage(Button button, Color color)
         {
-            Transform child = parent.Find(name);
-            return child != null ? child.GetComponent<Button>() : null;
+            Image image = button.GetComponent<Image>();
+            button.targetGraphic = image;
+            image.color = color;
+            ColorBlock colors = button.colors;
+            colors.normalColor = Color.white;
+            colors.highlightedColor = ButtonHighlightColor;
+            colors.pressedColor = new Color(0.22f, 0.42f, 0.86f, 1f);
+            colors.selectedColor = ButtonHighlightColor;
+            button.colors = colors;
         }
 
         private static void SetButtonLabel(Button button, string value)
         {
-            Text label = EnsureText(button.transform, "Label", value, 22, FontStyle.Bold, TextAnchor.MiddleCenter);
-            SetAnchored(label.rectTransform, Vector2.zero, Vector2.one, new Vector2(0.5f, 0.5f), Vector2.zero, Vector2.zero);
-            label.color = Color.white;
+            Text label = EnsureText(button.transform, "Label", value, 20, FontStyle.Bold, TextAnchor.MiddleCenter, TextColor);
+            SetStretch(label.rectTransform, Vector2.zero, Vector2.zero);
         }
 
         private static Image EnsureImage(Transform parent, string name, Sprite sprite)
         {
-            Transform existing = parent.Find(name);
-            GameObject imageObject = existing != null
-                ? existing.gameObject
-                : new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            GameObject imageObject = new(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
             imageObject.transform.SetParent(parent, false);
             Image image = imageObject.GetComponent<Image>();
             image.sprite = sprite;
             image.preserveAspect = true;
-            image.color = Color.white;
+            image.color = sprite != null ? Color.white : new Color(1f, 1f, 1f, 0.08f);
             image.raycastTarget = false;
             return image;
         }
 
-        private static Text EnsureText(Transform parent, string name, string value, int fontSize, FontStyle fontStyle, TextAnchor alignment)
+        private static Text EnsureText(Transform parent, string name, string value, int fontSize, FontStyle fontStyle, TextAnchor alignment, Color color)
         {
-            Transform existing = parent.Find(name);
-            GameObject textObject = existing != null
-                ? existing.gameObject
-                : new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Text));
+            GameObject textObject = new(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Text));
             textObject.transform.SetParent(parent, false);
             Text text = textObject.GetComponent<Text>();
             text.text = value;
@@ -272,7 +349,7 @@ namespace Quoridor.Editor.MenuGeneration
             text.fontSize = fontSize;
             text.fontStyle = fontStyle;
             text.alignment = alignment;
-            text.color = TextColor;
+            text.color = color;
             text.horizontalOverflow = HorizontalWrapMode.Wrap;
             text.verticalOverflow = VerticalWrapMode.Truncate;
             text.raycastTarget = false;
@@ -288,6 +365,15 @@ namespace Quoridor.Editor.MenuGeneration
             rectTransform.sizeDelta = size;
         }
 
+        private static void SetStretch(RectTransform rectTransform, Vector2 offsetMin, Vector2 offsetMax)
+        {
+            rectTransform.anchorMin = Vector2.zero;
+            rectTransform.anchorMax = Vector2.one;
+            rectTransform.pivot = new Vector2(0.5f, 0.5f);
+            rectTransform.offsetMin = offsetMin;
+            rectTransform.offsetMax = offsetMax;
+        }
+
         private static Font GetDefaultFont()
         {
             Font font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
@@ -299,42 +385,78 @@ namespace Quoridor.Editor.MenuGeneration
             GameObject lanPanel,
             GameObject roomListPanel,
             GameObject roomPanel,
-            Text lanSelectedCharacterText,
-            Text roomListText,
-            Text roomWaitingText,
-            Button joinRoomButton,
-            Button createRoomButton,
-            Button lanBackButton,
-            Button firstRoomButton,
-            Button secondRoomButton,
-            Button roomListBackButton,
-            Button roomBackButton,
-            Button simulateButton,
-            Button startButton,
+            LobbyReferences lobby,
+            WaitingRoomReferences waitingRoom,
             CharacterVisualCatalog catalog)
         {
-            var serializedController = new SerializedObject(controller);
+            SerializedObject serializedController = new(controller);
             serializedController.FindProperty("lanPanel").objectReferenceValue = lanPanel;
             serializedController.FindProperty("roomListPanel").objectReferenceValue = roomListPanel;
             serializedController.FindProperty("roomPanel").objectReferenceValue = roomPanel;
-            serializedController.FindProperty("lanSelectedCharacterText").objectReferenceValue = lanSelectedCharacterText;
-            serializedController.FindProperty("roomListText").objectReferenceValue = roomListText;
-            serializedController.FindProperty("roomWaitingText").objectReferenceValue = roomWaitingText;
-            serializedController.FindProperty("joinRoomButton").objectReferenceValue = joinRoomButton;
-            serializedController.FindProperty("createRoomButton").objectReferenceValue = createRoomButton;
-            serializedController.FindProperty("lanBackButton").objectReferenceValue = lanBackButton;
-            serializedController.FindProperty("roomListFirstRoomButton").objectReferenceValue = firstRoomButton;
-            serializedController.FindProperty("roomListSecondRoomButton").objectReferenceValue = secondRoomButton;
-            serializedController.FindProperty("roomListBackButton").objectReferenceValue = roomListBackButton;
-            serializedController.FindProperty("roomBackButton").objectReferenceValue = roomBackButton;
-            serializedController.FindProperty("simulateSecondPlayerButton").objectReferenceValue = simulateButton;
-            serializedController.FindProperty("startLocalFromRoomButton").objectReferenceValue = startButton;
+            serializedController.FindProperty("lanSelectedCharacterText").objectReferenceValue = lobby.SelectedCharacterText;
+            serializedController.FindProperty("roomListText").objectReferenceValue = lobby.RoomListText;
+            serializedController.FindProperty("roomInfoText").objectReferenceValue = lobby.RoomInfoText;
+            serializedController.FindProperty("roomWaitingText").objectReferenceValue = waitingRoom.WaitingText;
+            serializedController.FindProperty("joinRoomButton").objectReferenceValue = lobby.JoinRoomButton;
+            serializedController.FindProperty("createRoomButton").objectReferenceValue = lobby.CreateRoomButton;
+            serializedController.FindProperty("lanBackButton").objectReferenceValue = lobby.BackButton;
+            serializedController.FindProperty("roomListFirstRoomButton").objectReferenceValue = lobby.FirstRoomButton;
+            serializedController.FindProperty("roomListSecondRoomButton").objectReferenceValue = lobby.SecondRoomButton;
+            serializedController.FindProperty("roomListBackButton").objectReferenceValue = lobby.BackButton;
+            serializedController.FindProperty("roomBackButton").objectReferenceValue = waitingRoom.BackButton;
+            serializedController.FindProperty("startLocalFromRoomButton").objectReferenceValue = waitingRoom.StartButton;
             if (catalog != null)
             {
                 serializedController.FindProperty("characterCatalog").objectReferenceValue = catalog;
             }
 
             serializedController.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private readonly struct LobbyReferences
+        {
+            public LobbyReferences(
+                Text selectedCharacterText,
+                Text roomListText,
+                Text roomInfoText,
+                Button joinRoomButton,
+                Button createRoomButton,
+                Button backButton,
+                Button firstRoomButton,
+                Button secondRoomButton)
+            {
+                SelectedCharacterText = selectedCharacterText;
+                RoomListText = roomListText;
+                RoomInfoText = roomInfoText;
+                JoinRoomButton = joinRoomButton;
+                CreateRoomButton = createRoomButton;
+                BackButton = backButton;
+                FirstRoomButton = firstRoomButton;
+                SecondRoomButton = secondRoomButton;
+            }
+
+            public Text SelectedCharacterText { get; }
+            public Text RoomListText { get; }
+            public Text RoomInfoText { get; }
+            public Button JoinRoomButton { get; }
+            public Button CreateRoomButton { get; }
+            public Button BackButton { get; }
+            public Button FirstRoomButton { get; }
+            public Button SecondRoomButton { get; }
+        }
+
+        private readonly struct WaitingRoomReferences
+        {
+            public WaitingRoomReferences(Text waitingText, Button backButton, Button startButton)
+            {
+                WaitingText = waitingText;
+                BackButton = backButton;
+                StartButton = startButton;
+            }
+
+            public Text WaitingText { get; }
+            public Button BackButton { get; }
+            public Button StartButton { get; }
         }
     }
 }
