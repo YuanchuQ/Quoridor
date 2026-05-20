@@ -43,9 +43,9 @@ namespace Quoridor.UI
         private CharacterVisualDefinition playerTwoCharacter;
 
         /// <summary>
-        /// Raised when the player requests a fresh local match.
+        /// Raised when the player requests to leave the match and return to the lobby.
         /// </summary>
-        public event Action RestartRequested;
+        public event Action ReturnToLobbyRequested;
 
         /// <summary>
         /// Refreshes the match HUD with current match data.
@@ -252,7 +252,7 @@ namespace Quoridor.UI
         {
             if (restartButton != null)
             {
-                restartButton.onClick.AddListener(HandleRestartClicked);
+                restartButton.onClick.AddListener(HandleReturnToLobbyClicked);
             }
         }
 
@@ -260,13 +260,13 @@ namespace Quoridor.UI
         {
             if (restartButton != null)
             {
-                restartButton.onClick.RemoveListener(HandleRestartClicked);
+                restartButton.onClick.RemoveListener(HandleReturnToLobbyClicked);
             }
         }
 
-        private void HandleRestartClicked()
+        private void HandleReturnToLobbyClicked()
         {
-            RestartRequested?.Invoke();
+            ReturnToLobbyRequested?.Invoke();
         }
     }
 }

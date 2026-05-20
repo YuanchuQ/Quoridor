@@ -18,6 +18,8 @@ namespace Quoridor.Pawn
         [SerializeField] private Vector2 visualOffset = new(0f, 0.1f);
 
         private Coroutine moveRoutine;
+        private Material defaultMaterial;
+        private bool nearGoalEffectActive;
 
         /// <summary>
         /// Player represented by this pawn.
@@ -77,8 +79,30 @@ namespace Quoridor.Pawn
 
             if (spriteRenderer != null && material != null)
             {
-                spriteRenderer.sharedMaterial = material;
+                defaultMaterial = material;
+                spriteRenderer.sharedMaterial = nearGoalEffectActive ? spriteRenderer.sharedMaterial : material;
             }
+        }
+
+        /// <summary>
+        /// Enables or disables the near-goal visual material without changing the pawn sprite.
+        /// </summary>
+        public void SetNearGoalEffect(bool isActive, Material effectMaterial)
+        {
+            CacheRenderer();
+
+            if (spriteRenderer == null)
+            {
+                return;
+            }
+
+            if (defaultMaterial == null)
+            {
+                defaultMaterial = spriteRenderer.sharedMaterial;
+            }
+
+            nearGoalEffectActive = isActive && effectMaterial != null;
+            spriteRenderer.sharedMaterial = nearGoalEffectActive ? effectMaterial : defaultMaterial;
         }
 
         /// <summary>
@@ -101,12 +125,19 @@ namespace Quoridor.Pawn
         private void Reset()
         {
             CacheRenderer();
+            defaultMaterial = spriteRenderer != null ? spriteRenderer.sharedMaterial : null;
         }
 
         private void OnValidate()
         {
             CacheRenderer();
             moveDuration = Mathf.Max(0.01f, moveDuration);
+        }
+
+        private void Awake()
+        {
+            CacheRenderer();
+            defaultMaterial = spriteRenderer != null ? spriteRenderer.sharedMaterial : null;
         }
 
         private IEnumerator MoveRoutine(BoardPosition targetPosition)

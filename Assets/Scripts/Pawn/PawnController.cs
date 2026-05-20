@@ -20,6 +20,8 @@ namespace Quoridor.Pawn
         [SerializeField] private PawnView playerOnePawn;
         [SerializeField] private PawnView playerTwoPawn;
         [SerializeField] private CharacterVisualCatalog characterCatalog;
+        [SerializeField] private Material nearGoalMaterial;
+        [SerializeField] private int nearGoalStepThreshold = 5;
 
         private readonly List<BoardPosition> legalMoves = new();
         private BoardGraph boardGraph;
@@ -81,6 +83,7 @@ namespace Quoridor.Pawn
                 ApplyCharacterVisual(playerTwoPawn, PlayerId.PlayerTwo);
             }
 
+            RefreshNearGoalEffects();
             RefreshMoveHints();
         }
 
@@ -116,6 +119,7 @@ namespace Quoridor.Pawn
             }
 
             RefreshMoveHints();
+            RefreshNearGoalEffects();
             return true;
         }
 
@@ -208,6 +212,8 @@ namespace Quoridor.Pawn
             {
                 ApplyCharacterVisual(playerTwoPawn, PlayerId.PlayerTwo);
             }
+
+            RefreshNearGoalEffects();
         }
 
         private void Awake()
@@ -281,6 +287,30 @@ namespace Quoridor.Pawn
 
             legalMoves.Clear();
             legalMoves.AddRange(PawnMovementRules.GetLegalMoves(boardGraph, currentPosition, opponentPosition));
+        }
+
+        private void RefreshNearGoalEffects()
+        {
+            ApplyNearGoalEffect(playerOnePawn, PlayerId.PlayerOne);
+            ApplyNearGoalEffect(playerTwoPawn, PlayerId.PlayerTwo);
+        }
+
+        private void ApplyNearGoalEffect(PawnView pawnView, PlayerId playerId)
+        {
+            if (pawnView == null)
+            {
+                return;
+            }
+
+            pawnView.SetNearGoalEffect(IsNearGoal(playerId, pawnView.Position), nearGoalMaterial);
+        }
+
+        private bool IsNearGoal(PlayerId playerId, BoardPosition position)
+        {
+            int boardSize = config != null ? config.BoardSize : QuoridorRules.BoardSize;
+            int goalRow = playerId == PlayerId.PlayerOne ? boardSize - 1 : 0;
+            int distance = Mathf.Abs(goalRow - position.Y);
+            return distance <= Mathf.Max(0, nearGoalStepThreshold);
         }
 
         private PawnView GetPawn(PlayerId playerId)
