@@ -134,10 +134,14 @@ namespace Quoridor.Menu
             Add(twoPlayerBackButton, ShowMain);
             Add(joinRoomButton, JoinRoom);
             Add(createRoomButton, CreateRoom);
-            Add(lanBackButton, ShowTwoPlayer);
+            Add(lanBackButton, ReturnFromLan);
             Add(roomListFirstRoomButton, JoinFirstRoom);
             Add(roomListSecondRoomButton, JoinSecondRoom);
-            Add(roomListBackButton, ShowLan);
+            if (roomListBackButton != lanBackButton)
+            {
+                Add(roomListBackButton, ShowLan);
+            }
+
             Add(roomBackButton, ShowLan);
             Add(startLocalFromRoomButton, LoadLocalGame);
             Add(settingsBackButton, ShowMain);
@@ -154,10 +158,14 @@ namespace Quoridor.Menu
             Remove(twoPlayerBackButton, ShowMain);
             Remove(joinRoomButton, JoinRoom);
             Remove(createRoomButton, CreateRoom);
-            Remove(lanBackButton, ShowTwoPlayer);
+            Remove(lanBackButton, ReturnFromLan);
             Remove(roomListFirstRoomButton, JoinFirstRoom);
             Remove(roomListSecondRoomButton, JoinSecondRoom);
-            Remove(roomListBackButton, ShowLan);
+            if (roomListBackButton != lanBackButton)
+            {
+                Remove(roomListBackButton, ShowLan);
+            }
+
             Remove(roomBackButton, ShowLan);
             Remove(startLocalFromRoomButton, LoadLocalGame);
             Remove(settingsBackButton, ShowMain);
@@ -190,6 +198,21 @@ namespace Quoridor.Menu
             StopRoomSearch();
             ShowPanel(twoPlayerPanel);
             SetStatus("Choose a multiplayer mode");
+        }
+
+        private void ReturnFromLan()
+        {
+            StopRoomSearch();
+            activeRoomIsNetworked = false;
+            activeRoomName = string.Empty;
+            ClearDiscoveredRooms();
+
+            if (networkManager != null && (networkManager.IsHostActive || networkManager.IsClientConnected))
+            {
+                networkManager.StopLanSession();
+            }
+
+            ShowMain();
         }
 
         private void ShowLan()
