@@ -2,10 +2,12 @@ using System;
 using Quoridor.Config;
 using Quoridor.Core;
 using Quoridor.Input;
+using Quoridor.Networking;
 using Quoridor.Pawn;
 using Quoridor.UI;
 using Quoridor.Wall;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Quoridor.GameFlow
 {
@@ -21,6 +23,7 @@ namespace Quoridor.GameFlow
         [SerializeField] private WallController wallController;
         [SerializeField] private MatchUiView matchUiView;
         [SerializeField] private CharacterVisualCatalog characterCatalog;
+        [SerializeField] private string lobbySceneName = "MainMenu";
 
         private GameState state = GameState.PlayerOneTurn;
         private PlayerId activePlayer = PlayerId.PlayerOne;
@@ -141,7 +144,7 @@ namespace Quoridor.GameFlow
         {
             if (matchUiView != null)
             {
-                matchUiView.RestartRequested += StartNewMatch;
+                matchUiView.ReturnToLobbyRequested += ReturnToLobby;
             }
 
             if (pawnController != null)
@@ -165,7 +168,7 @@ namespace Quoridor.GameFlow
         {
             if (matchUiView != null)
             {
-                matchUiView.RestartRequested -= StartNewMatch;
+                matchUiView.ReturnToLobbyRequested -= ReturnToLobby;
             }
 
             if (pawnController != null)
@@ -260,6 +263,17 @@ namespace Quoridor.GameFlow
         private void HandleWallOrientationChanged(WallOrientation orientation)
         {
             RefreshUi();
+        }
+
+        private void ReturnToLobby()
+        {
+            QuoridorNetworkManager networkManager = FindFirstObjectByType<QuoridorNetworkManager>();
+            if (networkManager != null)
+            {
+                networkManager.StopLanSession();
+            }
+
+            SceneManager.LoadScene(lobbySceneName);
         }
 
         private void RefreshUi()

@@ -7,6 +7,7 @@ using Quoridor.Wall;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Quoridor.Editor.UIGeneration
@@ -18,6 +19,7 @@ namespace Quoridor.Editor.UIGeneration
     {
         private const string MatchHudPrefabPath = "Assets/Prefabs/UI/MatchHUD.prefab";
         private const string PlayerInfoTexturePath = "Assets/Art/UI/Information.png";
+        private const string NearGoalMaterialPath = "Assets/Art/Materials/PawnNearGoalEnchant.mat";
         private const int HudSortingOrder = 50;
         private static readonly Color PlayerOneTextColor = new Color(0.68f, 0.24f, 0.32f, 1f);
         private static readonly Color PlayerTwoTextColor = new Color(0.2f, 0.34f, 0.68f, 1f);
@@ -61,6 +63,8 @@ namespace Quoridor.Editor.UIGeneration
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             scaler.referenceResolution = new Vector2(1280f, 720f);
             scaler.matchWidthOrHeight = 0.5f;
+
+            EnsureEventSystem(hud.transform);
 
             CreatePlayerInfoPanel(
                 hud.transform,
@@ -293,9 +297,15 @@ namespace Quoridor.Editor.UIGeneration
             labelRect.pivot = new Vector2(0.5f, 0.5f);
             labelRect.anchoredPosition = Vector2.zero;
             labelRect.sizeDelta = Vector2.zero;
-            label.text = "Restart";
+            label.text = "返回大厅";
             label.color = Color.white;
             return button;
+        }
+
+        private static void EnsureEventSystem(Transform parent)
+        {
+            GameObject eventSystemObject = new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
+            eventSystemObject.transform.SetParent(parent, false);
         }
 
         private static Font GetDefaultFont()
@@ -331,6 +341,15 @@ namespace Quoridor.Editor.UIGeneration
             serializedController.FindProperty("matchUiView").objectReferenceValue = matchUiView;
             serializedController.ApplyModifiedPropertiesWithoutUndo();
 
+            PawnController pawnController = systems.GetComponent<PawnController>();
+            if (pawnController != null)
+            {
+                var serializedPawnController = new SerializedObject(pawnController);
+                serializedPawnController.FindProperty("nearGoalMaterial").objectReferenceValue = EnsureNearGoalMaterial();
+                serializedPawnController.ApplyModifiedPropertiesWithoutUndo();
+                EditorUtility.SetDirty(pawnController);
+            }
+
             EditorUtility.SetDirty(gameFlowController);
             EditorUtility.SetDirty(matchUiView);
             EditorSceneManager.MarkSceneDirty(sceneRoot.scene);
@@ -348,6 +367,41 @@ namespace Quoridor.Editor.UIGeneration
             GameObject hudObject = (GameObject)PrefabUtility.InstantiatePrefab(prefab, sceneRoot);
             hudObject.name = "MatchHUD";
             return hudObject;
+        }
+
+        private static Material EnsureNearGoalMaterial()
+        {
+            EnsureFolder("Assets/Art", "Materials");
+
+            Material material = AssetDatabase.LoadAssetAtPath<Material>(NearGoalMaterialPath);
+            if (material != null)
+            {
+                return material;
+            }
+
+            Shader shader = Shader.Find("Quoridor/Sprites/Pawn Near Goal Enchant");
+            if (shader == null)
+            {
+                shader = Shader.Find("Sprites/Default");
+            }
+
+            material = new Material(shader)
+            {
+                name = "PawnNearGoalEnchant"
+            };
+
+            if (material.HasProperty("_EnchantColor"))
+            {
+                material.SetColor("_EnchantColor", new Color(0.82f, 0.42f, 1f, 1f));
+            }
+
+            if (material.HasProperty("_SecondColor"))
+            {
+                material.SetColor("_SecondColor", new Color(0.25f, 0.86f, 1f, 1f));
+            }
+
+            AssetDatabase.CreateAsset(material, NearGoalMaterialPath);
+            return material;
         }
     }
 }
