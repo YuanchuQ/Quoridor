@@ -1941,7 +1941,7 @@ MonoBehaviour:
   playerTwoPawn: {fileID: 1133516381}
   characterCatalog: {fileID: 11400000, guid: 2b75e541504c24c069bdafa3fbc6c50c, type: 2}
   nearGoalMaterial: {fileID: 2100000, guid: 14c0d33b54c42487faf237a3b7e0c61d, type: 2}
-  nearGoalStepThreshold: 5
+  nearGoalStepThreshold: 4
 --- !u!114 &574020598
 MonoBehaviour:
   m_ObjectHideFlags: 0
