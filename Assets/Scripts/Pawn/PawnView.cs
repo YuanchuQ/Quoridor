@@ -14,12 +14,11 @@ namespace Quoridor.Pawn
         [SerializeField] private PlayerId playerId;
         [SerializeField] private BoardView boardView;
         [SerializeField] private SpriteRenderer spriteRenderer;
+        [SerializeField] private SpriteRenderer nearGoalEffectRenderer;
         [SerializeField] private float moveDuration = 0.18f;
         [SerializeField] private Vector2 visualOffset = new(0f, 0.1f);
 
         private Coroutine moveRoutine;
-        private Material defaultMaterial;
-        private bool nearGoalEffectActive;
 
         /// <summary>
         /// Player represented by this pawn.
@@ -79,8 +78,8 @@ namespace Quoridor.Pawn
 
             if (spriteRenderer != null && material != null)
             {
-                defaultMaterial = material;
-                spriteRenderer.sharedMaterial = nearGoalEffectActive ? spriteRenderer.sharedMaterial : material;
+                spriteRenderer.sharedMaterial = material;
+                SyncNearGoalRenderer();
             }
         }
 
@@ -91,18 +90,15 @@ namespace Quoridor.Pawn
         {
             CacheRenderer();
 
-            if (spriteRenderer == null)
+            EnsureNearGoalRenderer();
+            if (spriteRenderer == null || nearGoalEffectRenderer == null)
             {
                 return;
             }
 
-            if (defaultMaterial == null)
-            {
-                defaultMaterial = spriteRenderer.sharedMaterial;
-            }
-
-            nearGoalEffectActive = isActive && effectMaterial != null;
-            spriteRenderer.sharedMaterial = nearGoalEffectActive ? effectMaterial : defaultMaterial;
+            SyncNearGoalRenderer();
+            nearGoalEffectRenderer.sharedMaterial = effectMaterial;
+            nearGoalEffectRenderer.enabled = isActive && effectMaterial != null && nearGoalEffectRenderer.sprite != null;
         }
 
         /// <summary>
@@ -120,12 +116,12 @@ namespace Quoridor.Pawn
             transform.localScale = new Vector3(Mathf.Max(0.01f, localScale), Mathf.Max(0.01f, localScale), 1f);
             visualOffset = offset;
             transform.position = GetWorldPosition(Position);
+            SyncNearGoalRenderer();
         }
 
         private void Reset()
         {
             CacheRenderer();
-            defaultMaterial = spriteRenderer != null ? spriteRenderer.sharedMaterial : null;
         }
 
         private void OnValidate()
@@ -137,7 +133,7 @@ namespace Quoridor.Pawn
         private void Awake()
         {
             CacheRenderer();
-            defaultMaterial = spriteRenderer != null ? spriteRenderer.sharedMaterial : null;
+            SyncNearGoalRenderer();
         }
 
         private IEnumerator MoveRoutine(BoardPosition targetPosition)
@@ -175,6 +171,45 @@ namespace Quoridor.Pawn
             {
                 spriteRenderer = GetComponent<SpriteRenderer>();
             }
+        }
+
+        private void EnsureNearGoalRenderer()
+        {
+            CacheRenderer();
+            if (nearGoalEffectRenderer != null)
+            {
+                return;
+            }
+
+            Transform existing = transform.Find("NearGoalEffect");
+            if (existing != null)
+            {
+                nearGoalEffectRenderer = existing.GetComponent<SpriteRenderer>();
+            }
+
+            if (nearGoalEffectRenderer == null)
+            {
+                GameObject effectObject = new("NearGoalEffect");
+                effectObject.transform.SetParent(transform, false);
+                nearGoalEffectRenderer = effectObject.AddComponent<SpriteRenderer>();
+            }
+
+            nearGoalEffectRenderer.enabled = false;
+        }
+
+        private void SyncNearGoalRenderer()
+        {
+            if (spriteRenderer == null || nearGoalEffectRenderer == null)
+            {
+                return;
+            }
+
+            nearGoalEffectRenderer.sprite = spriteRenderer.sprite;
+            nearGoalEffectRenderer.flipX = spriteRenderer.flipX;
+            nearGoalEffectRenderer.flipY = spriteRenderer.flipY;
+            nearGoalEffectRenderer.sortingLayerID = spriteRenderer.sortingLayerID;
+            nearGoalEffectRenderer.sortingOrder = spriteRenderer.sortingOrder + 1;
+            nearGoalEffectRenderer.color = Color.white;
         }
     }
 }

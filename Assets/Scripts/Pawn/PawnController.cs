@@ -21,7 +21,7 @@ namespace Quoridor.Pawn
         [SerializeField] private PawnView playerTwoPawn;
         [SerializeField] private CharacterVisualCatalog characterCatalog;
         [SerializeField] private Material nearGoalMaterial;
-        [SerializeField] private int nearGoalStepThreshold = 5;
+        [SerializeField] private int nearGoalStepThreshold = 4;
 
         private readonly List<BoardPosition> legalMoves = new();
         private BoardGraph boardGraph;

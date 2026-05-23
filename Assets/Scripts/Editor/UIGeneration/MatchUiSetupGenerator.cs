@@ -9,6 +9,9 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem.UI;
+#endif
 
 namespace Quoridor.Editor.UIGeneration
 {
@@ -304,7 +307,12 @@ namespace Quoridor.Editor.UIGeneration
 
         private static void EnsureEventSystem(Transform parent)
         {
-            GameObject eventSystemObject = new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
+            GameObject eventSystemObject = new GameObject("EventSystem", typeof(EventSystem));
+#if ENABLE_INPUT_SYSTEM
+            eventSystemObject.AddComponent<InputSystemUIInputModule>();
+#else
+            eventSystemObject.AddComponent<StandaloneInputModule>();
+#endif
             eventSystemObject.transform.SetParent(parent, false);
         }
 
@@ -346,6 +354,7 @@ namespace Quoridor.Editor.UIGeneration
             {
                 var serializedPawnController = new SerializedObject(pawnController);
                 serializedPawnController.FindProperty("nearGoalMaterial").objectReferenceValue = EnsureNearGoalMaterial();
+                serializedPawnController.FindProperty("nearGoalStepThreshold").intValue = 4;
                 serializedPawnController.ApplyModifiedPropertiesWithoutUndo();
                 EditorUtility.SetDirty(pawnController);
             }
