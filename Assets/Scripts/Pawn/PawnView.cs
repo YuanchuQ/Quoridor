@@ -97,8 +97,9 @@ namespace Quoridor.Pawn
             }
 
             SyncNearGoalRenderer();
-            nearGoalEffectRenderer.sharedMaterial = effectMaterial;
-            nearGoalEffectRenderer.enabled = isActive && effectMaterial != null && nearGoalEffectRenderer.sprite != null;
+            bool shouldShowEffect = isActive && effectMaterial != null && nearGoalEffectRenderer.sprite != null;
+            nearGoalEffectRenderer.sharedMaterial = shouldShowEffect ? effectMaterial : null;
+            nearGoalEffectRenderer.enabled = shouldShowEffect;
         }
 
         /// <summary>
@@ -210,6 +211,9 @@ namespace Quoridor.Pawn
             nearGoalEffectRenderer.sortingLayerID = spriteRenderer.sortingLayerID;
             nearGoalEffectRenderer.sortingOrder = spriteRenderer.sortingOrder + 1;
             nearGoalEffectRenderer.color = Color.white;
+            nearGoalEffectRenderer.transform.localPosition = Vector3.zero;
+            nearGoalEffectRenderer.transform.localRotation = Quaternion.identity;
+            nearGoalEffectRenderer.transform.localScale = Vector3.one;
         }
     }
 }

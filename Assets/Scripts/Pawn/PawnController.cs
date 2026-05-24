@@ -134,6 +134,7 @@ namespace Quoridor.Pawn
             if (!moved)
             {
                 activePlayer = previousActivePlayer;
+                RefreshNearGoalEffects();
                 RefreshMoveHints();
             }
 
@@ -161,6 +162,7 @@ namespace Quoridor.Pawn
         public void SetBoardGraph(BoardGraph nextBoardGraph)
         {
             boardGraph = nextBoardGraph ?? throw new ArgumentNullException(nameof(nextBoardGraph));
+            RefreshNearGoalEffects();
             RefreshMoveHints();
         }
 
@@ -307,10 +309,60 @@ namespace Quoridor.Pawn
 
         private bool IsNearGoal(PlayerId playerId, BoardPosition position)
         {
+            int shortestPathLength = GetShortestGoalPathLength(playerId, position);
+            return shortestPathLength <= Mathf.Max(0, nearGoalStepThreshold);
+        }
+
+        private int GetShortestGoalPathLength(PlayerId playerId, BoardPosition start)
+        {
+            if (boardGraph == null)
+            {
+                int boardSize = config != null ? config.BoardSize : QuoridorRules.BoardSize;
+                boardGraph = BoardGraph.CreateOpenBoard(boardSize);
+            }
+
+            if (!boardGraph.Contains(start))
+            {
+                return int.MaxValue;
+            }
+
+            var distances = new Dictionary<BoardPosition, int>
+            {
+                [start] = 0
+            };
+            var queue = new Queue<BoardPosition>();
+            queue.Enqueue(start);
+
+            while (queue.Count > 0)
+            {
+                BoardPosition current = queue.Dequeue();
+                int distance = distances[current];
+                if (IsGoalRow(playerId, current))
+                {
+                    return distance;
+                }
+
+                foreach (BoardPosition neighbor in boardGraph.GetNeighbors(current))
+                {
+                    if (distances.ContainsKey(neighbor))
+                    {
+                        continue;
+                    }
+
+                    distances[neighbor] = distance + 1;
+                    queue.Enqueue(neighbor);
+                }
+            }
+
+            return int.MaxValue;
+        }
+
+        private bool IsGoalRow(PlayerId playerId, BoardPosition position)
+        {
             int boardSize = config != null ? config.BoardSize : QuoridorRules.BoardSize;
-            int goalRow = playerId == PlayerId.PlayerOne ? boardSize - 1 : 0;
-            int distance = Mathf.Abs(goalRow - position.Y);
-            return distance <= Mathf.Max(0, nearGoalStepThreshold);
+            return playerId == PlayerId.PlayerOne
+                ? position.Y == boardSize - 1
+                : position.Y == 0;
         }
 
         private PawnView GetPawn(PlayerId playerId)
