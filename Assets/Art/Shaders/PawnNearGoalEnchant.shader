@@ -84,9 +84,8 @@ Shader "Quoridor/Sprites/Pawn Near Goal Enchant"
                 float enchantBand = smoothstep(0, _LineWidth, wave) * (1 - smoothstep(_LineWidth, _LineWidth * 2.2, wave));
                 float pulse = 0.65 + 0.35 * sin(_Time.y * 5.2 + diagonal * 8.0);
                 fixed4 enchant = lerp(_EnchantColor, _SecondColor, saturate(IN.texcoord.y + pulse * 0.25));
-                float alpha = sprite.a * saturate(enchantBand * pulse + _FlashStrength);
-                fixed3 rgb = sprite.rgb + enchant.rgb * alpha * _GlowStrength;
-                return fixed4(rgb, sprite.a);
+                float alpha = sprite.a * saturate(enchantBand * pulse + _FlashStrength) * _GlowStrength;
+                return fixed4(enchant.rgb, alpha);
             }
             ENDCG
         }
