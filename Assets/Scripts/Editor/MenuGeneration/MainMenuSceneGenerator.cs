@@ -212,8 +212,7 @@ namespace Quoridor.Editor.MenuGeneration
         {
             GameObject panel = CreateMenuPanel(parent, "SettingsPanel", new Vector2(0f, -82f), new Vector2(520f, 300f));
             CreatePanelTitle(panel.transform, "设置");
-            Text placeholder = CreateText(panel.transform, "SettingsPlaceholderText", "设置项预留", 26, FontStyle.Normal, TextAnchor.MiddleCenter, TextColor);
-            SetAnchored(placeholder.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 26f), new Vector2(360f, 48f));
+            panel.AddComponent<DisplaySettingsController>();
             backButton = CreateButton(panel.transform, "BackButton", "返回", new Vector2(0f, -84f), new Vector2(220f, 48f));
             panel.SetActive(false);
             return panel;
