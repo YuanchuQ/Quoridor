@@ -102,6 +102,7 @@ namespace Quoridor.Menu
 
         private void Awake()
         {
+            DisplaySettingsController.ApplySavedDisplaySettings();
             ApplyReadableFont();
             ResolveNetworkManager();
             BindButtons();
@@ -240,8 +241,24 @@ namespace Quoridor.Menu
 
         private void ShowSettings()
         {
+            EnsureDisplaySettings();
             ShowPanel(settingsPanel);
-            SetStatus("Settings placeholder");
+            SetStatus("调整显示设置");
+        }
+
+        private void EnsureDisplaySettings()
+        {
+            if (settingsPanel == null)
+            {
+                return;
+            }
+
+            if (!settingsPanel.TryGetComponent(out DisplaySettingsController displaySettings))
+            {
+                displaySettings = settingsPanel.AddComponent<DisplaySettingsController>();
+            }
+
+            displaySettings.EnsureBuilt();
         }
 
         private void ShowRoom(string roomName)
