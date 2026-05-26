@@ -11,12 +11,15 @@ namespace Quoridor.Menu
     public sealed class DisplaySettingsController : MonoBehaviour
     {
         private const string RootName = "DisplaySettingsRoot";
+        private const string BackButtonName = "BackButton";
         private const string PlaceholderName = "SettingsPlaceholderText";
         private const string WidthKey = "Quoridor.Display.Width";
         private const string HeightKey = "Quoridor.Display.Height";
         private const string FullscreenKey = "Quoridor.Display.Fullscreen";
         private const int FallbackWidth = 1920;
         private const int FallbackHeight = 1080;
+        private const float ContentWidth = 430f;
+        private const float RowHeight = 38f;
 
         private readonly List<Vector2Int> availableResolutions = new();
 
@@ -81,27 +84,25 @@ namespace Quoridor.Menu
                 ClearChildren(root.transform);
             }
 
+            RepositionBackButton();
             RectTransform rootRect = root.GetComponent<RectTransform>();
-            SetAnchored(rootRect, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 28f), new Vector2(420f, 168f));
-
-            Text title = CreateText(root.transform, "DisplayTitle", "显示设置", 26, FontStyle.Bold, TextAnchor.MiddleCenter, font);
-            SetAnchored(title.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -18f), new Vector2(360f, 36f));
+            SetAnchored(rootRect, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 6f), new Vector2(ContentWidth, 190f));
 
             fullscreenToggle = CreateToggle(root.transform, "FullscreenToggle", "全屏显示", font);
-            SetAnchored(fullscreenToggle.GetComponent<RectTransform>(), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -60f), new Vector2(360f, 34f));
+            SetAnchored(fullscreenToggle.GetComponent<RectTransform>(), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -20f), new Vector2(ContentWidth, RowHeight));
 
-            Text resolutionLabel = CreateText(root.transform, "ResolutionLabel", "分辨率", 20, FontStyle.Bold, TextAnchor.MiddleLeft, font);
-            SetAnchored(resolutionLabel.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(-126f, -104f), new Vector2(108f, 34f));
+            Text resolutionLabel = CreateText(root.transform, "ResolutionLabel", "分辨率", 20, FontStyle.Bold, TextAnchor.MiddleRight, font);
+            SetAnchored(resolutionLabel.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(-146f, -68f), new Vector2(112f, RowHeight));
 
             resolutionDropdown = CreateDropdown(root.transform, "ResolutionDropdown", font);
-            SetAnchored(resolutionDropdown.GetComponent<RectTransform>(), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(72f, -104f), new Vector2(244f, 34f));
+            SetAnchored(resolutionDropdown.GetComponent<RectTransform>(), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(70f, -68f), new Vector2(260f, RowHeight));
 
             Button applyButton = CreateButton(root.transform, "ApplyDisplaySettingsButton", "应用", font);
             applyButton.onClick.AddListener(ApplySelectedSettings);
-            SetAnchored(applyButton.GetComponent<RectTransform>(), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -146f), new Vector2(180f, 36f));
+            SetAnchored(applyButton.GetComponent<RectTransform>(), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -116f), new Vector2(190f, 40f));
 
             feedbackText = CreateText(root.transform, "DisplaySettingsFeedback", string.Empty, 16, FontStyle.Normal, TextAnchor.MiddleCenter, font);
-            SetAnchored(feedbackText.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -178f), new Vector2(360f, 24f));
+            SetAnchored(feedbackText.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -160f), new Vector2(ContentWidth, 26f));
         }
 
         private void RefreshAvailableResolutions()
@@ -262,7 +263,7 @@ namespace Quoridor.Menu
             Image templateImage = template.AddComponent<Image>();
             templateImage.color = new Color(0.23f, 0.22f, 0.28f, 0.98f);
             ScrollRect scrollRect = template.AddComponent<ScrollRect>();
-            SetAnchored(template.GetComponent<RectTransform>(), new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 1f), new Vector2(0f, -110f), new Vector2(0f, 108f));
+            SetAnchored(template.GetComponent<RectTransform>(), new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 1f), new Vector2(0f, -104f), new Vector2(0f, 104f));
 
             GameObject viewport = CreateUiObject("Viewport", template.transform);
             Mask mask = viewport.AddComponent<Mask>();
@@ -352,6 +353,15 @@ namespace Quoridor.Menu
             GameObject gameObject = new(name, typeof(RectTransform));
             gameObject.transform.SetParent(parent, false);
             return gameObject;
+        }
+
+        private void RepositionBackButton()
+        {
+            Transform backButton = transform.Find(BackButtonName);
+            if (backButton != null && backButton.TryGetComponent(out RectTransform rectTransform))
+            {
+                SetAnchored(rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -124f), new Vector2(220f, 48f));
+            }
         }
 
         private static void ClearChildren(Transform parent)
