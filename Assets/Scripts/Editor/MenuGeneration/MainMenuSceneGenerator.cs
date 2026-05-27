@@ -210,10 +210,10 @@ namespace Quoridor.Editor.MenuGeneration
 
         private static GameObject CreateSettingsPanel(Transform parent, out Button backButton)
         {
-            GameObject panel = CreateMenuPanel(parent, "SettingsPanel", new Vector2(0f, -82f), new Vector2(520f, 300f));
+            GameObject panel = CreateMenuPanel(parent, "SettingsPanel", new Vector2(0f, -82f), new Vector2(560f, 360f));
             CreatePanelTitle(panel.transform, "设置");
             panel.AddComponent<DisplaySettingsController>();
-            backButton = CreateButton(panel.transform, "BackButton", "返回", new Vector2(0f, -84f), new Vector2(220f, 48f));
+            backButton = CreateButton(panel.transform, "BackButton", "返回", new Vector2(0f, -124f), new Vector2(220f, 48f));
             panel.SetActive(false);
             return panel;
         }
