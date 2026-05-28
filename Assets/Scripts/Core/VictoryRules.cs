@@ -1,3 +1,4 @@
+// Evaluates local Quoridor victory conditions
 using System;
 
 namespace Quoridor.Core

@@ -1,3 +1,4 @@
+// Result returned by a wall validation step
 namespace Quoridor.Core
 {
     /// <summary>

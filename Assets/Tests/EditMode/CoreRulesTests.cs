@@ -1,9 +1,13 @@
+// Covers board graph and wall validator rules in edit mode tests
 using System.Collections.Generic;
 using NUnit.Framework;
 using Quoridor.Core;
 
 namespace Quoridor.Tests.EditMode
 {
+    /// <summary>
+    /// Covers board graph and wall validator rules in edit mode tests.
+    /// </summary>
     public sealed class CoreRulesTests
     {
         [Test]

@@ -1,3 +1,4 @@
+// Validates whether a wall anchor fits within the board's wall slot bounds
 namespace Quoridor.Core
 {
     /// <summary>

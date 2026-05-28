@@ -1,3 +1,4 @@
+// Immutable board coordinate measured in cell units from the bottom-left corner
 using System;
 
 namespace Quoridor.Core

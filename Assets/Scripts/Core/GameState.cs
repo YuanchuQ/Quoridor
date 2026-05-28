@@ -1,3 +1,4 @@
+// High-level match state for local multiplayer
 namespace Quoridor.Core
 {
     /// <summary>

@@ -1,8 +1,12 @@
+// Covers pawn movement rule edge cases in edit mode tests
 using NUnit.Framework;
 using Quoridor.Core;
 
 namespace Quoridor.Tests.EditMode
 {
+    /// <summary>
+    /// Covers pawn movement rule edge cases in edit mode tests.
+    /// </summary>
     public sealed class PawnMovementRulesTests
     {
         [Test]

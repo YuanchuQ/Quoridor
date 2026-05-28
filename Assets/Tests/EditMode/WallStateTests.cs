@@ -1,8 +1,12 @@
+// Covers wall state mutation and validation behavior in edit mode tests
 using NUnit.Framework;
 using Quoridor.Core;
 
 namespace Quoridor.Tests.EditMode
 {
+    /// <summary>
+    /// Covers wall state mutation and validation behavior in edit mode tests.
+    /// </summary>
     public sealed class WallStateTests
     {
         [Test]

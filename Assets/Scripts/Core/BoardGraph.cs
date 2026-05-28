@@ -1,3 +1,4 @@
+// Mutable adjacency graph for Quoridor cell connectivity
 using System;
 using System.Collections.Generic;
 

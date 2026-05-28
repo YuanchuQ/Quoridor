@@ -1,3 +1,4 @@
+// Orientation of a two-cell Quoridor wall
 namespace Quoridor.Core
 {
     /// <summary>

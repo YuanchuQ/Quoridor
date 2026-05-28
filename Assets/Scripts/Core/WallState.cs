@@ -1,3 +1,4 @@
+// Pure runtime state for placed walls, remaining wall counts, and board connectivity
 using System;
 using System.Collections.Generic;
 

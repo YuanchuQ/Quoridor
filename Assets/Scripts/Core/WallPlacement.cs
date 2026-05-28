@@ -1,3 +1,4 @@
+// Immutable placement of a two-cell wall, anchored at the lower-left wall slot
 using System;
 using System.Collections.Generic;
 
