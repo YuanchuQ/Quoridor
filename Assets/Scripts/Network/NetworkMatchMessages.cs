@@ -1,3 +1,4 @@
+// Client request for the authoritative match configuration
 using Mirror;
 
 namespace Quoridor.Networking

@@ -1,3 +1,4 @@
+// Handles wall preview, validation, placement, and remaining wall counts
 using System;
 using Quoridor.Board;
 using Quoridor.Config;
@@ -14,15 +15,25 @@ namespace Quoridor.Wall
     [DisallowMultipleComponent]
     public sealed class WallController : MonoBehaviour
     {
+        [Tooltip("Rules and layout values used by wall placement")]
         [SerializeField] private GameConfig config;
+        [Tooltip("Board view used to position wall visuals")]
         [SerializeField] private BoardView boardView;
+        [Tooltip("Input router that supplies board click and orientation events")]
         [SerializeField] private InputRouter inputRouter;
+        [Tooltip("Pawn controller used to validate path connectivity around current pawn positions")]
         [SerializeField] private PawnController pawnController;
+        [Tooltip("Reusable wall view shown while previewing placement")]
         [SerializeField] private WallView previewWall;
+        [Tooltip("Prefab instantiated for each placed wall")]
         [SerializeField] private WallView placedWallPrefab;
+        [Tooltip("Parent transform for placed wall instances")]
         [SerializeField] private Transform placedWallsRoot;
+        [Tooltip("Material used by a valid wall preview")]
         [SerializeField] private Material validPreviewMaterial;
+        [Tooltip("Material used by an invalid wall preview")]
         [SerializeField] private Material invalidPreviewMaterial;
+        [Tooltip("Material used by committed wall visuals")]
         [SerializeField] private Material placedMaterial;
 
         private WallState wallState;

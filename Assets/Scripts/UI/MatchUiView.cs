@@ -1,3 +1,4 @@
+// Scene-facing UI view for turn, wall counts, input mode, and victory state
 using System;
 using Quoridor.Config;
 using Quoridor.Core;
@@ -12,25 +13,45 @@ namespace Quoridor.UI
     /// </summary>
     public sealed class MatchUiView : MonoBehaviour
     {
+        [Tooltip("Text that shows the current turn")]
         [SerializeField] private Text turnText;
+        [Tooltip("Text that shows the active input mode")]
         [SerializeField] private Text modeText;
+        [Tooltip("Text that shows the current control hint")]
         [SerializeField] private Text hintText;
+        [Tooltip("Text that shows remaining wall counts")]
         [SerializeField] private Text wallText;
+        [Tooltip("Text that shows the current wall orientation")]
         [SerializeField] private Text orientationText;
+        [Tooltip("Player one display name text")]
         [SerializeField] private Text playerOneNameText;
+        [Tooltip("Player one secondary name text")]
         [SerializeField] private Text playerOneSubNameText;
+        [Tooltip("Player one portrait image")]
         [SerializeField] private Image playerOnePortraitImage;
+        [Tooltip("Player one pawn count text")]
         [SerializeField] private Text playerOnePawnCountText;
+        [Tooltip("Player one wall count text")]
         [SerializeField] private Text playerOneWallCountText;
+        [Tooltip("Player one turn status text")]
         [SerializeField] private Text playerOneStatusText;
+        [Tooltip("Player two display name text")]
         [SerializeField] private Text playerTwoNameText;
+        [Tooltip("Player two secondary name text")]
         [SerializeField] private Text playerTwoSubNameText;
+        [Tooltip("Player two portrait image")]
         [SerializeField] private Image playerTwoPortraitImage;
+        [Tooltip("Player two pawn count text")]
         [SerializeField] private Text playerTwoPawnCountText;
+        [Tooltip("Player two wall count text")]
         [SerializeField] private Text playerTwoWallCountText;
+        [Tooltip("Player two turn status text")]
         [SerializeField] private Text playerTwoStatusText;
+        [Tooltip("Panel displayed when the match ends")]
         [SerializeField] private GameObject gameOverPanel;
+        [Tooltip("Text that shows the winner")]
         [SerializeField] private Text winnerText;
+        [Tooltip("Button that returns to the lobby after game over")]
         [SerializeField] private Button restartButton;
 
         private const string PlayerOneName = "优衣";

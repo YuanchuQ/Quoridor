@@ -1,3 +1,4 @@
+// Controls the main menu Canvas panels, room flow, and character selection
 using System;
 using Quoridor.Config;
 using Quoridor.Core;
@@ -9,42 +10,74 @@ using UnityEngine.UI;
 namespace Quoridor.Menu
 {
     /// <summary>
-    /// Controls the main menu Canvas panels, placeholder room flow, and character selection.
+    /// Controls the main menu Canvas panels, room flow, and character selection.
     /// </summary>
     [DisallowMultipleComponent]
     public sealed class MainMenuController : MonoBehaviour
     {
+        [Tooltip("Scene loaded for local two-player matches")]
         [SerializeField] private string localGameSceneName = "QuoridorDemo";
+        [Tooltip("Root panel for the first menu screen")]
         [SerializeField] private GameObject mainPanel;
+        [Tooltip("Root panel for multiplayer mode selection")]
         [SerializeField] private GameObject twoPlayerPanel;
+        [Tooltip("Root panel for LAN lobby browsing")]
         [SerializeField] private GameObject lanPanel;
+        [Tooltip("Optional root panel for the room list")]
         [SerializeField] private GameObject roomListPanel;
+        [Tooltip("Root panel shown after creating or joining a room")]
         [SerializeField] private GameObject roomPanel;
+        [Tooltip("Root panel for display settings")]
         [SerializeField] private GameObject settingsPanel;
+        [Tooltip("Footer text used for menu status messages")]
         [SerializeField] private Text statusText;
+        [Tooltip("Text showing selected character in the LAN lobby")]
         [SerializeField] private Text lanSelectedCharacterText;
+        [Tooltip("Text that summarizes discovered rooms")]
         [SerializeField] private Text roomListText;
+        [Tooltip("Text that shows selected room details")]
         [SerializeField] private Text roomInfoText;
+        [Tooltip("Text that shows the active room name")]
         [SerializeField] private Text roomTitleText;
+        [Tooltip("Text that shows waiting room state")]
         [SerializeField] private Text roomWaitingText;
+        [Tooltip("Text that shows selected character in the room")]
         [SerializeField] private Text selectedCharacterText;
+        [Tooltip("Catalog used to resolve selectable characters")]
         [SerializeField] private CharacterVisualCatalog characterCatalog;
+        [Tooltip("Network manager used by LAN menu actions")]
         [SerializeField] private QuoridorNetworkManager networkManager;
+        [Tooltip("Button for the currently unavailable single-player mode")]
         [SerializeField] private Button singlePlayerButton;
+        [Tooltip("Button that opens multiplayer mode selection")]
         [SerializeField] private Button twoPlayerButton;
+        [Tooltip("Button that opens settings")]
         [SerializeField] private Button settingsButton;
+        [Tooltip("Button that quits the application")]
         [SerializeField] private Button quitButton;
+        [Tooltip("Button that opens LAN lobby")]
         [SerializeField] private Button lanButton;
+        [Tooltip("Button that starts local two-player mode")]
         [SerializeField] private Button localButton;
+        [Tooltip("Button that returns from multiplayer mode selection")]
         [SerializeField] private Button twoPlayerBackButton;
+        [Tooltip("Button that joins the selected LAN room")]
         [SerializeField] private Button joinRoomButton;
+        [Tooltip("Button that creates a LAN room")]
         [SerializeField] private Button createRoomButton;
+        [Tooltip("Button that leaves LAN lobby flow")]
         [SerializeField] private Button lanBackButton;
+        [Tooltip("Button representing the first discovered LAN room")]
         [SerializeField] private Button roomListFirstRoomButton;
+        [Tooltip("Button representing the second discovered LAN room")]
         [SerializeField] private Button roomListSecondRoomButton;
+        [Tooltip("Button that returns from the room list")]
         [SerializeField] private Button roomListBackButton;
+        [Tooltip("Button that leaves the waiting room")]
         [SerializeField] private Button roomBackButton;
+        [Tooltip("Button that starts the current room match")]
         [SerializeField] private Button startLocalFromRoomButton;
+        [Tooltip("Button that returns from settings")]
         [SerializeField] private Button settingsBackButton;
 
         private const string DefaultStatus = "Ready";
@@ -93,7 +126,7 @@ namespace Quoridor.Menu
         }
 
         /// <summary>
-        /// Selects a character by display name from legacy character card buttons.
+        /// Selects a character by display name for simple button bindings.
         /// </summary>
         public void SelectCharacter(string characterName)
         {
@@ -311,7 +344,7 @@ namespace Quoridor.Menu
 
         private void HandleSinglePlayer()
         {
-            SetStatus("Single Player is reserved for a future AI opponent");
+            SetStatus("单人模式暂未开放");
         }
 
         private void LoadLocalGame()

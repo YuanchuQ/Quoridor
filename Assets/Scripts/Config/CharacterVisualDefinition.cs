@@ -1,3 +1,4 @@
+// Describes the UI and board visuals for a selectable character
 using UnityEngine;
 
 namespace Quoridor.Config
@@ -8,12 +9,19 @@ namespace Quoridor.Config
     [System.Serializable]
     public sealed class CharacterVisualDefinition
     {
+        [Tooltip("Stable id stored by menus and networking")]
         [SerializeField] private string characterId;
+        [Tooltip("Localized character name shown in UI")]
         [SerializeField] private string displayName;
+        [Tooltip("Secondary romanized name shown in UI")]
         [SerializeField] private string latinName;
+        [Tooltip("Portrait sprite used by player information panels")]
         [SerializeField] private Sprite portraitSprite;
+        [Tooltip("Small character sprite used as the board pawn")]
         [SerializeField] private Sprite pawnSprite;
+        [Tooltip("Local scale applied to the board pawn sprite")]
         [SerializeField, Min(0.01f)] private float pawnScale = 0.13f;
+        [Tooltip("Local offset applied to the board pawn sprite")]
         [SerializeField] private Vector2 pawnOffset = new(0f, 0.1f);
 
         /// <summary>

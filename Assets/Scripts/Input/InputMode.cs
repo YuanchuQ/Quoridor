@@ -1,3 +1,4 @@
+// High-level intent currently requested by local player input
 namespace Quoridor.Input
 {
     /// <summary>

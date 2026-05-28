@@ -1,3 +1,4 @@
+// Coordinates local pawn movement input and legal move highlighting
 using System;
 using System.Collections.Generic;
 using Quoridor.Board;
@@ -14,13 +15,21 @@ namespace Quoridor.Pawn
     [DisallowMultipleComponent]
     public sealed class PawnController : MonoBehaviour
     {
+        [Tooltip("Rules and layout values used by pawn movement")]
         [SerializeField] private GameConfig config;
+        [Tooltip("Board view used to resolve cell positions")]
         [SerializeField] private BoardView boardView;
+        [Tooltip("Input router that supplies board click events")]
         [SerializeField] private InputRouter inputRouter;
+        [Tooltip("Pawn view controlled for player one")]
         [SerializeField] private PawnView playerOnePawn;
+        [Tooltip("Pawn view controlled for player two")]
         [SerializeField] private PawnView playerTwoPawn;
+        [Tooltip("Character catalog used to update pawn sprites")]
         [SerializeField] private CharacterVisualCatalog characterCatalog;
+        [Tooltip("Material displayed when a pawn is close to its goal")]
         [SerializeField] private Material nearGoalMaterial;
+        [Tooltip("Shortest path distance that enables the near-goal warning effect")]
         [SerializeField] private int nearGoalStepThreshold = 4;
 
         private readonly List<BoardPosition> legalMoves = new();

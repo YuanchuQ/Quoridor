@@ -1,3 +1,4 @@
+// Centralizes local player board and keyboard input before game systems consume it
 using System;
 using Quoridor.Board;
 using Quoridor.Core;
@@ -14,11 +15,17 @@ namespace Quoridor.Input
     [DisallowMultipleComponent]
     public sealed class InputRouter : MonoBehaviour
     {
+        [Tooltip("Board view used for pointer hit testing")]
         [SerializeField] private BoardView boardView;
+        [Tooltip("Current action mode for board clicks")]
         [SerializeField] private InputMode activeMode = InputMode.PawnMove;
+        [Tooltip("Current wall orientation used by wall placement")]
         [SerializeField] private WallOrientation currentWallOrientation = WallOrientation.Horizontal;
+        [Tooltip("Camera used to convert pointer positions into world positions")]
         [SerializeField] private Camera inputCamera;
+        [Tooltip("Keyboard key that switches between movement and wall placement")]
         [SerializeField] private KeyCode toggleInputModeKey = KeyCode.Tab;
+        [Tooltip("Keyboard key that rotates wall placement orientation")]
         [SerializeField] private KeyCode toggleWallOrientationKey = KeyCode.R;
 
         private CellView hoveredCell;

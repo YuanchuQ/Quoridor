@@ -1,3 +1,4 @@
+// Describes a completed pawn movement
 using Quoridor.Core;
 
 namespace Quoridor.Pawn

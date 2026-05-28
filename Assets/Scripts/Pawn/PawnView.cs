@@ -1,3 +1,4 @@
+// Scene-facing pawn view that owns visual position and movement animation
 using System.Collections;
 using Quoridor.Board;
 using Quoridor.Core;
@@ -11,11 +12,17 @@ namespace Quoridor.Pawn
     [RequireComponent(typeof(SpriteRenderer))]
     public sealed class PawnView : MonoBehaviour
     {
+        [Tooltip("Player represented by this pawn view")]
         [SerializeField] private PlayerId playerId;
+        [Tooltip("Board used to convert coordinates into world positions")]
         [SerializeField] private BoardView boardView;
+        [Tooltip("Renderer used for the pawn character sprite")]
         [SerializeField] private SpriteRenderer spriteRenderer;
+        [Tooltip("Renderer used for the near-goal warning overlay")]
         [SerializeField] private SpriteRenderer nearGoalEffectRenderer;
+        [Tooltip("Duration of pawn movement animation in seconds")]
         [SerializeField] private float moveDuration = 0.18f;
+        [Tooltip("Visual offset from the target cell center")]
         [SerializeField] private Vector2 visualOffset = new(0f, 0.1f);
 
         private Coroutine moveRoutine;

@@ -1,3 +1,4 @@
+// Owns local match turn state, victory detection, and UI refreshes
 using System;
 using Quoridor.Config;
 using Quoridor.Core;
@@ -17,12 +18,19 @@ namespace Quoridor.GameFlow
     [DisallowMultipleComponent]
     public sealed class GameFlowController : MonoBehaviour
     {
+        [Tooltip("Rules and layout values used by match flow")]
         [SerializeField] private GameConfig config;
+        [Tooltip("Input router used to read the current input mode")]
         [SerializeField] private InputRouter inputRouter;
+        [Tooltip("Pawn controller that applies movement and exposes pawn positions")]
         [SerializeField] private PawnController pawnController;
+        [Tooltip("Wall controller that applies wall placement and exposes wall counts")]
         [SerializeField] private WallController wallController;
+        [Tooltip("HUD view refreshed by match state changes")]
         [SerializeField] private MatchUiView matchUiView;
+        [Tooltip("Character catalog used to resolve player portraits and pawn sprites")]
         [SerializeField] private CharacterVisualCatalog characterCatalog;
+        [Tooltip("Scene name loaded when returning to the lobby")]
         [SerializeField] private string lobbySceneName = "MainMenu";
 
         private GameState state = GameState.PlayerOneTurn;

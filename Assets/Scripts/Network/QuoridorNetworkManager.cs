@@ -1,3 +1,4 @@
+// Mirror network manager for local LAN room creation, joining, and match scene transition
 using System;
 using System.Collections.Generic;
 using Mirror;
@@ -13,8 +14,11 @@ namespace Quoridor.Networking
     [DisallowMultipleComponent]
     public sealed class QuoridorNetworkManager : NetworkManager
     {
+        [Tooltip("Room name advertised to LAN discovery")]
         [SerializeField] private string roomName = "Princess Room";
+        [Tooltip("Scene name loaded when the host starts the match")]
         [SerializeField] private string matchSceneName = "QuoridorDemo";
+        [Tooltip("LAN discovery component used to advertise and find rooms")]
         [SerializeField] private QuoridorLanDiscovery discovery;
 
         private readonly List<QuoridorRoomPlayer> roomPlayers = new();

@@ -1,3 +1,4 @@
+// Scene-facing wall view used for both preview and placed wall visuals
 using Quoridor.Board;
 using Quoridor.Config;
 using Quoridor.Core;
@@ -11,10 +12,15 @@ namespace Quoridor.Wall
     [RequireComponent(typeof(SpriteRenderer))]
     public sealed class WallView : MonoBehaviour
     {
+        [Tooltip("Renderer used for the wall sprite")]
         [SerializeField] private SpriteRenderer spriteRenderer;
+        [Tooltip("Material used when preview placement is valid")]
         [SerializeField] private Material validPreviewMaterial;
+        [Tooltip("Material used when preview placement is invalid")]
         [SerializeField] private Material invalidPreviewMaterial;
+        [Tooltip("Material used after the wall is placed")]
         [SerializeField] private Material placedMaterial;
+        [Tooltip("Sprite sorting order used by wall visuals")]
         [SerializeField] private int sortingOrder = 15;
 
         /// <summary>

@@ -1,3 +1,4 @@
+// Client discovery probe for Quoridor LAN rooms
 using System;
 using Mirror;
 
