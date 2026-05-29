@@ -1,3 +1,4 @@
+// Generates and clears Quoridor board cell instances in edit mode
 using System;
 using System.Collections.Generic;
 using UnityEditor;

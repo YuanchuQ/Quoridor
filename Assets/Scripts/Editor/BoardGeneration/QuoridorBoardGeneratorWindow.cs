@@ -1,3 +1,4 @@
+// Editor window used to generate the Quoridor board once during edit mode
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
