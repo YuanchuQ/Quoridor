@@ -1,3 +1,4 @@
+// Input payload for pointer interaction with a board cell
 using Quoridor.Board;
 using Quoridor.Core;
 

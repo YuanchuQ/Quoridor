@@ -1,3 +1,4 @@
+// Applies serialized coordinate data to generated cell prefab instances
 using System;
 using UnityEditor;
 using UnityEngine;

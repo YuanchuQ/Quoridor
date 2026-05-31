@@ -1,3 +1,4 @@
+// Calculates legal pawn destinations from the current board graph and opponent position
 using System;
 using System.Collections.Generic;
 

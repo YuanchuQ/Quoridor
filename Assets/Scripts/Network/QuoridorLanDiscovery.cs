@@ -1,3 +1,4 @@
+// LAN discovery adapter that advertises Quoridor room metadata
 using System;
 using System.Net;
 using Mirror;
@@ -12,6 +13,7 @@ namespace Quoridor.Networking
     [DisallowMultipleComponent]
     public sealed class QuoridorLanDiscovery : NetworkDiscoveryBase<QuoridorDiscoveryRequest, QuoridorDiscoveryResponse>
     {
+        [Tooltip("Network manager that provides advertised LAN room state")]
         [SerializeField] private QuoridorNetworkManager networkManager;
 
         /// <summary>

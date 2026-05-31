@@ -1,3 +1,4 @@
+// Validates goal-row reachability with breadth-first search
 using System;
 using System.Collections.Generic;
 

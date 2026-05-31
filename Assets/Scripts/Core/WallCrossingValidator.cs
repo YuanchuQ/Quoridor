@@ -1,3 +1,4 @@
+// Validates whether a new wall crosses an existing wall of the opposite orientation
 using System.Collections.Generic;
 
 namespace Quoridor.Core

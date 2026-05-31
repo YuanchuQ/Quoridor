@@ -1,8 +1,12 @@
+// Covers player victory row checks in edit mode tests
 using NUnit.Framework;
 using Quoridor.Core;
 
 namespace Quoridor.Tests.EditMode
 {
+    /// <summary>
+    /// Covers player victory row checks in edit mode tests.
+    /// </summary>
     public sealed class VictoryRulesTests
     {
         [Test]

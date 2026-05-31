@@ -1,3 +1,4 @@
+// Scene-facing view for one board cell
 using System;
 using Quoridor.Core;
 using UnityEngine;
@@ -11,11 +12,17 @@ namespace Quoridor.Board
     [RequireComponent(typeof(BoxCollider2D))]
     public sealed class CellView : MonoBehaviour
     {
+        [Tooltip("Board X coordinate assigned during edit-time board generation")]
         [SerializeField] private int coordinateX;
+        [Tooltip("Board Y coordinate assigned during edit-time board generation")]
         [SerializeField] private int coordinateY;
+        [Tooltip("Renderer that displays this cell")]
         [SerializeField] private SpriteRenderer spriteRenderer;
+        [Tooltip("Material used when the cell is idle")]
         [SerializeField] private Material defaultMaterial;
+        [Tooltip("Material used while the pointer is over the cell")]
         [SerializeField] private Material hoverMaterial;
+        [Tooltip("Material used when the cell is a legal pawn destination")]
         [SerializeField] private Material moveHintMaterial;
 
         private CellHighlightState highlightState = CellHighlightState.None;

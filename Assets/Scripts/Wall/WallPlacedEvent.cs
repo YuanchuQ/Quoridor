@@ -1,3 +1,4 @@
+// Describes a successfully placed wall
 using Quoridor.Core;
 
 namespace Quoridor.Wall

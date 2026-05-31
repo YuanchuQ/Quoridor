@@ -1,3 +1,4 @@
+// Scene-facing board view that indexes edit-time-created cell objects
 using System;
 using System.Collections.Generic;
 using Quoridor.Config;
@@ -11,7 +12,9 @@ namespace Quoridor.Board
     /// </summary>
     public sealed class BoardView : MonoBehaviour
     {
+        [Tooltip("Rules and layout values used by this board")]
         [SerializeField] private GameConfig config;
+        [Tooltip("Edit-time generated cells indexed by board coordinate")]
         [SerializeField] private CellView[] cells = Array.Empty<CellView>();
 
         private readonly Dictionary<BoardPosition, CellView> cellLookup = new();

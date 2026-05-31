@@ -1,3 +1,4 @@
+// Carries a requested wall orientation change from input into game-facing systems
 using Quoridor.Core;
 
 namespace Quoridor.Input

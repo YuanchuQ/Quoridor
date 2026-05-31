@@ -1,3 +1,4 @@
+// Runs the complete wall validation pipeline in deterministic order
 using System.Collections.Generic;
 
 namespace Quoridor.Core

@@ -1,3 +1,4 @@
+// Identifies one of the two local Quoridor players
 namespace Quoridor.Core
 {
     /// <summary>

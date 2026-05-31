@@ -1,3 +1,4 @@
+// Undirected edge between two adjacent board positions
 using System;
 
 namespace Quoridor.Core

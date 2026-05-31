@@ -1,3 +1,4 @@
+// ScriptableObject catalog for character sprites used by menus, HUD, and pawns
 using Quoridor.Core;
 using UnityEngine;
 
@@ -9,8 +10,11 @@ namespace Quoridor.Config
     [CreateAssetMenu(fileName = "CharacterVisualCatalog", menuName = "Quoridor/Character Visual Catalog")]
     public sealed class CharacterVisualCatalog : ScriptableObject
     {
+        [Tooltip("Selectable character visual definitions")]
         [SerializeField] private CharacterVisualDefinition[] characters = System.Array.Empty<CharacterVisualDefinition>();
+        [Tooltip("Default character id used by player one")]
         [SerializeField] private string defaultPlayerOneCharacterId = "yui";
+        [Tooltip("Default character id used by player two")]
         [SerializeField] private string defaultPlayerTwoCharacterId = "karyl";
 
         /// <summary>

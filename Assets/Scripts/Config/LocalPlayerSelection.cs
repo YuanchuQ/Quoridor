@@ -1,3 +1,4 @@
+// Small cross-scene holder for local player character choices
 using Quoridor.Core;
 
 namespace Quoridor.Config

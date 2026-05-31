@@ -1,3 +1,4 @@
+// Bridges one character selection button to the main menu controller
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,11 +10,17 @@ namespace Quoridor.Menu
     [DisallowMultipleComponent]
     public sealed class CharacterSelectButton : MonoBehaviour
     {
+        [Tooltip("Menu controller notified when this character is selected")]
         [SerializeField] private MainMenuController menuController;
+        [Tooltip("Button that triggers character selection")]
         [SerializeField] private Button button;
+        [Tooltip("Stable character id sent to menu and network state")]
         [SerializeField] private string characterId;
+        [Tooltip("Display name shown by menu status text")]
         [SerializeField] private string characterName;
+        [Tooltip("Portrait image highlighted by this button")]
         [SerializeField] private Image portraitImage;
+        [Tooltip("Material applied while this character is selected")]
         [SerializeField] private Material selectedMaterial;
 
         private Material defaultMaterial;

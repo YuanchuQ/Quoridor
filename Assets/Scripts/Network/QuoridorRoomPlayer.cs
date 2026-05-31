@@ -1,3 +1,4 @@
+// Networked lobby player state for the LAN room
 using Mirror;
 using Quoridor.Config;
 using Quoridor.Core;

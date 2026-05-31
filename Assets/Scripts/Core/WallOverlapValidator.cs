@@ -1,3 +1,4 @@
+// Validates whether a new wall overlaps an existing wall on the same line
 using System.Collections.Generic;
 
 namespace Quoridor.Core

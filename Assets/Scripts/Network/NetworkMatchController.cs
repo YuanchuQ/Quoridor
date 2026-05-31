@@ -1,3 +1,4 @@
+// Bridges local match input to Mirror messages and replays authoritative actions
 using Mirror;
 using Quoridor.Config;
 using Quoridor.Core;
@@ -15,9 +16,13 @@ namespace Quoridor.Networking
     [DisallowMultipleComponent]
     public sealed class NetworkMatchController : MonoBehaviour
     {
+        [Tooltip("Input router whose board events are forwarded over the network")]
         [SerializeField] private InputRouter inputRouter;
+        [Tooltip("Pawn controller used to apply synchronized pawn movement")]
         [SerializeField] private PawnController pawnController;
+        [Tooltip("Wall controller used to apply synchronized wall placement")]
         [SerializeField] private WallController wallController;
+        [Tooltip("Game flow controller advanced after synchronized actions")]
         [SerializeField] private GameFlowController gameFlowController;
 
         private bool networkMatchActive;

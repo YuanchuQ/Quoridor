@@ -1,3 +1,4 @@
+// Immutable LAN room data shown in the room list
 using System;
 
 namespace Quoridor.Networking

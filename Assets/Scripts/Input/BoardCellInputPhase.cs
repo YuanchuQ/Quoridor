@@ -1,3 +1,4 @@
+// Describes the pointer action reported for a board cell
 namespace Quoridor.Input
 {
     /// <summary>

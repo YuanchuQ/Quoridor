@@ -1,3 +1,4 @@
+// Central constants for the v0.1.0 local Quoridor ruleset
 namespace Quoridor.Core
 {
     /// <summary>

@@ -1,3 +1,4 @@
+// Builds and applies display settings for the main menu settings panel
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,7 +13,7 @@ namespace Quoridor.Menu
     {
         private const string RootName = "DisplaySettingsRoot";
         private const string BackButtonName = "BackButton";
-        private const string PlaceholderName = "SettingsPlaceholderText";
+        private const string LegacySettingsTextName = "SettingsPlaceholderText";
         private const string WidthKey = "Quoridor.Display.Width";
         private const string HeightKey = "Quoridor.Display.Height";
         private const string FullscreenKey = "Quoridor.Display.Fullscreen";
@@ -35,7 +36,7 @@ namespace Quoridor.Menu
         {
             if (!hasBuilt)
             {
-                HidePlaceholder();
+                HideLegacySettingsText();
                 BuildInterface();
                 hasBuilt = true;
             }
@@ -65,12 +66,12 @@ namespace Quoridor.Menu
             EnsureBuilt();
         }
 
-        private void HidePlaceholder()
+        private void HideLegacySettingsText()
         {
-            Transform placeholder = transform.Find(PlaceholderName);
-            if (placeholder != null)
+            Transform legacyText = transform.Find(LegacySettingsTextName);
+            if (legacyText != null)
             {
-                placeholder.gameObject.SetActive(false);
+                legacyText.gameObject.SetActive(false);
             }
         }
 

@@ -1,3 +1,4 @@
+// Writes generated cell references into a BoardView-like serialized object
 using System;
 using System.Collections.Generic;
 using System.Reflection;
